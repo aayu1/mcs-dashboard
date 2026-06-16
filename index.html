@@ -11,9 +11,10 @@
   --bg:#0f0f0f;--bg2:#1a1a1a;--bg3:#242424;--bg4:#2e2e2e;
   --border:rgba(255,255,255,0.08);--border2:rgba(255,255,255,0.14);
   --text:#f0f0f0;--text2:#a0a0a0;--text3:#555;
-  --green:#22c55e;--amber:#f59e0b;--red:#ef4444;--teal:#14b8a6;
+  --green:#22c55e;--amber:#f59e0b;--red:#ef4444;--teal:#14b8a6;--blue:#3b82f6;
 }
 body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:14px;line-height:1.5;min-height:100vh}
+
 .topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 28px;border-bottom:1px solid var(--border);background:var(--bg2);position:sticky;top:0;z-index:100;flex-wrap:wrap;gap:10px}
 .logo{font-size:16px;font-weight:700}.logo span{color:var(--green)}
 .live-pill{display:flex;align-items:center;gap:6px;background:rgba(34,197,94,0.12);border:1px solid rgba(34,197,94,0.25);color:var(--green);border-radius:99px;padding:3px 10px;font-size:11px;font-weight:500}
@@ -25,42 +26,50 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
 .btn:hover{background:var(--bg4)}
 .btn-green{background:rgba(34,197,94,0.15);border-color:rgba(34,197,94,0.35);color:var(--green)}
 .btn-green:hover{background:rgba(34,197,94,0.25)}
+
 .main{padding:24px 28px;max-width:1400px;margin:0 auto}
 
-.progress-wrap{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:20px 24px;margin-bottom:24px;text-align:center}
-.spinner{width:36px;height:36px;border:3px solid var(--bg4);border-top-color:var(--green);border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 14px}
+.load-bar-wrap{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:16px 20px;margin-bottom:24px}
+.load-bar-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;flex-wrap:wrap;gap:8px}
+.load-bar-label{font-size:13px;color:var(--text2)}
+.load-bar-pct{font-size:13px;font-weight:600;color:var(--green)}
+.load-bar-track{height:6px;background:var(--bg4);border-radius:3px;overflow:hidden;margin-bottom:8px}
+.load-bar-fill{height:100%;background:var(--green);border-radius:3px;transition:width 0.5s ease}
+.load-months{display:flex;gap:8px;flex-wrap:wrap}
+.load-month-pill{display:flex;align-items:center;gap:6px;padding:4px 12px;border-radius:99px;font-size:11px;font-weight:500;border:1px solid var(--border);background:var(--bg3);color:var(--text3)}
+.load-month-pill.loading{border-color:rgba(245,158,11,0.4);color:var(--amber);background:rgba(245,158,11,0.07)}
+.load-month-pill.done{border-color:rgba(34,197,94,0.4);color:var(--green);background:rgba(34,197,94,0.07)}
+.pill-dot{width:5px;height:5px;border-radius:50%;background:currentColor}
+.pill-spin{width:10px;height:10px;border:1.5px solid var(--amber);border-top-color:transparent;border-radius:50%;animation:spin 0.7s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
-.progress-track{height:6px;background:var(--bg4);border-radius:3px;overflow:hidden;margin:12px 0 8px}
-.progress-fill{height:100%;background:var(--green);border-radius:3px;transition:width 0.4s ease}
-.progress-label{font-size:13px;color:var(--text2)}
-.progress-sub{font-size:11px;color:var(--text3);margin-top:4px}
 
-.error-box{background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);color:var(--red);border-radius:10px;padding:16px 20px;margin-bottom:20px;font-size:13px;line-height:1.8}
+.error-box{background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.25);color:var(--red);border-radius:10px;padding:16px 20px;margin-bottom:20px;font-size:13px;line-height:1.9}
 
 .section-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:20px 24px;margin-bottom:24px}
 .section-title{font-size:14px;font-weight:600;color:var(--text);margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
 .section-sub{font-size:12px;color:var(--text3);font-weight:400}
 
 .top5-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
-.top5-card{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:16px;position:relative;overflow:hidden}
-.top5-card.r1{border-color:rgba(245,158,11,0.45)}
+.top5-card{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:16px;position:relative;overflow:hidden;transition:border-color 0.3s}
+.top5-card.r1{border-color:rgba(245,158,11,0.5)}
 .top5-card.r2{border-color:rgba(180,180,180,0.3)}
-.top5-card.r3{border-color:rgba(180,120,80,0.3)}
+.top5-card.r3{border-color:rgba(180,120,80,0.35)}
 .top5-rank{position:absolute;top:12px;right:12px;font-size:22px;line-height:1}
-.top5-code{font-family:'SF Mono','Fira Code',monospace;font-size:11px;font-weight:700;color:var(--teal);margin-bottom:8px;word-break:break-all}
-.top5-num{font-size:32px;font-weight:800;line-height:1;margin-bottom:4px}
+.top5-code{font-family:'SF Mono','Fira Code',monospace;font-size:11px;font-weight:700;color:var(--teal);margin-bottom:8px;word-break:break-all;padding-right:28px}
+.top5-num{font-size:34px;font-weight:800;line-height:1;margin-bottom:3px}
 .top5-sub{font-size:11px;color:var(--text3);margin-bottom:10px}
-.top5-months{display:grid;grid-template-columns:1fr 1fr;gap:3px;border-top:1px solid var(--border);padding-top:10px;margin-top:4px}
+.top5-months{display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;border-top:1px solid var(--border);padding-top:10px;margin-top:4px}
 .top5-m{font-size:10px;color:var(--text3)}.top5-m b{color:var(--text2);font-weight:600}
-.tier{display:inline-block;margin-top:8px;padding:2px 10px;border-radius:99px;font-size:10px;font-weight:600}
-.t-p{background:rgba(34,197,94,0.15);color:var(--green);border:1px solid rgba(34,197,94,0.2)}
-.t-s{background:rgba(245,158,11,0.15);color:var(--amber);border:1px solid rgba(245,158,11,0.2)}
-.t-x{background:rgba(239,68,68,0.15);color:var(--red);border:1px solid rgba(239,68,68,0.2)}
+.tier-badge{display:inline-block;margin-top:8px;padding:2px 10px;border-radius:99px;font-size:10px;font-weight:600}
 
 .legend{display:flex;flex-wrap:wrap;gap:12px}
 .li{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--text2)}
-.lsq{width:10px;height:10px;border-radius:2px}
+.lsq{width:10px;height:10px;border-radius:2px;flex-shrink:0}
 .chart-wrap{position:relative;width:100%;height:300px}
+
+.tier-key{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.tier-key-item{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text2);background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:5px 12px}
+.tier-dot{width:8px;height:8px;border-radius:50%}
 
 .filter-row{display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap}
 .filter-row input,.filter-row select{padding:7px 12px;border-radius:8px;border:1px solid var(--border2);background:var(--bg3);color:var(--text);font-size:13px;outline:none}
@@ -72,7 +81,7 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
 .result-count{font-size:12px;color:var(--text3)}
 
 .table-wrap{overflow-x:auto}
-table{width:100%;border-collapse:collapse;min-width:640px}
+table{width:100%;border-collapse:collapse;min-width:600px}
 thead th{font-size:11px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:0.5px;padding:9px 13px;text-align:left;border-bottom:1px solid var(--border2);white-space:nowrap}
 tbody tr{border-bottom:1px solid var(--border);transition:background 0.1s}
 tbody tr:last-child{border-bottom:none}
@@ -80,17 +89,24 @@ tbody tr:hover{background:rgba(255,255,255,0.025)}
 tbody td{padding:10px 13px;font-size:13px;vertical-align:middle}
 .rb{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;font-size:11px;font-weight:700;background:var(--bg4);color:var(--text2)}
 .rb1{background:rgba(245,158,11,0.2);color:#f59e0b}
-.rb2{background:rgba(180,180,180,0.15);color:#9ca3af}
+.rb2{background:rgba(180,180,180,0.12);color:#9ca3af}
 .rb3{background:rgba(180,120,80,0.2);color:#b47850}
 .code{font-family:'SF Mono','Fira Code',monospace;font-size:12px;font-weight:600;color:var(--teal)}
 .nc{text-align:center}.nz{color:var(--text3)}
-.jbadge{display:inline-block;padding:2px 9px;border-radius:99px;font-size:11px;font-weight:600;background:rgba(34,197,94,0.15);color:var(--green);border:1px solid rgba(34,197,94,0.25)}
-.jzero{background:var(--bg3);color:var(--text3);border-color:var(--border)}
+.cur-badge{display:inline-block;padding:2px 9px;border-radius:99px;font-size:11px;font-weight:600;background:rgba(34,197,94,0.15);color:var(--green);border:1px solid rgba(34,197,94,0.25)}
+.cur-zero{background:var(--bg3);color:var(--text3);border-color:var(--border)}
 .bar-wrap{display:flex;align-items:center;gap:7px}
-.bar-track{flex:1;height:5px;background:var(--bg4);border-radius:3px;overflow:hidden;min-width:60px}
+.bar-track{flex:1;height:5px;background:var(--bg4);border-radius:3px;overflow:hidden;min-width:50px}
 .bar-fill{height:100%;border-radius:3px}
 .bar-pct{font-size:11px;color:var(--text2);min-width:28px;text-align:right}
 .fw{font-weight:700}
+
+/* tier classes set dynamically */
+.t-elite{background:rgba(139,92,246,0.15);color:#a78bfa;border:1px solid rgba(139,92,246,0.25)}
+.t-prime{background:rgba(34,197,94,0.15);color:var(--green);border:1px solid rgba(34,197,94,0.2)}
+.t-standard{background:rgba(59,130,246,0.15);color:#60a5fa;border:1px solid rgba(59,130,246,0.2)}
+.t-active{background:rgba(245,158,11,0.15);color:var(--amber);border:1px solid rgba(245,158,11,0.2)}
+.t-passive{background:rgba(239,68,68,0.12);color:var(--red);border:1px solid rgba(239,68,68,0.18)}
 
 .footer{text-align:center;padding:20px;font-size:11px;color:var(--text3);border-top:1px solid var(--border);margin-top:8px}
 @media(max-width:600px){.main{padding:14px 12px}.topbar{padding:12px 16px}}
@@ -111,23 +127,25 @@ tbody td{padding:10px 13px;font-size:13px;vertical-align:middle}
 
 <div class="main">
 
-  <div class="progress-wrap" id="progress-wrap">
-    <div class="spinner"></div>
-    <div class="progress-label" id="progress-label">Connecting to sheet…</div>
-    <div class="progress-track"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
-    <div class="progress-sub" id="progress-sub">Fetching Mar–Jun data in one call</div>
+  <div class="load-bar-wrap" id="load-bar-wrap">
+    <div class="load-bar-top">
+      <span class="load-bar-label" id="load-label">Connecting…</span>
+      <span class="load-bar-pct" id="load-pct">0%</span>
+    </div>
+    <div class="load-bar-track"><div class="load-bar-fill" id="load-fill" style="width:0%"></div></div>
+    <div class="load-months" id="load-months"></div>
   </div>
 
   <div id="error-area"></div>
 
   <div id="top5-card" class="section-card" style="display:none">
-    <div class="section-title">Top 5 mediators <span class="section-sub">by total orders · Mar–Jun 2026</span></div>
+    <div class="section-title" id="top5-title">Top 5 mediators <span class="section-sub" id="top5-sub"></span></div>
     <div class="top5-grid" id="top5-grid"></div>
   </div>
 
   <div id="chart-card" class="section-card" style="display:none">
     <div class="section-title">
-      Monthly breakdown — top 15
+      <span>Monthly breakdown — top 15</span>
       <div class="legend" id="chart-legend"></div>
     </div>
     <div class="chart-wrap">
@@ -137,38 +155,25 @@ tbody td{padding:10px 13px;font-size:13px;vertical-align:middle}
 
   <div id="table-card" class="section-card" style="display:none">
     <div class="section-title">
-      All mediators
-      <div class="month-tabs">
-        <div class="mtab active" onclick="setSort('total',this)">Total</div>
-        <div class="mtab" onclick="setSort('mar',this)">March</div>
-        <div class="mtab" onclick="setSort('apr',this)">April</div>
-        <div class="mtab" onclick="setSort('may',this)">May</div>
-        <div class="mtab" onclick="setSort('jun',this)">June</div>
-      </div>
+      <span>All mediators</span>
+      <div class="month-tabs" id="month-tabs"></div>
     </div>
+    <div class="tier-key" id="tier-key"></div>
     <div class="filter-row">
       <input type="text" id="search-box" placeholder="Search MCS code…" oninput="applyFilters()">
       <select id="tier-filter" onchange="applyFilters()">
         <option value="">All tiers</option>
-        <option value="Priority">Priority (10+)</option>
-        <option value="Standard">Standard (4–9)</option>
-        <option value="Passive">Passive (0–3)</option>
+        <option value="Elite">Elite</option>
+        <option value="Prime">Prime</option>
+        <option value="Standard">Standard</option>
+        <option value="Active">Active</option>
+        <option value="Passive">Passive</option>
       </select>
       <span class="result-count" id="result-count"></span>
     </div>
     <div class="table-wrap">
       <table>
-        <thead><tr>
-          <th style="width:40px">#</th>
-          <th>MCS code</th>
-          <th class="nc" style="width:68px">March</th>
-          <th class="nc" style="width:68px">April</th>
-          <th class="nc" style="width:68px">May</th>
-          <th class="nc" style="width:88px">June <span style="color:var(--green);font-size:9px">(live)</span></th>
-          <th class="nc" style="width:68px">Total</th>
-          <th style="min-width:120px">Share</th>
-          <th style="width:86px">Tier</th>
-        </tr></thead>
+        <thead><tr id="thead-row"></tr></thead>
         <tbody id="tbody"></tbody>
       </table>
     </div>
@@ -181,6 +186,9 @@ tbody td{padding:10px 13px;font-size:13px;vertical-align:middle}
 <script>
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw2RG5g5dSgIfA-_hX7jfjPNdM8qfcG65hT_xHRcqbEZfnjgFZLIBcFh-TZ-21Vy0HwMw/exec';
 
+// Codes to exclude — any MCS code matching these patterns
+const EXCLUDE_PATTERN = /^MCSIN\d/i;
+
 const MCS_CODES = [
   'MCSSUNIL','MCSJANHVI','MCSRAJ','MCSPIYUSH','MCSAVNI','MCSHIM','MCSMANSI','MCSABV',
   'MCSSHIVANI','MCSPRINCE','MCSFTS','MCSHIMANSHI','MCSTDC','MCSYASHVI','MCSBHAVISHA',
@@ -190,35 +198,112 @@ const MCS_CODES = [
   'MCSAAYUSH','MCSINANJU','MCSINELMA','MCSSALONI','MCSLAV','MCSRAD','MCSJATIN',
   'MCSPRANJUL','MCSANJALI','MCSVAISHNAVI','MCSVINITA','MCSBANALI','MCSERAM','MCSSHREYA',
   'MCSURVASHI','MCSTAN','MCSSWATI','MCSDAKSH','MCSMEGHAL','MCSARCHI','MCSGAURAV',
-  'MCSJAIN','MCSBDX','MCSIN7 & IN8','MCSTEAM','MCSHUNNY','MCSAISHA','MCSKHUSHAL',
+  'MCSJAIN','MCSBDX','MCSTEAM','MCSHUNNY','MCSAISHA','MCSKHUSHAL',
   'MCSVAISHALI','MCSPOOJA','MCSDIVYA','MCSSHIKHA','MCSKARISHMA','MCSADDA','MCSLAVA',
   'MCSTANISHA','MCSRITESH','MCSMEGHA','MCSAJ','MCSREV','MCSKAPOOR','MCSNANDINI',
   'MCSVIBHU','MCSSHIVAM','MCSMOKSH','MCSANU','MCSXNIDHI','MCSBUNNY','MCSSTARS','MCSABHISHEK'
+].filter(c => !EXCLUDE_PATTERN.test(c));
+
+// ── Tier thresholds (total across shown months) ──
+// Elite ≥ 600 · Prime ≥ 300 · Standard ≥ 100 · Active ≥ 20 · Passive < 20
+const TIERS = [
+  { label:'Elite',    min:600, cls:'t-elite', dot:'#a78bfa' },
+  { label:'Prime',    min:300, cls:'t-prime', dot:'#22c55e' },
+  { label:'Standard', min:100, cls:'t-standard', dot:'#60a5fa' },
+  { label:'Active',   min:20,  cls:'t-active', dot:'#f59e0b' },
+  { label:'Passive',  min:0,   cls:'t-passive', dot:'#ef4444' },
 ];
 
-const MONTH_KEYS  = ['mar','apr','may','jun'];
-const MONTH_NUMS  = { mar:3, apr:4, may:5, jun:6 };
-const MONTH_LABELS= { mar:'March', apr:'April', may:'May', jun:'June' };
-const COLORS      = { mar:'#3b82f6', apr:'#14b8a6', may:'#f59e0b', jun:'#22c55e' };
-
-let allRows  = [];
-let sortKey  = 'total';
-let chartInst= null;
-
-function tier(n){ return n>=10?{l:'Priority',c:'t-p'}:n>=4?{l:'Standard',c:'t-s'}:{l:'Passive',c:'t-x'}; }
-
-function setProgress(pct, label, sub) {
-  document.getElementById('progress-fill').style.width  = pct + '%';
-  document.getElementById('progress-label').textContent = label;
-  if (sub !== undefined) document.getElementById('progress-sub').textContent = sub;
+function getTier(total) {
+  for (const t of TIERS) if (total >= t.min) return t;
+  return TIERS[TIERS.length - 1];
 }
 
-async function fetchMonth(monthKey) {
-  const mn   = MONTH_NUMS[monthKey];
-  const year = 2026;
-  const from = year + '-' + String(mn).padStart(2,'0');
-  const to   = from;
-  const url  = SCRIPT_URL + '?action=dashGetAllOrders&fromDate=' + from + '&toDate=' + to;
+// ── Build dynamic months: current + last 2 ──
+function buildMonths() {
+  const now    = new Date();
+  const months = [];
+  const NAMES  = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const COLORS = ['#3b82f6','#14b8a6','#f59e0b','#22c55e','#a78bfa','#f472b6','#34d399','#fb923c','#38bdf8','#a3e635','#f87171','#818cf8'];
+  for (let i = 2; i >= 0; i--) {
+    const d   = new Date(now.getFullYear(), now.getMonth() - i, 1);
+    const key = 'm' + d.getFullYear() + '_' + (d.getMonth() + 1);
+    months.push({
+      key,
+      label:    NAMES[d.getMonth()] + ' ' + d.getFullYear(),
+      short:    NAMES[d.getMonth()],
+      from:     d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0'),
+      to:       d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0'),
+      num:      d.getMonth() + 1,
+      year:     d.getFullYear(),
+      isCurrent: i === 0,
+      color:    COLORS[d.getMonth()],
+    });
+  }
+  return months;
+}
+
+const MONTHS = buildMonths();
+// Sort MCS_CODES longest-first so specific codes match before shorter ones
+// e.g. MCSVAISHNAVIPAID matches MCSVAISHNAVI not a shorter prefix
+MCS_CODES.sort((a, b) => b.length - a.length);
+const CURRENT_MONTH = MONTHS[MONTHS.length - 1];
+
+let allRows = [];
+let sortKey = 'total';
+let chartInst = null;
+let loadedMonths = {};
+
+// ── Progress UI ──
+function initLoadUI() {
+  const pills = document.getElementById('load-months');
+  pills.innerHTML = MONTHS.map(m => `
+    <div class="load-month-pill" id="pill-${m.key}">
+      <span class="pill-dot"></span>${m.label}
+    </div>`).join('');
+}
+
+function setPillState(key, state) {
+  const pill = document.getElementById('pill-' + key);
+  if (!pill) return;
+  pill.className = 'load-month-pill ' + state;
+  if (state === 'loading') {
+    pill.innerHTML = `<span class="pill-spin"></span>${MONTHS.find(m=>m.key===key).label}`;
+  } else if (state === 'done') {
+    pill.innerHTML = `<span class="pill-dot"></span>${MONTHS.find(m=>m.key===key).label} ✓`;
+  }
+}
+
+function setLoadBar(pct, label) {
+  document.getElementById('load-fill').style.width = pct + '%';
+  document.getElementById('load-pct').textContent  = Math.round(pct) + '%';
+  document.getElementById('load-label').textContent = label;
+}
+
+// ── Build table headers dynamically ──
+function buildTableHeaders() {
+  const tabsEl = document.getElementById('month-tabs');
+  tabsEl.innerHTML = `<div class="mtab active" onclick="setSort('total',this)">Total</div>` +
+    MONTHS.map(m => `<div class="mtab" onclick="setSort('${m.key}',this)">${m.short}</div>`).join('');
+
+  document.getElementById('thead-row').innerHTML =
+    `<th style="width:40px">#</th>
+     <th>MCS code</th>` +
+    MONTHS.map(m => `<th class="nc" style="width:72px">${m.short}${m.isCurrent ? ' <span style="color:var(--green);font-size:9px">(live)</span>' : ''}</th>`).join('') +
+    `<th class="nc" style="width:68px">Total</th>
+     <th style="min-width:110px">Share</th>
+     <th style="width:86px">Tier</th>`;
+}
+
+function buildTierKey() {
+  document.getElementById('tier-key').innerHTML = TIERS.map(t =>
+    `<div class="tier-key-item"><div class="tier-dot" style="background:${t.dot}"></div>${t.label} ${t === TIERS[TIERS.length-1] ? '< '+TIERS[TIERS.length-2].min : t.min === TIERS[0].min ? '≥ '+t.min : t.min+'–'+(TIERS[TIERS.indexOf(t)-1].min-1)}</div>`
+  ).join('');
+}
+
+// ── Fetch ──
+async function fetchMonth(month) {
+  const url = SCRIPT_URL + '?action=dashGetAllOrders&fromDate=' + month.from + '&toDate=' + month.to;
   const resp = await fetch(url);
   if (!resp.ok) throw new Error('HTTP ' + resp.status);
   const data = await resp.json();
@@ -226,99 +311,116 @@ async function fetchMonth(monthKey) {
   return data.orders || [];
 }
 
+// ── Main ──
 async function initDashboard() {
-  allRows = [];
+  allRows       = [];
+  loadedMonths  = {};
   document.getElementById('error-area').innerHTML = '';
-  document.getElementById('progress-wrap').style.display = 'block';
+  document.getElementById('load-bar-wrap').style.display = 'block';
   document.getElementById('top5-card').style.display     = 'none';
   document.getElementById('chart-card').style.display    = 'none';
   document.getElementById('table-card').style.display    = 'none';
   document.getElementById('last-updated').textContent    = 'Loading…';
 
-  const counts = {};
-  MCS_CODES.forEach(c => { counts[c] = { mar:0, apr:0, may:0, jun:0 }; });
+  initLoadUI();
+  buildTableHeaders();
+  buildTierKey();
 
-  try {
-    const monthNames = ['March','April','May','June'];
-    for (let i = 0; i < MONTH_KEYS.length; i++) {
-      const key = MONTH_KEYS[i];
-      setProgress(Math.round((i / 4) * 90), 'Fetching ' + monthNames[i] + ' orders…', 'Call ' + (i+1) + ' of 4');
-      const orders = await fetchMonth(key);
+  const counts = {};
+  MCS_CODES.forEach(c => {
+    counts[c] = {};
+    MONTHS.forEach(m => counts[c][m.key] = 0);
+  });
+
+  for (let i = 0; i < MONTHS.length; i++) {
+    const month = MONTHS[i];
+    setPillState(month.key, 'loading');
+    setLoadBar((i / MONTHS.length) * 90, 'Fetching ' + month.label + ' orders…');
+
+    try {
+      const orders = await fetchMonth(month);
       orders.forEach(o => {
-        const code = (o.mcsCode || '').trim().toUpperCase();
-        if (counts[code]) counts[code][key]++;
-        else {
-          counts[code] = { mar:0, apr:0, may:0, jun:0 };
-          counts[code][key] = 1;
-        }
+        const raw = (o.mcsCode || '').trim().toUpperCase();
+        if (EXCLUDE_PATTERN.test(raw)) return;
+        // Match raw code to the longest known MCS code it starts with
+        const parent = MCS_CODES.find(c => raw === c || raw.startsWith(c));
+        if (!parent) return;
+        counts[parent][month.key] = (counts[parent][month.key] || 0) + 1;
       });
+      loadedMonths[month.key] = true;
+      setPillState(month.key, 'done');
+    } catch(err) {
+      setPillState(month.key, '');
+      document.getElementById('error-area').innerHTML = `
+        <div class="error-box">⚠️ Error fetching ${month.label}: <b>${err.message}</b><br>
+        Make sure <code>dashGetAllOrders</code> is in your <code>doGet</code> and deployment is set to <b>Anyone</b>.</div>`;
     }
-    setProgress(100, 'Processing data…', '');
-  } catch(err) {
-    document.getElementById('progress-wrap').style.display = 'none';
-    document.getElementById('error-area').innerHTML = `
-      <div class="error-box">
-        ⚠️ Failed to load data: <b>${err.message}</b><br><br>
-        Check that:<br>
-        • Apps Script is deployed with <b>Who has access = Anyone</b><br>
-        • <code>dashGetAllOrders</code> action is in your <b>doGet</b> in Code.gs<br>
-        • Open browser console (F12) for more details
-      </div>`;
-    return;
+
+    // Rebuild rows and render after EACH month loads
+    allRows = Object.entries(counts).map(([code, m]) => {
+      const row = { code };
+      let total = 0;
+      MONTHS.forEach(mo => { row[mo.key] = m[mo.key] || 0; total += row[mo.key]; });
+      row.total = total;
+      return row;
+    }).sort((a, b) => b.total - a.total);
+
+    // Show sections after first month
+    if (i === 0) {
+      document.getElementById('top5-card').style.display  = 'block';
+      document.getElementById('chart-card').style.display = 'block';
+      document.getElementById('table-card').style.display = 'block';
+    }
+
+    renderTop5();
+    renderChart();
+    applyFilters();
+
+    setLoadBar(((i + 1) / MONTHS.length) * 100, i === MONTHS.length - 1 ? 'All data loaded ✓' : 'Fetching next month…');
   }
 
-  allRows = Object.entries(counts).map(([code, m]) => ({
-    code,
-    mar: m.mar, apr: m.apr, may: m.may, jun: m.jun,
-    total: m.mar + m.apr + m.may + m.jun
-  })).sort((a,b) => b.total - a.total);
-
-  document.getElementById('progress-wrap').style.display = 'none';
-  document.getElementById('top5-card').style.display     = 'block';
-  document.getElementById('chart-card').style.display    = 'block';
-  document.getElementById('table-card').style.display    = 'block';
-
-  renderTop5();
-  renderChart();
-  applyFilters();
-
+  document.getElementById('load-bar-wrap').style.display = 'none';
   const now = new Date();
   document.getElementById('last-updated').textContent = 'Updated ' + now.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
   document.getElementById('footer-date').textContent  = now.toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'});
   scheduleAutoRefresh();
 }
 
+// ── Render top 5 ──
 function renderTop5() {
-  const top5   = allRows.slice(0,5);
-  const emojis = ['🥇','🥈','🥉','4️⃣','5️⃣'];
-  const rcls   = ['r1','r2','r3','',''];
-  document.getElementById('top5-grid').innerHTML = top5.map((r,i) => {
-    const t = tier(r.total);
+  const sub  = MONTHS.map(m=>m.label).join(', ');
+  document.getElementById('top5-sub').textContent = '· ' + sub;
+  const top5  = allRows.filter(r=>r.total>0).slice(0,5);
+  const emojis= ['🥇','🥈','🥉','4️⃣','5️⃣'];
+  const rcls  = ['r1','r2','r3','',''];
+  document.getElementById('top5-grid').innerHTML = top5.map((r,i)=>{
+    const t = getTier(r.total);
     return `<div class="top5-card ${rcls[i]}">
       <div class="top5-rank">${emojis[i]}</div>
       <div class="top5-code">${r.code}</div>
       <div class="top5-num">${r.total}</div>
       <div class="top5-sub">total orders</div>
       <div class="top5-months">
-        ${MONTH_KEYS.map(k=>`<div class="top5-m">${MONTH_LABELS[k].slice(0,3)} <b>${r[k]}</b></div>`).join('')}
+        ${MONTHS.map(m=>`<div class="top5-m">${m.short} <b>${r[m.key]}</b></div>`).join('')}
       </div>
-      <span class="tier ${t.c}">${t.l}</span>
+      <span class="tier-badge ${t.cls}">${t.label}</span>
     </div>`;
   }).join('');
 }
 
+// ── Render chart ──
 function renderChart() {
-  const active = allRows.filter(r=>r.total>0).slice(0,15);
-  const labels = active.map(r=>r.code.replace('MCS',''));
-  const datasets = MONTH_KEYS.map(k=>({
-    label: MONTH_LABELS[k],
-    data: active.map(r=>r[k]),
-    backgroundColor: COLORS[k],
+  const active   = allRows.filter(r=>r.total>0).slice(0,15);
+  const labels   = active.map(r=>r.code.replace('MCS',''));
+  const datasets = MONTHS.map(m=>({
+    label: m.label,
+    data: active.map(r=>r[m.key]),
+    backgroundColor: m.color,
     borderRadius: 3,
     borderWidth: 0,
   }));
-  document.getElementById('chart-legend').innerHTML = MONTH_KEYS.map(k=>
-    `<div class="li"><div class="lsq" style="background:${COLORS[k]}"></div>${MONTH_LABELS[k]}</div>`
+  document.getElementById('chart-legend').innerHTML = MONTHS.map(m=>
+    `<div class="li"><div class="lsq" style="background:${m.color}"></div>${m.label}</div>`
   ).join('');
   if (chartInst) { chartInst.destroy(); chartInst=null; }
   chartInst = new Chart(document.getElementById('barChart'),{
@@ -328,33 +430,37 @@ function renderChart() {
       plugins:{legend:{display:false},tooltip:{backgroundColor:'#1a1a1a',borderColor:'rgba(255,255,255,0.1)',borderWidth:1,titleColor:'#f0f0f0',bodyColor:'#a0a0a0',padding:10}},
       scales:{
         x:{ticks:{color:'#666',font:{size:10},autoSkip:false,maxRotation:40},grid:{color:'rgba(255,255,255,0.04)'}},
-        y:{beginAtZero:true,ticks:{color:'#666',font:{size:11},stepSize:1},grid:{color:'rgba(255,255,255,0.06)'}}
+        y:{beginAtZero:true,ticks:{color:'#666',font:{size:11}},grid:{color:'rgba(255,255,255,0.06)'}}
       }
     }
   });
 }
 
+// ── Render table ──
 function renderTable(rows) {
-  const grand  = rows.reduce((s,r)=>s+r.total,0)||1;
-  const maxT   = Math.max(...rows.map(r=>r.total),1);
-  const rbcls  = ['rb1','rb2','rb3'];
+  const grand = rows.reduce((s,r)=>s+r.total,0)||1;
+  const maxT  = Math.max(...rows.map(r=>r.total),1);
+  const rbcls = ['rb1','rb2','rb3'];
   document.getElementById('tbody').innerHTML = rows.map((r,i)=>{
     const pct  = Math.round((r.total/grand)*100);
     const barW = Math.round((r.total/maxT)*100);
-    const barC = barW>66?'#22c55e':barW>33?'#f59e0b':'#ef4444';
-    const t    = tier(r.total);
+    const t    = getTier(r.total);
+    const barC = t.dot;
     const rc   = rbcls[i]||'';
-    const cell = v => v>0?`<td class="nc">${v}</td>`:`<td class="nc nz">—</td>`;
-    const jun  = r.jun>0
-      ?`<td class="nc"><span class="jbadge">${r.jun}</span></td>`
-      :`<td class="nc"><span class="jbadge jzero">—</span></td>`;
+    const cell = v => v>0 ? `<td class="nc">${v}</td>` : `<td class="nc nz">—</td>`;
+    const curKey = CURRENT_MONTH.key;
+    const curV   = r[curKey];
+    const curCell = `<td class="nc"><span class="${curV>0?'cur-badge':'cur-badge cur-zero'}">${curV>0?curV:'—'}</span></td>`;
+    const monthCells = MONTHS.map(m =>
+      m.isCurrent ? curCell : cell(r[m.key])
+    ).join('');
     return `<tr>
       <td><span class="rb ${rc}">${i+1}</span></td>
       <td><span class="code">${r.code}</span></td>
-      ${cell(r.mar)}${cell(r.apr)}${cell(r.may)}${jun}
+      ${monthCells}
       <td class="nc fw">${r.total||'—'}</td>
       <td><div class="bar-wrap"><div class="bar-track"><div class="bar-fill" style="width:${barW}%;background:${barC}"></div></div><span class="bar-pct">${pct}%</span></div></td>
-      <td><span class="tier ${t.c}">${t.l}</span></td>
+      <td><span class="tier-badge ${t.cls}">${t.label}</span></td>
     </tr>`;
   }).join('');
   document.getElementById('result-count').textContent = rows.length + ' mediators';
@@ -368,11 +474,11 @@ function setSort(key, el) {
 }
 
 function applyFilters() {
-  const q    = (document.getElementById('search-box').value||'').trim().toLowerCase();
-  const tf   = document.getElementById('tier-filter').value;
-  let rows   = [...allRows].sort((a,b)=>b[sortKey]-a[sortKey]);
+  const q  = (document.getElementById('search-box').value||'').trim().toLowerCase();
+  const tf = document.getElementById('tier-filter').value;
+  let rows = [...allRows].sort((a,b)=>b[sortKey]-a[sortKey]);
   if (q)  rows = rows.filter(r=>r.code.toLowerCase().includes(q));
-  if (tf) rows = rows.filter(r=>tier(r.total).l===tf);
+  if (tf) rows = rows.filter(r=>getTier(r.total).label===tf);
   renderTable(rows);
 }
 
