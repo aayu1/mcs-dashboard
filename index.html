@@ -145,7 +145,7 @@ tbody td{padding:10px 13px;font-size:13px;vertical-align:middle}
 
   <div id="chart-card" class="section-card" style="display:none">
     <div class="section-title">
-      <span>Monthly breakdown — top 15</span>
+      <span>Monthly breakdown — top 10</span>
       <div class="legend" id="chart-legend"></div>
     </div>
     <div class="chart-wrap">
@@ -332,52 +332,52 @@ async function initDashboard() {
     MONTHS.forEach(m => counts[c][m.key] = 0);
   });
 
-  for (let i = 0; i < MONTHS.length; i++) {
-    const month = MONTHS[i];
-    setPillState(month.key, 'loading');
-    setLoadBar((i / MONTHS.length) * 90, 'Fetching ' + month.label + ' orders…');
+  // Fetch all months in PARALLEL — 3x faster than sequential
+  MONTHS.forEach(m => setPillState(m.key, 'loading'));
+  setLoadBar(5, 'Fetching all months simultaneously…');
 
-    try {
-      const orders = await fetchMonth(month);
-      orders.forEach(o => {
+  const fetchResults = await Promise.allSettled(MONTHS.map(m => fetchMonth(m)));
+  let loaded = 0;
+
+  fetchResults.forEach((result, i) => {
+    const month = MONTHS[i];
+    if (result.status === 'fulfilled') {
+      result.value.forEach(o => {
         const raw = (o.mcsCode || '').trim().toUpperCase();
         if (EXCLUDE_PATTERN.test(raw)) return;
-        // Match raw code to the longest known MCS code it starts with
         const parent = MCS_CODES.find(c => raw === c || raw.startsWith(c));
         if (!parent) return;
         counts[parent][month.key] = (counts[parent][month.key] || 0) + 1;
       });
       loadedMonths[month.key] = true;
       setPillState(month.key, 'done');
-    } catch(err) {
+      loaded++;
+      setLoadBar(5 + (loaded / MONTHS.length) * 90, 'Processed ' + month.label);
+    } else {
       setPillState(month.key, '');
-      document.getElementById('error-area').innerHTML = `
-        <div class="error-box">⚠️ Error fetching ${month.label}: <b>${err.message}</b><br>
-        Make sure <code>dashGetAllOrders</code> is in your <code>doGet</code> and deployment is set to <b>Anyone</b>.</div>`;
+      document.getElementById('error-area').innerHTML =
+        '<div class="error-box">⚠️ Error fetching ' + month.label + ': <b>' + result.reason.message + '</b><br>' +
+        'Make sure <code>dashGetAllOrders</code> is in your <code>doGet</code> and deployment is set to <b>Anyone</b>.</div>';
     }
+  });
 
-    // Rebuild rows and render after EACH month loads
-    allRows = Object.entries(counts).map(([code, m]) => {
-      const row = { code };
-      let total = 0;
-      MONTHS.forEach(mo => { row[mo.key] = m[mo.key] || 0; total += row[mo.key]; });
-      row.total = total;
-      return row;
-    }).sort((a, b) => b.total - a.total);
+  allRows = Object.entries(counts).map(([code, m]) => {
+    const row = { code };
+    let total = 0;
+    MONTHS.forEach(mo => { row[mo.key] = m[mo.key] || 0; total += row[mo.key]; });
+    row.total = total;
+    return row;
+  }).sort((a, b) => b.total - a.total);
 
-    // Show sections after first month
-    if (i === 0) {
-      document.getElementById('top5-card').style.display  = 'block';
-      document.getElementById('chart-card').style.display = 'block';
-      document.getElementById('table-card').style.display = 'block';
-    }
+  document.getElementById('top5-card').style.display  = 'block';
+  document.getElementById('chart-card').style.display = 'block';
+  document.getElementById('table-card').style.display = 'block';
+  renderTop5();
+  renderChart();
+  applyFilters();
+  setLoadBar(100, 'All data loaded ✓');
 
-    renderTop5();
-    renderChart();
-    applyFilters();
-
-    setLoadBar(((i + 1) / MONTHS.length) * 100, i === MONTHS.length - 1 ? 'All data loaded ✓' : 'Fetching next month…');
-  }
+  
 
   document.getElementById('load-bar-wrap').style.display = 'none';
   const now = new Date();
@@ -410,7 +410,7 @@ function renderTop5() {
 
 // ── Render chart ──
 function renderChart() {
-  const active   = allRows.filter(r=>r.total>0).slice(0,15);
+  const active   = allRows.filter(r=>r.total>0).slice(0,10);
   const labels   = active.map(r=>r.code.replace('MCS',''));
   const datasets = MONTHS.map(m=>({
     label: m.label,
