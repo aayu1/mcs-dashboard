@@ -139,7 +139,10 @@ tbody td{padding:10px 13px;font-size:13px;vertical-align:middle}
   <div id="error-area"></div>
 
   <div id="top5-card" class="section-card" style="display:none">
-    <div class="section-title" id="top5-title">Top 5 mediators <span class="section-sub" id="top5-sub"></span></div>
+    <div class="section-title" id="top5-title">
+      <span>Top 5 mediators <span class="section-sub" id="top5-sub"></span></span>
+      <div class="month-tabs" id="top5-tabs"></div>
+    </div>
     <div class="top5-grid" id="top5-grid"></div>
   </div>
 
@@ -190,7 +193,7 @@ const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw2RG5g5dSgIfA-_hX7j
 const EXCLUDE_PATTERN = /^MCSIN\d/i;
 
 const MCS_CODES = [
-  'MCSSUNIL','MCSRAJ','MCSPIYUSH','MCSAVNI','MCSHIM','MCSMANSI','MCSABV',
+  'MCSSUNIL','MCSJANHVI','MCSRAJ','MCSPIYUSH','MCSAVNI','MCSHIM','MCSMANSI','MCSABV',
   'MCSSHIVANI','MCSPRINCE','MCSFTS','MCSHIMANSHI','MCSTDC','MCSYASHVI','MCSBHAVISHA',
   'MCSLVL','MCSNHIL','MCSSURAT','MCSSAAD','MCSSAPNA','MCSAMAAN','MCSMONTY','MCSKEESHA',
   'MCSRUDRA','MCSNITU','MCSUMA','MCSDEV','MCSSHEF','MCSTANU','MCSSOM','MCSAPK','MCSMIT',
@@ -201,7 +204,7 @@ const MCS_CODES = [
   'MCSJAIN','MCSBDX','MCSTEAM','MCSHUNNY','MCSAISHA','MCSKHUSHAL',
   'MCSVAISHALI','MCSPOOJA','MCSDIVYA','MCSSHIKHA','MCSKARISHMA','MCSADDA','MCSLAVA',
   'MCSTANISHA','MCSRITESH','MCSMEGHA','MCSAJ','MCSREV','MCSKAPOOR','MCSNANDINI',
-  'MCSVIBHU','MCSSHIVAM','MCSMOKSH','MCSANU','MCSXNIDHI','MCSBUNNY','MCSSTARS','MCSABHISHEK','MCSANJU','MCSLOKESH','MCSJAHNVI',
+  'MCSVIBHU','MCSSHIVAM','MCSMOKSH','MCSANU','MCSXNIDHI','MCSBUNNY','MCSSTARS','MCSABHISHEK'
 ].filter(c => !EXCLUDE_PATTERN.test(c));
 
 // ── Tier thresholds (total across shown months) ──
@@ -281,6 +284,22 @@ function setLoadBar(pct, label) {
 }
 
 // ── Build table headers dynamically ──
+function buildTop5Tabs() {
+  const el = document.getElementById('top5-tabs');
+  el.innerHTML = `<div class="mtab active" onclick="setTop5Month('total',this)">Total</div>` +
+    MONTHS.map(m => `<div class="mtab" onclick="setTop5Month('${m.key}',this)">${m.short}</div>`).join('');
+}
+
+function setTop5Month(key, el) {
+  document.querySelectorAll('#top5-tabs .mtab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  // temporarily set sortKey for renderTop5 only
+  const prev = sortKey;
+  sortKey = key;
+  renderTop5();
+  sortKey = prev;
+}
+
 function buildTableHeaders() {
   const tabsEl = document.getElementById('month-tabs');
   tabsEl.innerHTML = `<div class="mtab active" onclick="setSort('total',this)">Total</div>` +
@@ -326,6 +345,7 @@ async function initDashboard() {
   document.getElementById('last-updated').textContent    = 'Loading…';
 
   initLoadUI();
+  buildTop5Tabs();
   buildTableHeaders();
   buildTierKey();
 
@@ -351,7 +371,9 @@ async function initDashboard() {
       // Determine which month bucket this order belongs to
       const monthNum = o.month; // month number returned by script
       const orderYear = o.year || new Date().getFullYear();
-      const bucket   = MONTHS.find(m => m.num === monthNum && m.year === orderYear);
+      // Match by month number AND year — fallback to month-only if year missing
+      let bucket = MONTHS.find(m => m.num === monthNum && m.year === orderYear);
+      if (!bucket) bucket = MONTHS.find(m => m.num === monthNum); // fallback: year missing
       if (!bucket) return;
       counts[parent][bucket.key] = (counts[parent][bucket.key] || 0) + 1;
     });
@@ -393,21 +415,29 @@ async function initDashboard() {
 
 // ── Render top 5 ──
 function renderTop5() {
-  const sub  = MONTHS.map(m=>m.label).join(', ');
-  document.getElementById('top5-sub').textContent = '· ' + sub;
-  const top5  = allRows.filter(r=>r.total>0).slice(0,5);
-  const emojis= ['🥇','🥈','🥉','4️⃣','5️⃣'];
-  const rcls  = ['r1','r2','r3','',''];
-  document.getElementById('top5-grid').innerHTML = top5.map((r,i)=>{
+  const isTotal = sortKey === 'total';
+  const activeM = MONTHS.find(m => m.key === sortKey);
+  const subLabel = isTotal
+    ? '· ' + MONTHS.map(m => m.label).join(', ')
+    : '· ' + activeM.label + ' only';
+  document.getElementById('top5-sub').textContent = subLabel;
+
+  const ranked = [...allRows]
+    .filter(r => r[sortKey] > 0)
+    .sort((a, b) => b[sortKey] - a[sortKey])
+    .slice(0, 5);
+
+  const emojis = ['🥇','🥈','🥉','4️⃣','5️⃣'];
+  const rcls   = ['r1','r2','r3','',''];
+
+  document.getElementById('top5-grid').innerHTML = ranked.map((r, i) => {
+    const displayVal = isTotal ? r.total : r[sortKey];
     const t = getTier(r.total);
     return `<div class="top5-card ${rcls[i]}">
       <div class="top5-rank">${emojis[i]}</div>
       <div class="top5-code">${r.code}</div>
-      <div class="top5-num">${r.total}</div>
-      <div class="top5-sub">total orders</div>
-      <div class="top5-months">
-        ${MONTHS.map(m=>`<div class="top5-m">${m.short} <b>${r[m.key]}</b></div>`).join('')}
-      </div>
+      <div class="top5-num">${displayVal}</div>
+      <div class="top5-sub">${isTotal ? 'total orders' : activeM.label + ' orders'}</div>
       <span class="tier-badge ${t.cls}">${t.label}</span>
     </div>`;
   }).join('');
@@ -475,6 +505,7 @@ function setSort(key, el) {
   sortKey = key;
   document.querySelectorAll('.mtab').forEach(t=>t.classList.remove('active'));
   el.classList.add('active');
+  renderTop5();
   applyFilters();
 }
 
