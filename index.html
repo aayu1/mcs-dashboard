@@ -3,530 +3,653 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MCS Mediator Dashboard</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<title>MCS Media — Combined Dashboard</title>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#0f0f0f;--bg2:#1a1a1a;--bg3:#242424;--bg4:#2e2e2e;
-  --border:rgba(255,255,255,0.08);--border2:rgba(255,255,255,0.14);
+  --bg:#0c0c0c;--bg2:#171717;--bg3:#222;--bg4:#2a2a2a;
+  --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.13);
   --text:#f0f0f0;--text2:#a0a0a0;--text3:#555;
-  --green:#22c55e;--amber:#f59e0b;--red:#ef4444;--teal:#14b8a6;--blue:#3b82f6;
+  --green:#22c55e;--amber:#f59e0b;--red:#ef4444;--blue:#3b82f6;--teal:#14b8a6;--purple:#a855f7;
 }
-body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:14px;line-height:1.5;min-height:100vh}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:14px;line-height:1.5;min-height:100vh}
 
-.topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 28px;border-bottom:1px solid var(--border);background:var(--bg2);position:sticky;top:0;z-index:100;flex-wrap:wrap;gap:10px}
-.logo{font-size:16px;font-weight:700}.logo span{color:var(--green)}
-.live-pill{display:flex;align-items:center;gap:6px;background:rgba(34,197,94,0.12);border:1px solid rgba(34,197,94,0.25);color:var(--green);border-radius:99px;padding:3px 10px;font-size:11px;font-weight:500}
-.live-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
-.topbar-right{display:flex;align-items:center;gap:10px}
-.last-updated{font-size:12px;color:var(--text3)}
-.btn{padding:7px 16px;border-radius:8px;border:1px solid var(--border2);background:var(--bg3);color:var(--text);font-size:13px;cursor:pointer;transition:background 0.15s}
-.btn:hover{background:var(--bg4)}
-.btn-green{background:rgba(34,197,94,0.15);border-color:rgba(34,197,94,0.35);color:var(--green)}
-.btn-green:hover{background:rgba(34,197,94,0.25)}
+/* ── TOPBAR ── */
+.topbar{display:flex;align-items:center;gap:12px;padding:11px 22px;border-bottom:1px solid var(--border2);background:var(--bg2);position:sticky;top:0;z-index:200;flex-wrap:wrap}
+.logo{font-weight:800;font-size:15px;letter-spacing:-.2px;white-space:nowrap}
+.logo-g{color:var(--green)}
+.live-pill{display:flex;align-items:center;gap:5px;background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.2);color:var(--green);border-radius:99px;padding:3px 10px;font-size:11px;font-weight:600}
+.ldot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.topbar-r{margin-left:auto;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.upd{font-size:12px;color:var(--text3)}
+.btn{border:1px solid var(--border2);background:var(--bg3);color:var(--text2);padding:5px 13px;border-radius:7px;cursor:pointer;font-size:12px;font-weight:600;transition:.15s;font-family:inherit}
+.btn:hover{background:var(--bg4);color:var(--text)}
 
-.main{padding:24px 28px;max-width:1400px;margin:0 auto}
+/* ── TAB NAV ── */
+.tab-nav{display:flex;gap:0;background:var(--bg2);border-bottom:1px solid var(--border2);padding:0 22px;overflow-x:auto}
+.tnav{padding:11px 18px;border:none;background:none;color:var(--text2);cursor:pointer;font-size:13px;font-weight:600;border-bottom:2px solid transparent;margin-bottom:-1px;white-space:nowrap;font-family:inherit;transition:.15s}
+.tnav:hover{color:var(--text)}
+.tnav.active{color:var(--green);border-bottom-color:var(--green)}
+.tnav .badge{display:inline-block;margin-left:6px;background:rgba(239,68,68,.18);color:var(--red);font-size:10px;font-weight:800;padding:1px 6px;border-radius:99px;vertical-align:middle}
 
-.load-bar-wrap{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:16px 20px;margin-bottom:24px}
-.load-bar-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;flex-wrap:wrap;gap:8px}
-.load-bar-label{font-size:13px;color:var(--text2)}
-.load-bar-pct{font-size:13px;font-weight:600;color:var(--green)}
-.load-bar-track{height:6px;background:var(--bg4);border-radius:3px;overflow:hidden;margin-bottom:8px}
-.load-bar-fill{height:100%;background:var(--green);border-radius:3px;transition:width 0.5s ease}
-.load-months{display:flex;gap:8px;flex-wrap:wrap}
-.load-month-pill{display:flex;align-items:center;gap:6px;padding:4px 12px;border-radius:99px;font-size:11px;font-weight:500;border:1px solid var(--border);background:var(--bg3);color:var(--text3)}
-.load-month-pill.loading{border-color:rgba(245,158,11,0.4);color:var(--amber);background:rgba(245,158,11,0.07)}
-.load-month-pill.done{border-color:rgba(34,197,94,0.4);color:var(--green);background:rgba(34,197,94,0.07)}
-.pill-dot{width:5px;height:5px;border-radius:50%;background:currentColor}
-.pill-spin{width:10px;height:10px;border:1.5px solid var(--amber);border-top-color:transparent;border-radius:50%;animation:spin 0.7s linear infinite}
+/* ── SCREENS ── */
+.screen{display:none;flex-direction:column;align-items:center;justify-content:center;min-height:70vh;padding:32px;text-align:center}
+.screen.on{display:flex}
+.setup-card{background:var(--bg2);border:1px solid var(--border2);border-radius:16px;padding:32px 36px;max-width:520px;width:100%}
+.setup-title{font-size:19px;font-weight:800;margin-bottom:6px}
+.setup-sub{color:var(--text2);font-size:13px;margin-bottom:22px;line-height:1.65}
+.url-in{width:100%;background:var(--bg3);border:1px solid var(--border2);color:var(--text);padding:10px 13px;border-radius:8px;font-size:12px;font-family:monospace;outline:none;margin-bottom:12px}
+.url-in:focus{border-color:var(--green)}
+.btn-p{background:var(--green);color:#000;border:none;padding:11px 24px;border-radius:8px;font-weight:800;cursor:pointer;font-size:14px;width:100%;font-family:inherit}
+.btn-p:hover{opacity:.88}
+.spinner{width:36px;height:36px;border:3px solid var(--border2);border-top-color:var(--green);border-radius:50%;animation:spin .75s linear infinite;margin-bottom:14px}
 @keyframes spin{to{transform:rotate(360deg)}}
+.err-icon{font-size:38px;margin-bottom:10px}
+.err-t{font-weight:700;color:var(--red);margin-bottom:6px;font-size:16px}
+.err-d{color:var(--text2);font-size:13px;max-width:460px;margin-bottom:20px;line-height:1.6}
+.err-acts{display:flex;gap:10px;justify-content:center}
 
-.error-box{background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.25);color:var(--red);border-radius:10px;padding:16px 20px;margin-bottom:20px;font-size:13px;line-height:1.9}
+/* ── TABS CONTENT ── */
+#dash{display:none}
+.tab-pane{display:none;padding:20px 22px 48px}
+.tab-pane.on{display:block}
 
-.section-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:20px 24px;margin-bottom:24px}
-.section-title{font-size:14px;font-weight:600;color:var(--text);margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
-.section-sub{font-size:12px;color:var(--text3);font-weight:400}
+/* ── COMMON ── */
+.section-h{font-size:14px;font-weight:700;margin:20px 0 12px;color:var(--text)}
+.grid4{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:11px;margin-bottom:22px}
+.stat-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:15px 18px}
+.sl{font-size:10px;color:var(--text2);font-weight:700;text-transform:uppercase;letter-spacing:.7px;margin-bottom:6px}
+.sv{font-size:25px;font-weight:800;line-height:1}
+.ss{font-size:11px;color:var(--text3);margin-top:3px}
+.green{color:var(--green)} .amber{color:var(--amber)} .red{color:var(--red)} .blue{color:var(--blue)} .teal{color:var(--teal)} .purple{color:var(--purple)}
 
-.top5-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
-.top5-card{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:16px;position:relative;overflow:hidden;transition:border-color 0.3s}
-.top5-card.r1{border-color:rgba(245,158,11,0.5)}
-.top5-card.r2{border-color:rgba(180,180,180,0.3)}
-.top5-card.r3{border-color:rgba(180,120,80,0.35)}
-.top5-rank{position:absolute;top:12px;right:12px;font-size:22px;line-height:1}
-.top5-code{font-family:'SF Mono','Fira Code',monospace;font-size:11px;font-weight:700;color:var(--teal);margin-bottom:8px;word-break:break-all;padding-right:28px}
-.top5-num{font-size:34px;font-weight:800;line-height:1;margin-bottom:3px}
-.top5-sub{font-size:11px;color:var(--text3);margin-bottom:10px}
-.top5-months{display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;border-top:1px solid var(--border);padding-top:10px;margin-top:4px}
-.top5-m{font-size:10px;color:var(--text3)}.top5-m b{color:var(--text2);font-weight:600}
-.tier-badge{display:inline-block;margin-top:8px;padding:2px 10px;border-radius:99px;font-size:10px;font-weight:600}
+.table-wrap{background:var(--bg2);border:1px solid var(--border);border-radius:12px;overflow:hidden;overflow-x:auto;margin-bottom:22px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{padding:9px 13px;text-align:left;color:var(--text2);font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid var(--border2);white-space:nowrap;cursor:pointer;user-select:none;background:var(--bg2)}
+th:hover{color:var(--text)}
+th.sorted{color:var(--green)}
+td{padding:10px 13px;border-top:1px solid var(--border);white-space:nowrap}
+tr:hover td{background:rgba(255,255,255,.025)}
+.no-rows{text-align:center;padding:32px;color:var(--text3);font-size:13px}
 
-.legend{display:flex;flex-wrap:wrap;gap:12px}
-.li{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--text2)}
-.lsq{width:10px;height:10px;border-radius:2px;flex-shrink:0}
-.chart-wrap{position:relative;width:100%;height:300px}
+/* ── BILLING STATUS BADGES ── */
+.bs{display:inline-block;font-size:10px;font-weight:700;padding:2px 8px;border-radius:99px;text-transform:uppercase;letter-spacing:.4px}
+.bs-bill-pending{background:rgba(239,68,68,.15);color:var(--red);border:1px solid rgba(239,68,68,.22)}
+.bs-less-entries{background:rgba(245,158,11,.15);color:var(--amber);border:1px solid rgba(245,158,11,.22)}
+.bs-all-wrapped{background:rgba(34,197,94,.15);color:var(--green);border:1px solid rgba(34,197,94,.22)}
+.bs-billed{background:rgba(20,184,166,.15);color:var(--teal);border:1px solid rgba(20,184,166,.22)}
+.bs-not-started{background:rgba(255,255,255,.05);color:var(--text3);border:1px solid var(--border2)}
+.bs-other{background:rgba(59,130,246,.1);color:var(--blue);border:1px solid rgba(59,130,246,.2)}
 
-.tier-key{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
-.tier-key-item{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text2);background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:5px 12px}
-.tier-dot{width:8px;height:8px;border-radius:50%}
+/* ── CONTROLS ── */
+.controls{display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap}
+.search-in{background:var(--bg2);border:1px solid var(--border2);color:var(--text);padding:7px 12px;border-radius:8px;font-size:13px;outline:none;width:200px;font-family:inherit}
+.search-in::placeholder{color:var(--text3)}
+.filter-btns{display:flex;gap:5px;flex-wrap:wrap}
+.fbtn{padding:4px 11px;border-radius:6px;border:1px solid var(--border2);background:none;color:var(--text2);font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;transition:.15s}
+.fbtn.active{background:var(--bg4);color:var(--text);border-color:rgba(255,255,255,.25)}
+.tcount{font-size:12px;color:var(--text3);margin-left:auto}
+.sa{margin-left:3px;opacity:.5;font-size:10px}
 
-.filter-row{display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap}
-.filter-row input,.filter-row select{padding:7px 12px;border-radius:8px;border:1px solid var(--border2);background:var(--bg3);color:var(--text);font-size:13px;outline:none}
-.filter-row input{width:200px}
-.filter-row input:focus,.filter-row select:focus{border-color:rgba(34,197,94,0.4)}
-.month-tabs{display:flex;gap:6px;flex-wrap:wrap}
-.mtab{padding:4px 12px;border-radius:8px;border:1px solid var(--border);background:var(--bg3);color:var(--text2);font-size:12px;font-weight:500;cursor:pointer}
-.mtab.active{background:rgba(34,197,94,0.15);border-color:rgba(34,197,94,0.35);color:var(--green)}
-.result-count{font-size:12px;color:var(--text3)}
+/* ── QUICK LINKS ── */
+.qlinks{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:22px}
+.qlink{display:flex;align-items:center;gap:7px;background:var(--bg2);border:1px solid var(--border);border-radius:9px;padding:8px 14px;text-decoration:none;color:var(--text2);font-size:12px;font-weight:600;transition:.15s}
+.qlink:hover{color:var(--text);border-color:var(--border2);background:var(--bg3)}
+.qlink-icon{font-size:15px}
 
-.table-wrap{overflow-x:auto}
-table{width:100%;border-collapse:collapse;min-width:600px}
-thead th{font-size:11px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:0.5px;padding:9px 13px;text-align:left;border-bottom:1px solid var(--border2);white-space:nowrap}
-tbody tr{border-bottom:1px solid var(--border);transition:background 0.1s}
-tbody tr:last-child{border-bottom:none}
-tbody tr:hover{background:rgba(255,255,255,0.025)}
-tbody td{padding:10px 13px;font-size:13px;vertical-align:middle}
-.rb{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;font-size:11px;font-weight:700;background:var(--bg4);color:var(--text2)}
-.rb1{background:rgba(245,158,11,0.2);color:#f59e0b}
-.rb2{background:rgba(180,180,180,0.12);color:#9ca3af}
-.rb3{background:rgba(180,120,80,0.2);color:#b47850}
-.code{font-family:'SF Mono','Fira Code',monospace;font-size:12px;font-weight:600;color:var(--teal)}
-.nc{text-align:center}.nz{color:var(--text3)}
-.cur-badge{display:inline-block;padding:2px 9px;border-radius:99px;font-size:11px;font-weight:600;background:rgba(34,197,94,0.15);color:var(--green);border:1px solid rgba(34,197,94,0.25)}
-.cur-zero{background:var(--bg3);color:var(--text3);border-color:var(--border)}
-.bar-wrap{display:flex;align-items:center;gap:7px}
-.bar-track{flex:1;height:5px;background:var(--bg4);border-radius:3px;overflow:hidden;min-width:50px}
-.bar-fill{height:100%;border-radius:3px}
-.bar-pct{font-size:11px;color:var(--text2);min-width:28px;text-align:right}
-.fw{font-weight:700}
+/* ── BILLING PIPELINE ── */
+.pipeline{display:flex;gap:10px;margin-bottom:22px;flex-wrap:wrap}
+.pipe-card{flex:1;min-width:130px;background:var(--bg2);border:1px solid var(--border);border-radius:11px;padding:13px 16px;cursor:pointer;transition:.15s}
+.pipe-card:hover{border-color:var(--border2)}
+.pipe-card.active{border-color:currentColor}
+.pipe-n{font-size:26px;font-weight:900}
+.pipe-l{font-size:11px;color:var(--text2);margin-top:3px;font-weight:600}
 
-/* tier classes set dynamically */
-.t-elite{background:rgba(139,92,246,0.15);color:#a78bfa;border:1px solid rgba(139,92,246,0.25)}
-.t-prime{background:rgba(34,197,94,0.15);color:var(--green);border:1px solid rgba(34,197,94,0.2)}
-.t-standard{background:rgba(59,130,246,0.15);color:#60a5fa;border:1px solid rgba(59,130,246,0.2)}
-.t-active{background:rgba(245,158,11,0.15);color:var(--amber);border:1px solid rgba(245,158,11,0.2)}
-.t-passive{background:rgba(239,68,68,0.12);color:var(--red);border:1px solid rgba(239,68,68,0.18)}
+/* ── TOP 5 ── */
+.top5-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:11px;margin-bottom:22px}
+.t5c{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:16px;position:relative}
+.t5-rank{position:absolute;top:12px;right:13px;font-size:18px}
+.t5-code{font-size:14px;font-weight:800;letter-spacing:.3px;margin-bottom:3px}
+.tier-badge{display:inline-block;font-size:10px;font-weight:700;padding:2px 8px;border-radius:99px;text-transform:uppercase;margin-bottom:10px}
+.tier-Priority{background:rgba(34,197,94,.15);color:var(--green);border:1px solid rgba(34,197,94,.22)}
+.tier-Standard{background:rgba(245,158,11,.15);color:var(--amber);border:1px solid rgba(245,158,11,.22)}
+.tier-Passive{background:rgba(239,68,68,.1);color:var(--red);border:1px solid rgba(239,68,68,.18)}
+.t5-nums{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.t5-nl{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.4px}
+.t5-nv{font-size:18px;font-weight:800}
+.rbar-bg{height:5px;background:var(--bg4);border-radius:99px;overflow:hidden}
+.rbar-fill{height:100%;border-radius:99px;transition:width .45s ease}
+.rbar-lbl{font-size:11px;color:var(--text2);margin-top:4px;font-weight:600}
 
-.footer{text-align:center;padding:20px;font-size:11px;color:var(--text3);border-top:1px solid var(--border);margin-top:8px}
-@media(max-width:600px){.main{padding:14px 12px}.topbar{padding:12px 16px}}
+/* ── MONTH TABS ── */
+.month-row{display:flex;align-items:center;gap:12px;margin-bottom:18px;flex-wrap:wrap}
+.mtabs{display:flex;gap:4px;background:var(--bg2);border:1px solid var(--border);border-radius:9px;padding:4px}
+.mtab{padding:5px 14px;border-radius:6px;border:none;background:none;color:var(--text2);cursor:pointer;font-size:12px;font-weight:600;font-family:inherit;white-space:nowrap;transition:.15s}
+.mtab.active{background:var(--bg4);color:var(--text);border:1px solid var(--border2)}
+.mtab:hover:not(.active){color:var(--text)}
+
+/* ── MINI BAR ── */
+.mbar{display:flex;align-items:center;gap:7px}
+.mbar-bg{flex-shrink:0;width:55px;height:4px;background:var(--bg4);border-radius:99px;overflow:hidden}
+.mbar-fill{height:100%;border-radius:99px}
+.mbar-txt{font-weight:700;min-width:34px;font-size:12px}
+
+/* ── PENDING ── */
+.pending-head{display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap}
+.p-badge{background:rgba(239,68,68,.12);color:var(--red);border:1px solid rgba(239,68,68,.2);font-size:11px;font-weight:700;padding:2px 9px;border-radius:99px}
+.p-sub{font-size:12px;color:var(--text3)}
 </style>
 </head>
 <body>
 
+<!-- TOP BAR -->
 <div class="topbar">
-  <div style="display:flex;align-items:center;gap:12px">
-    <div class="logo">MCS <span>Media</span></div>
-    <div class="live-pill"><span class="live-dot"></span>Live</div>
-  </div>
-  <div class="topbar-right">
-    <span class="last-updated" id="last-updated">—</span>
-    <button class="btn btn-green" onclick="initDashboard()">↻ Refresh</button>
+  <div class="logo">MCS <span class="logo-g">Media</span> — Combined Dashboard</div>
+  <div class="live-pill"><span class="ldot"></span>Live</div>
+  <div class="topbar-r">
+    <span class="upd" id="upd">—</span>
+    <button class="btn" onclick="loadData()">↻ Refresh</button>
   </div>
 </div>
 
-<div class="main">
+<!-- TAB NAVIGATION -->
+<div class="tab-nav" id="tab-nav" style="display:none">
+  <button class="tnav active" onclick="switchTab('overview')">🏠 Overview</button>
+  <button class="tnav" onclick="switchTab('brands')" id="tnav-brands">🏷 Brands &amp; Billing</button>
+  <button class="tnav" onclick="switchTab('mediators')">👥 Mediators</button>
+  <button class="tnav" onclick="switchTab('pending')" id="tnav-pending">⚠ Pending Refunds</button>
+</div>
 
-  <div class="load-bar-wrap" id="load-bar-wrap">
-    <div class="load-bar-top">
-      <span class="load-bar-label" id="load-label">Connecting…</span>
-      <span class="load-bar-pct" id="load-pct">0%</span>
-    </div>
-    <div class="load-bar-track"><div class="load-bar-fill" id="load-fill" style="width:0%"></div></div>
-    <div class="load-months" id="load-months"></div>
+<!-- Setup screen removed — URL hardcoded below -->
+
+<!-- LOADING -->
+<div class="screen" id="s-load">
+  <div class="spinner"></div>
+  <div id="load-msg" style="color:var(--text2);font-size:14px">Loading dashboard…</div>
+</div>
+
+<!-- ERROR -->
+<div class="screen" id="s-err">
+  <div class="err-icon">⚠️</div>
+  <div class="err-t" id="err-t">Could not load data</div>
+  <div class="err-d" id="err-d">Check the Apps Script URL and make sure access is set to "Anyone".</div>
+  <div class="err-acts">
+    <button class="btn-p" style="width:auto;padding:10px 28px" onclick="loadData()">Retry</button>
+  </div>
+</div>
+
+<!-- MAIN DASHBOARD -->
+<div id="dash">
+
+  <!-- OVERVIEW TAB -->
+  <div class="tab-pane on" id="tab-overview">
+    <div class="grid4" id="ov-stats"></div>
+
+    <div class="section-h">Billing Pipeline</div>
+    <div class="pipeline" id="ov-pipeline"></div>
+
+    <div class="section-h">Quick Links</div>
+    <div class="qlinks" id="ov-links"></div>
+
+    <div class="section-h">🏆 Top 5 Mediators This Month</div>
+    <div class="top5-grid" id="ov-top5"></div>
   </div>
 
-  <div id="error-area"></div>
-
-  <div id="top5-card" class="section-card" style="display:none">
-    <div class="section-title" id="top5-title">
-      <span>Top 5 mediators <span class="section-sub" id="top5-sub"></span></span>
-      <div class="month-tabs" id="top5-tabs"></div>
-    </div>
-    <div class="top5-grid" id="top5-grid"></div>
-  </div>
-
-  <div id="chart-card" class="section-card" style="display:none">
-    <div class="section-title">
-      <span>Monthly breakdown — top 10</span>
-      <div class="legend" id="chart-legend"></div>
-    </div>
-    <div class="chart-wrap">
-      <canvas id="barChart" role="img" aria-label="Monthly orders for top 15 mediators">Monthly order counts.</canvas>
-    </div>
-  </div>
-
-  <div id="table-card" class="section-card" style="display:none">
-    <div class="section-title">
-      <span>All mediators</span>
-      <div class="month-tabs" id="month-tabs"></div>
-    </div>
-    <div class="tier-key" id="tier-key"></div>
-    <div class="filter-row">
-      <input type="text" id="search-box" placeholder="Search MCS code…" oninput="applyFilters()">
-      <select id="tier-filter" onchange="applyFilters()">
-        <option value="">All tiers</option>
-        <option value="Elite">Elite</option>
-        <option value="Prime">Prime</option>
-        <option value="Standard">Standard</option>
-        <option value="Active">Active</option>
-        <option value="Passive">Passive</option>
-      </select>
-      <span class="result-count" id="result-count"></span>
+  <!-- BRANDS TAB -->
+  <div class="tab-pane" id="tab-brands">
+    <div class="controls">
+      <input class="search-in" id="b-search" placeholder="Search brand or code…" oninput="renderBrands()"/>
+      <div class="filter-btns" id="b-filters"></div>
+      <span class="tcount" id="b-count"></span>
     </div>
     <div class="table-wrap">
       <table>
-        <thead><tr id="thead-row"></tr></thead>
-        <tbody id="tbody"></tbody>
+        <thead>
+          <tr>
+            <th onclick="bSort('name')">Brand <span class="sa" id="sa-name">↕</span></th>
+            <th onclick="bSort('code')">Code <span class="sa" id="sa-code">↕</span></th>
+            <th onclick="bSort('lastBillDate')">Last Bill <span class="sa" id="sa-lastBillDate">↕</span></th>
+            <th onclick="bSort('billStatus')">Status <span class="sa" id="sa-billStatus">↕</span></th>
+            <th>Sheet</th>
+          </tr>
+        </thead>
+        <tbody id="brands-body"></tbody>
       </table>
     </div>
   </div>
 
-</div>
+  <!-- MEDIATORS TAB -->
+  <div class="tab-pane" id="tab-mediators">
+    <div class="month-row">
+      <div class="mtabs" id="m-tabs"></div>
+      <div style="font-size:11px;color:var(--text3)" id="m-legend"></div>
+    </div>
+    <div class="grid4" id="m-stats"></div>
+    <div class="section-h">Top 5 Mediators</div>
+    <div class="top5-grid" id="m-top5"></div>
+    <div class="section-h">All Mediators</div>
+    <div class="controls">
+      <input class="search-in" id="m-search" placeholder="Search MCS code…" oninput="renderMedTable()"/>
+      <span class="tcount" id="m-count"></span>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead id="m-thead"></thead>
+        <tbody id="m-tbody"></tbody>
+      </table>
+    </div>
+  </div>
 
-<div class="footer">MCS Media · Mediator Dashboard · Auto-refreshes daily at midnight · <span id="footer-date"></span></div>
+  <!-- PENDING TAB -->
+  <div class="tab-pane" id="tab-pending">
+    <div class="pending-head">
+      <div class="section-h" style="margin:0">Orders without Refund Form</div>
+      <span class="p-badge" id="p-badge">0</span>
+      <span class="p-sub" id="p-sub"></span>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Order ID</th><th>Buyer Name</th><th>MCS Code</th><th>Marketplace</th><th style="text-align:right">Amount</th>
+          </tr>
+        </thead>
+        <tbody id="p-body"></tbody>
+      </table>
+    </div>
+  </div>
+
+</div><!-- #dash -->
 
 <script>
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw2RG5g5dSgIfA-_hX7jfjPNdM8qfcG65hT_xHRcqbEZfnjgFZLIBcFh-TZ-21Vy0HwMw/exec';
+// ── CONFIG — paste your Apps Script /exec URL here ───────────
+const SURL = "https://script.google.com/macros/s/AKfycbwChK4A4Ly4yM9PShdrfy9gEafOzpTf_K0Q2mqzbhBcFbX7sWCktLh2ptLJvQiA9iC9Lg/exec";
+// ─────────────────────────────────────────────────────────────
 
-// Codes to exclude — any MCS code matching these patterns
-const EXCLUDE_PATTERN = /^MCSIN\d/i;
+let D        = null;
+let activeTab= 'overview';
 
-const MCS_CODES = [
-  'MCSSUNIL','MCSJANHVI','MCSRAJ','MCSPIYUSH','MCSAVNI','MCSHIM','MCSMANSI','MCSABV',
-  'MCSSHIVANI','MCSPRINCE','MCSFTS','MCSHIMANSHI','MCSTDC','MCSYASHVI','MCSBHAVISHA',
-  'MCSLVL','MCSNHIL','MCSSURAT','MCSSAAD','MCSSAPNA','MCSAMAAN','MCSMONTY','MCSKEESHA',
-  'MCSRUDRA','MCSNITU','MCSUMA','MCSDEV','MCSSHEF','MCSTANU','MCSSOM','MCSAPK','MCSMIT',
-  'MCSARP','MCSMONI','MCSNABOMITA','MCSCHARCHIT','MCSSUMIT','MCSSINANJU','MCSDHRUV',
-  'MCSAAYUSH','MCSINANJU','MCSINELMA','MCSSALONI','MCSLAV','MCSRAD','MCSJATIN',
-  'MCSPRANJUL','MCSANJALI','MCSVAISHNAVI','MCSVINITA','MCSBANALI','MCSERAM','MCSSHREYA',
-  'MCSURVASHI','MCSTAN','MCSSWATI','MCSDAKSH','MCSMEGHAL','MCSARCHI','MCSGAURAV',
-  'MCSJAIN','MCSBDX','MCSTEAM','MCSHUNNY','MCSAISHA','MCSKHUSHAL',
-  'MCSVAISHALI','MCSPOOJA','MCSDIVYA','MCSSHIKHA','MCSKARISHMA','MCSADDA','MCSLAVA',
-  'MCSTANISHA','MCSRITESH','MCSMEGHA','MCSAJ','MCSREV','MCSKAPOOR','MCSNANDINI',
-  'MCSVIBHU','MCSSHIVAM','MCSMOKSH','MCSANU','MCSXNIDHI','MCSBUNNY','MCSSTARS','MCSABHISHEK'
-].filter(c => !EXCLUDE_PATTERN.test(c));
+// Brands state
+let bSortKey = 'name', bSortDir = 1, bFilter = 'all';
 
-// ── Tier thresholds (total across shown months) ──
-// Elite ≥ 600 · Prime ≥ 300 · Standard ≥ 100 · Active ≥ 20 · Passive < 20
-const TIERS = [
-  { label:'Elite',    min:600, cls:'t-elite', dot:'#a78bfa' },
-  { label:'Prime',    min:300, cls:'t-prime', dot:'#22c55e' },
-  { label:'Standard', min:100, cls:'t-standard', dot:'#60a5fa' },
-  { label:'Active',   min:20,  cls:'t-active', dot:'#f59e0b' },
-  { label:'Passive',  min:0,   cls:'t-passive', dot:'#ef4444' },
-];
+// Mediators state
+let selMonth  = 'all', mSortKey = 'totalClaimed', mSortDir = -1, mSearchQ = '';
 
-function getTier(total) {
-  for (const t of TIERS) if (total >= t.min) return t;
-  return TIERS[TIERS.length - 1];
+const MLABEL = {'2026-03':'Mar','2026-04':'Apr','2026-05':'May','2026-06':'Jun','2026-07':'Jul','2026-08':'Aug'};
+const MEDALS = ['🥇','🥈','🥉','4th','5th'];
+
+const BILL_LABELS = {
+  'bill-pending':  { label:'Last Bill Pending', cls:'bs-bill-pending', color:'var(--red)',    icon:'🔴' },
+  'less-entries':  { label:'Less Entries',      cls:'bs-less-entries', color:'var(--amber)',  icon:'🟡' },
+  'all-wrapped':   { label:'All Wrapped',        cls:'bs-all-wrapped',  color:'var(--green)', icon:'🟢' },
+  'billed':        { label:'Billed',             cls:'bs-billed',       color:'var(--teal)',  icon:'🔵' },
+  'not-started':   { label:'Not Started',        cls:'bs-not-started',  color:'var(--text3)', icon:'⚫' },
+  'other':         { label:'Other',              cls:'bs-other',        color:'var(--blue)',  icon:'🔷' },
+};
+
+// ── BOOT ──────────────────────────────────────────────────────
+window.addEventListener('DOMContentLoaded', () => {
+  loadData();
+});
+
+// ── SCREEN CONTROL ────────────────────────────────────────────
+function showScreen(name) {
+  document.getElementById('s-load').classList.toggle('on', name==='load');
+  document.getElementById('s-err').classList.toggle('on',  name==='err');
+  document.getElementById('dash').style.display     = name==='dash' ? 'block' : 'none';
+  document.getElementById('tab-nav').style.display  = name==='dash' ? 'flex'  : 'none';
 }
 
-// ── Build dynamic months: current + last 2 ──
-function buildMonths() {
-  const now    = new Date();
-  const months = [];
-  const NAMES  = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  const COLORS = ['#3b82f6','#14b8a6','#f59e0b','#22c55e','#a78bfa','#f472b6','#34d399','#fb923c','#38bdf8','#a3e635','#f87171','#818cf8'];
-  for (let i = 2; i >= 0; i--) {
-    const d   = new Date(now.getFullYear(), now.getMonth() - i, 1);
-    const key = 'm' + d.getFullYear() + '_' + (d.getMonth() + 1);
-    months.push({
-      key,
-      label:    NAMES[d.getMonth()] + ' ' + d.getFullYear(),
-      short:    NAMES[d.getMonth()],
-      from:     d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0'),
-      to:       d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0'),
-      num:      d.getMonth() + 1,
-      year:     d.getFullYear(),
-      isCurrent: i === 0,
-      color:    COLORS[d.getMonth()],
-    });
-  }
-  return months;
-}
+// URL is hardcoded — no setup needed
 
-const MONTHS = buildMonths();
-// Sort MCS_CODES longest-first so specific codes match before shorter ones
-// e.g. MCSVAISHNAVIPAID matches MCSVAISHNAVI not a shorter prefix
-MCS_CODES.sort((a, b) => b.length - a.length);
-const CURRENT_MONTH = MONTHS[MONTHS.length - 1];
-
-let allRows = [];
-let sortKey = 'total';
-let chartInst = null;
-let loadedMonths = {};
-
-// ── Progress UI ──
-function initLoadUI() {
-  const pills = document.getElementById('load-months');
-  pills.innerHTML = MONTHS.map(m => `
-    <div class="load-month-pill" id="pill-${m.key}">
-      <span class="pill-dot"></span>${m.label}
-    </div>`).join('');
-}
-
-function setPillState(key, state) {
-  const pill = document.getElementById('pill-' + key);
-  if (!pill) return;
-  pill.className = 'load-month-pill ' + state;
-  if (state === 'loading') {
-    pill.innerHTML = `<span class="pill-spin"></span>${MONTHS.find(m=>m.key===key).label}`;
-  } else if (state === 'done') {
-    pill.innerHTML = `<span class="pill-dot"></span>${MONTHS.find(m=>m.key===key).label} ✓`;
+// ── LOAD DATA ─────────────────────────────────────────────────
+async function loadData() {
+  showScreen('load');
+  document.getElementById('load-msg').textContent = 'Loading from Google Sheets…';
+  try {
+    const res  = await fetch(SURL + '?action=dashboard&t=' + Date.now());
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const json = await res.json();
+    if (json.error) throw new Error(json.error);
+    D = json;
+    renderAll();
+    showScreen('dash');
+    document.getElementById('upd').textContent = 'Updated ' + new Date().toLocaleTimeString();
+    // badges
+    const pending = (D.pendingRefunds||[]).length;
+    const billPending = (D.billingSummary||{})['bill-pending'] || 0;
+    const bBadge = billPending > 0 ? `<span class="badge">${billPending}</span>` : '';
+    document.getElementById('tnav-brands').innerHTML = `🏷 Brands &amp; Billing ${bBadge}`;
+    document.getElementById('tnav-pending').innerHTML = `⚠ Pending Refunds <span class="badge">${pending}</span>`;
+  } catch(err) {
+    document.getElementById('err-t').textContent = 'Could not load data';
+    document.getElementById('err-d').textContent = err.message + ' — Make sure the Apps Script is deployed with access: Anyone (no Google account required).';
+    showScreen('err');
   }
 }
 
-function setLoadBar(pct, label) {
-  document.getElementById('load-fill').style.width = pct + '%';
-  document.getElementById('load-pct').textContent  = Math.round(pct) + '%';
-  document.getElementById('load-label').textContent = label;
+// ── RENDER ALL ────────────────────────────────────────────────
+function renderAll() {
+  renderOverview();
+  renderBrands();
+  renderMediators();
+  renderPending();
 }
 
-// ── Build table headers dynamically ──
-function buildTop5Tabs() {
-  const el = document.getElementById('top5-tabs');
-  el.innerHTML = `<div class="mtab active" onclick="setTop5Month('total',this)">Total</div>` +
-    MONTHS.map(m => `<div class="mtab" onclick="setTop5Month('${m.key}',this)">${m.short}</div>`).join('');
+// ── TAB SWITCHING ─────────────────────────────────────────────
+function switchTab(name) {
+  activeTab = name;
+  document.querySelectorAll('.tab-pane').forEach(el => el.classList.remove('on'));
+  document.getElementById('tab-'+name).classList.add('on');
+  document.querySelectorAll('.tnav').forEach(el => el.classList.remove('active'));
+  event.currentTarget.classList.add('active');
 }
 
-function setTop5Month(key, el) {
-  document.querySelectorAll('#top5-tabs .mtab').forEach(t => t.classList.remove('active'));
-  el.classList.add('active');
-  // temporarily set sortKey for renderTop5 only
-  const prev = sortKey;
-  sortKey = key;
-  renderTop5();
-  sortKey = prev;
-}
+// ═══════════════════════════════════════════════════════════════
+//  OVERVIEW
+// ═══════════════════════════════════════════════════════════════
+function renderOverview() {
+  const B  = D.billingSummary   || {};
+  const MS = D.mediatorSummary  || {};
+  const months = D.months       || [];
+  const curMonth = months[months.length-1] || '';
 
-function buildTableHeaders() {
-  const tabsEl = document.getElementById('month-tabs');
-  tabsEl.innerHTML = `<div class="mtab active" onclick="setSort('total',this)">Total</div>` +
-    MONTHS.map(m => `<div class="mtab" onclick="setSort('${m.key}',this)">${m.short}</div>`).join('');
+  // Stats
+  const totalBrands  = (D.brands||[]).length;
+  const billPending  = (B['bill-pending']||0) + (B['less-entries']||0);
+  document.getElementById('ov-stats').innerHTML =
+    sc('Total Brands',   totalBrands,         '',         '') +
+    sc('Bills Pending',  billPending,          'Need attention', billPending>0?'red':'green') +
+    sc('Active Mediators', MS.totalMediators||0, 'This period', '') +
+    sc('Completion Rate',  (MS.overallRate||0)+'%', 'Refunds / Orders', MS.overallRate>=80?'green':MS.overallRate>=60?'amber':'red');
 
-  document.getElementById('thead-row').innerHTML =
-    `<th style="width:40px">#</th>
-     <th>MCS code</th>` +
-    MONTHS.map(m => `<th class="nc" style="width:72px">${m.short}${m.isCurrent ? ' <span style="color:var(--green);font-size:9px">(live)</span>' : ''}</th>`).join('') +
-    `<th class="nc" style="width:68px">Total</th>
-     <th style="min-width:110px">Share</th>
-     <th style="width:86px">Tier</th>`;
-}
+  // Billing pipeline
+  const pOrder = ['bill-pending','less-entries','not-started','billed','all-wrapped'];
+  document.getElementById('ov-pipeline').innerHTML = pOrder.map(k => {
+    const meta = BILL_LABELS[k];
+    const n    = B[k] || 0;
+    return `<div class="pipe-card" style="color:${meta.color}" onclick="switchToTab('brands','${k}')">
+      <div class="pipe-n">${n}</div>
+      <div class="pipe-l">${meta.icon} ${meta.label}</div>
+    </div>`;
+  }).join('');
 
-function buildTierKey() {
-  document.getElementById('tier-key').innerHTML = TIERS.map(t =>
-    `<div class="tier-key-item"><div class="tier-dot" style="background:${t.dot}"></div>${t.label} ${t === TIERS[TIERS.length-1] ? '< '+TIERS[TIERS.length-2].min : t.min === TIERS[0].min ? '≥ '+t.min : t.min+'–'+(TIERS[TIERS.indexOf(t)-1].min-1)}</div>`
+  // Quick links
+  const sl = D.sysLinks || {};
+  const links = [
+    { label:'Order Sheet',    icon:'📋', url:sl.orderSheet },
+    { label:'Refund Sheet',   icon:'💸', url:sl.refundSheet },
+    { label:'Army Sheet',     icon:'🪖', url:sl.armySheet },
+    { label:'Army Buyers',    icon:'👥', url:sl.armyBuyerSheet },
+    { label:'Task Sheet',     icon:'✅', url:sl.taskSheet },
+    { label:'Bulk Deals',     icon:'📦', url:sl.bulkDeals },
+    { label:'Payment Sheet',  icon:'💳', url:sl.paymentSheet },
+  ].filter(l => l.url);
+  document.getElementById('ov-links').innerHTML = links.map(l =>
+    `<a class="qlink" href="${l.url}" target="_blank"><span class="qlink-icon">${l.icon}</span>${l.label}</a>`
   ).join('');
+
+  // Top 5 for current month
+  const top5meds = (D.mediators||[])
+    .filter(m => mVal(m, curMonth, 'claimed') > 0)
+    .sort((a,b) => mVal(b,curMonth,'claimed') - mVal(a,curMonth,'claimed'))
+    .slice(0,5);
+  document.getElementById('ov-top5').innerHTML = top5meds.length
+    ? top5meds.map((m,i) => top5Card(m,i,curMonth)).join('')
+    : `<div style="color:var(--text3);font-size:13px">No mediator data for ${MLABEL[curMonth]||curMonth}</div>`;
 }
 
-// ── Fetch ──
-async function fetchAllMonths() {
-  // Single API call covering the full date range of all 3 months
-  const from = MONTHS[0].from;
-  const to   = MONTHS[MONTHS.length - 1].to;
-  const url  = SCRIPT_URL + '?action=dashGetAllOrders&fromDate=' + from + '&toDate=' + to;
-  const resp = await fetch(url);
-  if (!resp.ok) throw new Error('HTTP ' + resp.status);
-  const data = await resp.json();
-  if (data.error) throw new Error(data.error);
-  return data.orders || [];
+function switchToTab(tab, filter) {
+  document.querySelectorAll('.tnav').forEach((el,i) => el.classList.toggle('active', i===['overview','brands','mediators','pending'].indexOf(tab)));
+  document.querySelectorAll('.tab-pane').forEach(el => el.classList.remove('on'));
+  document.getElementById('tab-'+tab).classList.add('on');
+  if (filter && tab === 'brands') { bFilter = filter; renderBrands(); }
 }
 
-// ── Main ──
-async function initDashboard() {
-  allRows       = [];
-  loadedMonths  = {};
-  document.getElementById('error-area').innerHTML = '';
-  document.getElementById('load-bar-wrap').style.display = 'block';
-  document.getElementById('top5-card').style.display     = 'none';
-  document.getElementById('chart-card').style.display    = 'none';
-  document.getElementById('table-card').style.display    = 'none';
-  document.getElementById('last-updated').textContent    = 'Loading…';
+// ═══════════════════════════════════════════════════════════════
+//  BRANDS
+// ═══════════════════════════════════════════════════════════════
+const B_FILTER_ORDER = ['all','bill-pending','less-entries','not-started','billed','all-wrapped'];
 
-  initLoadUI();
-  buildTop5Tabs();
-  buildTableHeaders();
-  buildTierKey();
+function renderBrands() {
+  const brands = D.brands || [];
+  const q      = (document.getElementById('b-search').value||'').toLowerCase().trim();
 
-  const counts = {};
-  MCS_CODES.forEach(c => {
-    counts[c] = {};
-    MONTHS.forEach(m => counts[c][m.key] = 0);
+  // Build filter buttons
+  const B = D.billingSummary || {};
+  document.getElementById('b-filters').innerHTML = B_FILTER_ORDER.map(k => {
+    const isAll = k==='all';
+    const meta  = BILL_LABELS[k] || {};
+    const count = isAll ? brands.length : (B[k]||0);
+    const label = isAll ? 'All' : (meta.icon+' '+meta.label);
+    return `<button class="fbtn ${bFilter===k?'active':''}" onclick="setBFilter('${k}')">${label} <span style="opacity:.6">${count}</span></button>`;
+  }).join('');
+
+  // Filter + search
+  let rows = brands.filter(b =>
+    (bFilter==='all' || b.billStatus===bFilter) &&
+    (!q || b.name.toLowerCase().includes(q) || b.code.toLowerCase().includes(q))
+  );
+
+  // Sort
+  rows = [...rows].sort((a,b) => {
+    const va = (a[bSortKey]||'').toLowerCase();
+    const vb = (b[bSortKey]||'').toLowerCase();
+    return bSortDir * va.localeCompare(vb);
   });
 
-  // Single API call for all 3 months at once
-  MONTHS.forEach(m => setPillState(m.key, 'loading'));
-  setLoadBar(10, 'Fetching all data in one call…');
+  document.getElementById('b-count').textContent = rows.length + ' brands';
+  ['name','code','lastBillDate','billStatus'].forEach(k => {
+    const el = document.getElementById('sa-'+k);
+    if (el) el.textContent = bSortKey===k ? (bSortDir===1?'↑':'↓') : '↕';
+    const th = el?.closest('th');
+    if (th) th.classList.toggle('sorted', bSortKey===k);
+  });
 
-  try {
-    const orders = await fetchAllMonths();
-    setLoadBar(70, 'Processing ' + orders.length + ' orders…');
-
-    orders.forEach(o => {
-      const raw = (o.mcsCode || '').trim().toUpperCase();
-      if (EXCLUDE_PATTERN.test(raw)) return;
-      const parent = MCS_CODES.find(c => raw === c || raw.startsWith(c));
-      if (!parent) return;
-      // Determine which month bucket this order belongs to
-      const monthNum = o.month; // month number returned by script
-      const orderYear = o.year || new Date().getFullYear();
-      // Match by month number AND year — fallback to month-only if year missing
-      let bucket = MONTHS.find(m => m.num === monthNum && m.year === orderYear);
-      if (!bucket) bucket = MONTHS.find(m => m.num === monthNum); // fallback: year missing
-      if (!bucket) return;
-      counts[parent][bucket.key] = (counts[parent][bucket.key] || 0) + 1;
-    });
-
-    MONTHS.forEach(m => { loadedMonths[m.key] = true; setPillState(m.key, 'done'); });
-    setLoadBar(90, 'Rendering…');
-  } catch(err) {
-    document.getElementById('error-area').innerHTML =
-      '<div class="error-box">⚠️ Failed to load data: <b>' + err.message + '</b><br>' +
-      'Make sure <code>dashGetAllOrders</code> is in your <code>doGet</code> and deployment is set to <b>Anyone</b>.</div>';
-    document.getElementById('load-bar-wrap').style.display = 'none';
+  if (!rows.length) {
+    document.getElementById('brands-body').innerHTML = `<tr><td colspan="5" class="no-rows">No brands found</td></tr>`;
     return;
   }
 
-  allRows = Object.entries(counts).map(([code, m]) => {
-    const row = { code };
-    let total = 0;
-    MONTHS.forEach(mo => { row[mo.key] = m[mo.key] || 0; total += row[mo.key]; });
-    row.total = total;
-    return row;
-  }).sort((a, b) => b.total - a.total);
-
-  document.getElementById('top5-card').style.display  = 'block';
-  document.getElementById('chart-card').style.display = 'block';
-  document.getElementById('table-card').style.display = 'block';
-  renderTop5();
-  renderChart();
-  applyFilters();
-  setLoadBar(100, 'All data loaded ✓');
-
-  
-
-  document.getElementById('load-bar-wrap').style.display = 'none';
-  const now = new Date();
-  document.getElementById('last-updated').textContent = 'Updated ' + now.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
-  document.getElementById('footer-date').textContent  = now.toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'});
-  scheduleAutoRefresh();
-}
-
-// ── Render top 5 ──
-function renderTop5() {
-  const isTotal = sortKey === 'total';
-  const activeM = MONTHS.find(m => m.key === sortKey);
-  const subLabel = isTotal
-    ? '· ' + MONTHS.map(m => m.label).join(', ')
-    : '· ' + activeM.label + ' only';
-  document.getElementById('top5-sub').textContent = subLabel;
-
-  const ranked = [...allRows]
-    .filter(r => r[sortKey] > 0)
-    .sort((a, b) => b[sortKey] - a[sortKey])
-    .slice(0, 5);
-
-  const emojis = ['🥇','🥈','🥉','4️⃣','5️⃣'];
-  const rcls   = ['r1','r2','r3','',''];
-
-  document.getElementById('top5-grid').innerHTML = ranked.map((r, i) => {
-    const displayVal = isTotal ? r.total : r[sortKey];
-    const t = getTier(r.total);
-    return `<div class="top5-card ${rcls[i]}">
-      <div class="top5-rank">${emojis[i]}</div>
-      <div class="top5-code">${r.code}</div>
-      <div class="top5-num">${displayVal}</div>
-      <div class="top5-sub">${isTotal ? 'total orders' : activeM.label + ' orders'}</div>
-      <span class="tier-badge ${t.cls}">${t.label}</span>
-    </div>`;
-  }).join('');
-}
-
-// ── Render chart ──
-function renderChart() {
-  const active   = allRows.filter(r=>r.total>0).slice(0,10);
-  const labels   = active.map(r=>r.code.replace('MCS',''));
-  const datasets = MONTHS.map(m=>({
-    label: m.label,
-    data: active.map(r=>r[m.key]),
-    backgroundColor: m.color,
-    borderRadius: 3,
-    borderWidth: 0,
-  }));
-  document.getElementById('chart-legend').innerHTML = MONTHS.map(m=>
-    `<div class="li"><div class="lsq" style="background:${m.color}"></div>${m.label}</div>`
-  ).join('');
-  if (chartInst) { chartInst.destroy(); chartInst=null; }
-  chartInst = new Chart(document.getElementById('barChart'),{
-    type:'bar', data:{labels,datasets},
-    options:{
-      responsive:true, maintainAspectRatio:false,
-      plugins:{legend:{display:false},tooltip:{backgroundColor:'#1a1a1a',borderColor:'rgba(255,255,255,0.1)',borderWidth:1,titleColor:'#f0f0f0',bodyColor:'#a0a0a0',padding:10}},
-      scales:{
-        x:{ticks:{color:'#666',font:{size:10},autoSkip:false,maxRotation:40},grid:{color:'rgba(255,255,255,0.04)'}},
-        y:{beginAtZero:true,ticks:{color:'#666',font:{size:11}},grid:{color:'rgba(255,255,255,0.06)'}}
-      }
-    }
-  });
-}
-
-// ── Render table ──
-function renderTable(rows) {
-  const grand = rows.reduce((s,r)=>s+r.total,0)||1;
-  const maxT  = Math.max(...rows.map(r=>r.total),1);
-  const rbcls = ['rb1','rb2','rb3'];
-  document.getElementById('tbody').innerHTML = rows.map((r,i)=>{
-    const pct  = Math.round((r.total/grand)*100);
-    const barW = Math.round((r.total/maxT)*100);
-    const t    = getTier(r.total);
-    const barC = t.dot;
-    const rc   = rbcls[i]||'';
-    const cell = v => v>0 ? `<td class="nc">${v}</td>` : `<td class="nc nz">—</td>`;
-    const curKey = CURRENT_MONTH.key;
-    const curV   = r[curKey];
-    const curCell = `<td class="nc"><span class="${curV>0?'cur-badge':'cur-badge cur-zero'}">${curV>0?curV:'—'}</span></td>`;
-    const monthCells = MONTHS.map(m =>
-      m.isCurrent ? curCell : cell(r[m.key])
-    ).join('');
+  document.getElementById('brands-body').innerHTML = rows.map(b => {
+    const meta = BILL_LABELS[b.billStatus] || BILL_LABELS['other'];
+    const billDisp = b.lastBillDate || '—';
     return `<tr>
-      <td><span class="rb ${rc}">${i+1}</span></td>
-      <td><span class="code">${r.code}</span></td>
-      ${monthCells}
-      <td class="nc fw">${r.total||'—'}</td>
-      <td><div class="bar-wrap"><div class="bar-track"><div class="bar-fill" style="width:${barW}%;background:${barC}"></div></div><span class="bar-pct">${pct}%</span></div></td>
-      <td><span class="tier-badge ${t.cls}">${t.label}</span></td>
+      <td style="font-weight:700;max-width:240px">
+        <a href="${b.sheetLink}" target="_blank" style="color:var(--text);text-decoration:none;hover:color:var(--green)"
+          onmouseover="this.style.color='var(--green)'" onmouseout="this.style.color='var(--text)'">${b.name}</a>
+      </td>
+      <td style="font-family:monospace;font-size:12px;color:var(--teal)">${b.code||'—'}</td>
+      <td style="color:var(--text2)">${billDisp}</td>
+      <td><span class="bs ${meta.cls}">${meta.label}</span></td>
+      <td>
+        <a href="${b.sheetLink}" target="_blank" style="color:var(--text3);font-size:11px;text-decoration:none;padding:3px 8px;border:1px solid var(--border2);border-radius:5px"
+          onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--text3)'">↗ Open</a>
+        ${b.extraLink ? `<a href="${b.extraLink}" target="_blank" style="color:var(--text3);font-size:11px;text-decoration:none;padding:3px 8px;border:1px solid var(--border2);border-radius:5px;margin-left:5px"
+          onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--text3)'">↗ Extra</a>` : ''}
+      </td>
     </tr>`;
   }).join('');
-  document.getElementById('result-count').textContent = rows.length + ' mediators';
 }
 
-function setSort(key, el) {
-  sortKey = key;
-  document.querySelectorAll('.mtab').forEach(t=>t.classList.remove('active'));
-  el.classList.add('active');
-  renderTop5();
-  applyFilters();
+function setBFilter(k) { bFilter=k; renderBrands(); }
+function bSort(k) { bSortKey===k ? bSortDir*=-1 : (bSortKey=k, bSortDir=1); renderBrands(); }
+
+// ═══════════════════════════════════════════════════════════════
+//  MEDIATORS
+// ═══════════════════════════════════════════════════════════════
+function renderMediators() {
+  const months = D.months || [];
+  const MS     = D.mediatorSummary || {};
+
+  // Month tabs
+  const tabsEl = document.getElementById('m-tabs');
+  tabsEl.innerHTML = '';
+  addMTab(tabsEl,'all','All Months');
+  months.forEach(m => addMTab(tabsEl, m, MLABEL[m]||m));
+
+  document.getElementById('m-legend').textContent =
+    `Priority: ${MS.priority||0}  ·  Standard: ${MS.standard||0}  ·  Passive: ${MS.passive||0}`;
+
+  renderMedStats();
+  renderMedTop5();
+  renderMedTable();
 }
 
-function applyFilters() {
-  const q  = (document.getElementById('search-box').value||'').trim().toLowerCase();
-  const tf = document.getElementById('tier-filter').value;
-  let rows = [...allRows].sort((a,b)=>b[sortKey]-a[sortKey]);
-  if (q)  rows = rows.filter(r=>r.code.toLowerCase().includes(q));
-  if (tf) rows = rows.filter(r=>getTier(r.total).label===tf);
-  renderTable(rows);
+function addMTab(container, val, label) {
+  const b = document.createElement('button');
+  b.className = 'mtab'+(selMonth===val?' active':'');
+  b.textContent = label;
+  b.onclick = () => { selMonth=val; renderMedStats(); renderMedTop5(); renderMedTable(); b.closest('.mtabs').querySelectorAll('.mtab').forEach(x=>x.classList.remove('active')); b.classList.add('active'); };
+  container.appendChild(b);
 }
 
-function scheduleAutoRefresh() {
-  const now = new Date();
-  const mid = new Date(now);
-  mid.setDate(mid.getDate()+1);
-  mid.setHours(0,0,0,0);
-  setTimeout(()=>initDashboard(), mid-now);
+function renderMedStats() {
+  const meds = filteredMeds();
+  const cl   = meds.reduce((s,m)=>s+mClaimed(m),0);
+  const rf   = meds.reduce((s,m)=>s+mRefunded(m),0);
+  const rate = cl>0?Math.round(rf/cl*100):0;
+  document.getElementById('m-stats').innerHTML =
+    sc('Active Mediators', meds.filter(m=>mClaimed(m)>0).length, '', '') +
+    sc('Orders Claimed',   cl,     'This period', '') +
+    sc('Refunds Submitted',rf,     'Forms done',  'green') +
+    sc('Completion Rate',  rate+'%','',            rate>=80?'green':rate>=60?'amber':'red');
 }
 
-initDashboard();
+function renderMedTop5() {
+  const top5 = filteredMeds().slice(0,5);
+  document.getElementById('m-top5').innerHTML = top5.map((m,i)=>top5Card(m,i,selMonth==='all'?null:selMonth)).join('');
+}
+
+function renderMedTable() {
+  const months = D.months||[];
+  let meds = filteredMeds();
+  const q  = document.getElementById('m-search').value.toLowerCase().trim();
+  if (q) meds = meds.filter(m=>m.code.toLowerCase().includes(q));
+
+  meds = [...meds].sort((a,b) => {
+    let va,vb;
+    if (mSortKey.startsWith('m_')) { const mo=mSortKey.slice(2); va=mVal(a,mo,'claimed'); vb=mVal(b,mo,'claimed'); }
+    else if (mSortKey==='rate') { const ca=mClaimed(a),ra=mRefunded(a),cb=mClaimed(b),rb=mRefunded(b); va=ca>0?ra/ca:0; vb=cb>0?rb/cb:0; }
+    else { va=a[mSortKey]??0; vb=b[mSortKey]??0; }
+    return mSortDir*(va<vb?-1:va>vb?1:0);
+  });
+
+  document.getElementById('m-count').textContent = meds.length+' mediators';
+
+  const sa = k => mSortKey===k?(mSortDir===-1?'↓':'↑'):'↕';
+  const sc2 = k => mSortKey===k?'sorted':'';
+  const sh = (k,l) => `<th class="${sc2(k)}" onclick="mSort('${k}')">${l} <span class="sa">${sa(k)}</span></th>`;
+  const mCols = selMonth==='all' ? months.map(m=>sh('m_'+m,MLABEL[m]||m)).join('') : '';
+
+  document.getElementById('m-thead').innerHTML = `<tr>
+    <th style="width:34px">#</th>
+    ${sh('code','MCS Code')}
+    ${mCols}
+    ${sh('totalClaimed','Claimed')}
+    ${sh('totalRefunded','Refunds')}
+    ${sh('rate','Rate')}
+    <th>Tier</th>
+  </tr>`;
+
+  if (!meds.length) {
+    document.getElementById('m-tbody').innerHTML=`<tr><td colspan="${4+months.length}" class="no-rows">No mediators found</td></tr>`;
+    return;
+  }
+
+  document.getElementById('m-tbody').innerHTML = meds.map((m,i)=>{
+    const cl=mClaimed(m),rf=mRefunded(m);
+    const rate=cl>0?Math.round(rf/cl*100):0;
+    const rc=rate>=80?'var(--green)':rate>=60?'var(--amber)':'var(--red)';
+    const mCells=selMonth==='all'?months.map(mo=>{
+      const c=mVal(m,mo,'claimed');
+      return `<td style="text-align:right">${c>0?c:'<span style="color:var(--text3)">—</span>'}</td>`;
+    }).join(''):'';
+    return `<tr>
+      <td style="color:var(--text3);font-weight:600;font-size:12px">${i+1}</td>
+      <td style="font-weight:700;font-family:monospace;font-size:13px">${m.code}</td>
+      ${mCells}
+      <td style="text-align:right;font-weight:700">${cl}</td>
+      <td style="text-align:right;color:var(--green)">${rf}</td>
+      <td><div class="mbar"><div class="mbar-bg"><div class="mbar-fill" style="width:${rate}%;background:${rc}"></div></div><span class="mbar-txt" style="color:${rc}">${rate}%</span></div></td>
+      <td><span class="tier-badge tier-${m.tier}">${m.tier}</span></td>
+    </tr>`;
+  }).join('');
+}
+
+function mSort(k) { mSortKey===k?mSortDir*=-1:(mSortKey=k,mSortDir=-1); renderMedTable(); }
+
+// ═══════════════════════════════════════════════════════════════
+//  PENDING
+// ═══════════════════════════════════════════════════════════════
+function renderPending() {
+  const pending  = D.pendingRefunds||[];
+  const months   = D.months||[];
+  const curMonth = months[months.length-1]||'';
+  document.getElementById('p-badge').textContent = pending.length;
+  document.getElementById('p-sub').textContent   = curMonth ? `(Orders in ${MLABEL[curMonth]||curMonth} with no refund form)` : '';
+
+  if (!pending.length) {
+    document.getElementById('p-body').innerHTML = `<tr><td colspan="5" class="no-rows">🎉 All orders have refund forms for ${MLABEL[curMonth]||curMonth}</td></tr>`;
+    return;
+  }
+  document.getElementById('p-body').innerHTML = pending.map(p=>`<tr>
+    <td style="font-family:monospace;font-size:12px;color:var(--amber)">${p.orderId||'—'}</td>
+    <td>${p.buyerName||'—'}</td>
+    <td style="font-weight:700;font-family:monospace;font-size:12px">${p.mcsCode}</td>
+    <td>${p.marketplace||'—'}</td>
+    <td style="text-align:right;color:var(--red);font-weight:700">₹${Number(p.amount||0).toLocaleString('en-IN')}</td>
+  </tr>`).join('');
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  SHARED HELPERS
+// ═══════════════════════════════════════════════════════════════
+function sc(label, value, sub, cls) {
+  return `<div class="stat-card"><div class="sl">${label}</div><div class="sv ${cls}">${value}</div>${sub?`<div class="ss">${sub}</div>`:''}</div>`;
+}
+
+function top5Card(m, i, monthKey) {
+  const cl = monthKey ? mVal(m,monthKey,'claimed')  : (m.totalClaimed||0);
+  const rf = monthKey ? mVal(m,monthKey,'refunded') : (m.totalRefunded||0);
+  const rate = cl>0?Math.round(rf/cl*100):0;
+  const rc   = rate>=80?'var(--green)':rate>=60?'var(--amber)':'var(--red)';
+  const months = D.months||[];
+  const pills  = months.map(mo=>{
+    const d=m.months[mo]||{claimed:0,refunded:0};
+    return `<span style="font-size:10px;padding:2px 7px;border-radius:5px;background:var(--bg3);border:1px solid var(--border);color:var(--text2)">${MLABEL[mo]||mo}: <b style="color:var(--text)">${d.claimed}</b>${d.refunded>0?`/<span style="color:var(--green)">${d.refunded}</span>`:''}</span>`;
+  }).join('');
+  return `<div class="t5c">
+    <div class="t5-rank">${MEDALS[i]||'#'+(i+1)}</div>
+    <div class="t5-code">${m.code}</div>
+    <span class="tier-badge tier-${m.tier}">${m.tier}</span>
+    <div class="t5-nums">
+      <div><div class="t5-nl">Claimed</div><div class="t5-nv">${cl}</div></div>
+      <div><div class="t5-nl">Refunds</div><div class="t5-nv" style="color:var(--green)">${rf}</div></div>
+    </div>
+    <div class="rbar-bg"><div class="rbar-fill" style="width:${rate}%;background:${rc}"></div></div>
+    <div class="rbar-lbl">${rate}% completion</div>
+    <div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:10px">${pills}</div>
+  </div>`;
+}
+
+function filteredMeds() {
+  const meds = D.mediators||[];
+  if (selMonth==='all') return meds;
+  return meds.filter(m=>mVal(m,selMonth,'claimed')>0)
+             .sort((a,b)=>mVal(b,selMonth,'claimed')-mVal(a,selMonth,'claimed'));
+}
+function mClaimed(m)  { return selMonth==='all'?(m.totalClaimed||0):mVal(m,selMonth,'claimed'); }
+function mRefunded(m) { return selMonth==='all'?(m.totalRefunded||0):mVal(m,selMonth,'refunded'); }
+function mVal(m,mo,f) { return m.months?.[mo]?.[f]||0; }
+
+// Auto-refresh midnight
+(function sched() {
+  const now=new Date(),mn=new Date(now);
+  mn.setDate(mn.getDate()+1); mn.setHours(0,0,0,0);
+  setTimeout(()=>{ if(D)loadData(); sched(); }, mn-now);
+})();
 </script>
 </body>
 </html>
