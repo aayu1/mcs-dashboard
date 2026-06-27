@@ -281,7 +281,7 @@ tr:hover td{background:#FAFAFA}
                 <th onclick="bSort('code')">Code <span class="sa" id="sa-code">↕</span></th>
                 <th onclick="bSort('lastBillDate')">Last Bill <span class="sa" id="sa-lastBillDate">↕</span></th>
                 <th onclick="bSort('billStatus')">Status <span class="sa" id="sa-billStatus">↕</span></th>
-                <th style="text-align:right">Orders <span style="font-size:9px;color:#94A3B8">(this month)</span></th>
+                <th style="text-align:right;cursor:pointer" onclick="bSort('orderCount')">Orders <span style="font-size:9px;color:#94A3B8">(this month)</span> <span class="sa" id="sa-orderCount">↕</span></th>
                 <th>Sheet</th>
               </tr>
             </thead>
@@ -706,10 +706,12 @@ function renderDailyTrendChart() {
         data: counts,
         borderColor: '#F59E0B',
         backgroundColor: 'rgba(245,158,11,0.08)',
-        borderWidth: 2,
+        borderWidth: 2.5,
         tension: 0.3,
         pointRadius: 0,
-        pointHoverRadius: 5,
+        pointHoverRadius: 6,
+        pointHoverBorderWidth: 2,
+        pointHoverBorderColor: '#fff',
         pointHoverBackgroundColor: '#F59E0B',
         fill: true,
       }]
@@ -720,9 +722,17 @@ function renderDailyTrendChart() {
       plugins: {
         legend: { display: false },
         tooltip: {
+          enabled: true,
+          mode: 'index',
+          intersect: false,
           backgroundColor:'#fff', borderColor:'rgba(0,0,0,.1)', borderWidth:1,
-          titleColor:'#0F172A', bodyColor:'#64748B', padding:10,
-          callbacks: { label: ctx => ctx.parsed.y + ' orders' }
+          titleColor:'#0F172A', bodyColor:'#0F172A', padding:12,
+          titleFont:{size:12,weight:'700'}, bodyFont:{size:13,weight:'600'},
+          displayColors: false,
+          callbacks: {
+            title: items => items[0]?.label || '',
+            label: ctx => '  ' + ctx.parsed.y + ' order' + (ctx.parsed.y===1?'':'s')
+          }
         }
       },
       scales: {
@@ -761,10 +771,17 @@ function renderBrands() {
     (bFilter==='all'||b.billStatus===bFilter) &&
     (!q||b.name.toLowerCase().includes(q)||b.code.toLowerCase().includes(q))
   );
-  rows = [...rows].sort((a,b) => bSortDir*(a[bSortKey]||'').toLowerCase().localeCompare((b[bSortKey]||'').toLowerCase()));
+  rows = [...rows].sort((a,b) => {
+    if (bSortKey === 'orderCount') {
+      const va = (D?.brandOrderCounts?.[(a.code||'').toUpperCase()]) || 0;
+      const vb = (D?.brandOrderCounts?.[(b.code||'').toUpperCase()]) || 0;
+      return bSortDir*(va - vb);
+    }
+    return bSortDir*(a[bSortKey]||'').toLowerCase().localeCompare((b[bSortKey]||'').toLowerCase());
+  });
 
   document.getElementById('b-count').textContent = rows.length+' brands';
-  ['name','code','lastBillDate','billStatus'].forEach(k => {
+  ['name','code','lastBillDate','billStatus','orderCount'].forEach(k => {
     const el=document.getElementById('sa-'+k);
     if(el) el.textContent = bSortKey===k?(bSortDir===1?'↑':'↓'):'↕';
     const th=el?.closest('th'); if(th) th.classList.toggle('sorted',bSortKey===k);
