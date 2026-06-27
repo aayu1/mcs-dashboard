@@ -1226,6 +1226,13 @@ async function doBuyerSearch() {
   document.getElementById('buyer-cancel-btn').style.display = 'inline-block';
   document.getElementById('buyer-search-btn').disabled   = true;
 
+  // Read quick-filter values (must come before cutoff calculation that uses them)
+  const fd = (document.getElementById('buyer-fd')?.value || '').trim();
+  const td = (document.getElementById('buyer-td')?.value || '').trim();
+  const pc = (document.getElementById('buyer-pc')?.value || '').trim();
+  const fromDate = fd ? fd + '-01' : '';
+  const toDate   = td ? td + '-31' : '';
+
   // Client-side cutoff: use From Month if set, else default 10 months back
   const cutoff = new Date();
   if (fd) {
@@ -1278,14 +1285,6 @@ async function doBuyerSearch() {
       renderBuyerResults();
     }
   };
-
-  // Read quick-filter values
-  const fd = (document.getElementById('buyer-fd')?.value || '').trim();
-  const td = (document.getElementById('buyer-td')?.value || '').trim();
-  const pc = (document.getElementById('buyer-pc')?.value || '').trim();
-  // Convert YYYY-MM → YYYY-MM-01 (from) and YYYY-MM-31 (to)
-  const fromDate = fd ? fd + '-01' : '';
-  const toDate   = td ? td + '-31' : '';
 
   const bUrl = (action, tab) => {
     const p = new URLSearchParams({ action, [buyerMode]: v, tab });
