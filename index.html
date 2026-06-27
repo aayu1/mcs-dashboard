@@ -319,7 +319,7 @@ tr:hover td{background:#FAFAFA}
             <span class="m-rcount" id="m-rcount"></span>
           </div>
           <div style="overflow-x:auto">
-            <table><thead><tr id="m-thead"></tr></thead><tbody id="m-tbody"></tbody></table>
+            <table style="width:100%;border-collapse:collapse;min-width:520px;table-layout:fixed"><thead><tr id="m-thead"></tr></thead><tbody id="m-tbody"></tbody></table>
           </div>
         </div>
 
@@ -417,19 +417,31 @@ tr:hover td{background:#FAFAFA}
             </div>
             <!-- Table -->
             <div style="border:1px solid #F1F5F9;border-radius:10px;overflow:hidden;overflow-x:auto">
-              <table style="width:100%;border-collapse:collapse;font-size:12px;min-width:600px">
+              <table style="width:100%;border-collapse:collapse;font-size:12px;table-layout:fixed;min-width:860px">
+                <colgroup>
+                  <col style="width:36px">   <!-- icon -->
+                  <col style="width:120px">  <!-- buyer -->
+                  <col style="width:150px">  <!-- order id -->
+                  <col style="width:90px">   <!-- product -->
+                  <col style="width:110px">  <!-- mcs -->
+                  <col style="width:80px">   <!-- platform -->
+                  <col style="width:76px">   <!-- amount -->
+                  <col style="width:82px">   <!-- ordered -->
+                  <col style="width:88px">   <!-- refund date -->
+                  <col style="width:110px">  <!-- status -->
+                </colgroup>
                 <thead>
                   <tr style="background:#F8FAFC">
-                    <th style="padding:8px 12px;text-align:left;font-size:10px;font-weight:700;color:#64748B;text-transform:uppercase;white-space:nowrap;border-bottom:2px solid #F1F5F9"></th>
-                    <th style="padding:8px 12px;text-align:left;font-size:10px;font-weight:700;color:#64748B;text-transform:uppercase;white-space:nowrap;border-bottom:2px solid #F1F5F9">Buyer</th>
-                    <th style="padding:8px 12px;text-align:left;font-size:10px;font-weight:700;color:#64748B;text-transform:uppercase;white-space:nowrap;border-bottom:2px solid #F1F5F9">Order ID</th>
-                    <th style="padding:8px 12px;text-align:left;font-size:10px;font-weight:700;color:#64748B;text-transform:uppercase;white-space:nowrap;border-bottom:2px solid #F1F5F9">Product</th>
-                    <th style="padding:8px 12px;text-align:left;font-size:10px;font-weight:700;color:#64748B;text-transform:uppercase;white-space:nowrap;border-bottom:2px solid #F1F5F9">MCS</th>
-                    <th style="padding:8px 12px;text-align:left;font-size:10px;font-weight:700;color:#64748B;text-transform:uppercase;white-space:nowrap;border-bottom:2px solid #F1F5F9">Platform</th>
-                    <th style="padding:8px 12px;text-align:left;font-size:10px;font-weight:700;color:#64748B;text-transform:uppercase;white-space:nowrap;border-bottom:2px solid #F1F5F9">Amount</th>
-                    <th style="padding:8px 12px;text-align:left;font-size:10px;font-weight:700;color:#64748B;text-transform:uppercase;white-space:nowrap;border-bottom:2px solid #F1F5F9">Ordered</th>
-                    <th style="padding:8px 12px;text-align:left;font-size:10px;font-weight:700;color:#64748B;text-transform:uppercase;white-space:nowrap;border-bottom:2px solid #F1F5F9">Refund Date</th>
-                    <th style="padding:8px 12px;text-align:left;font-size:10px;font-weight:700;color:#64748B;text-transform:uppercase;white-space:nowrap;border-bottom:2px solid #F1F5F9">Status</th>
+                    <th style="padding:8px 10px;text-align:left;font-size:10px;font-weight:700;color:#64748B;text-transform:uppercase;border-bottom:2px solid #F1F5F9"></th>
+                    <th style="padding:8px 10px;text-align:left;font-size:10px;font-weight:700;color:#64748B;text-transform:uppercase;border-bottom:2px solid #F1F5F9">Buyer</th>
+                    <th style="padding:8px 10px;text-align:left;font-size:10px;font-weight:700;color:#64748B;text-transform:uppercase;border-bottom:2px solid #F1F5F9">Order ID</th>
+                    <th style="padding:8px 10px;text-align:left;font-size:10px;font-weight:700;color:#64748B;text-transform:uppercase;border-bottom:2px solid #F1F5F9">Product</th>
+                    <th style="padding:8px 10px;text-align:left;font-size:10px;font-weight:700;color:#64748B;text-transform:uppercase;border-bottom:2px solid #F1F5F9">MCS Code</th>
+                    <th style="padding:8px 10px;text-align:left;font-size:10px;font-weight:700;color:#64748B;text-transform:uppercase;border-bottom:2px solid #F1F5F9">Platform</th>
+                    <th style="padding:8px 10px;text-align:left;font-size:10px;font-weight:700;color:#64748B;text-transform:uppercase;border-bottom:2px solid #F1F5F9">Amount</th>
+                    <th style="padding:8px 10px;text-align:left;font-size:10px;font-weight:700;color:#64748B;text-transform:uppercase;border-bottom:2px solid #F1F5F9">Ordered</th>
+                    <th style="padding:8px 10px;text-align:left;font-size:10px;font-weight:700;color:#64748B;text-transform:uppercase;border-bottom:2px solid #F1F5F9">Refund On</th>
+                    <th style="padding:8px 10px;text-align:left;font-size:10px;font-weight:700;color:#64748B;text-transform:uppercase;border-bottom:2px solid #F1F5F9">Status</th>
                   </tr>
                 </thead>
                 <tbody id="buyer-tbody"></tbody>
@@ -577,10 +589,10 @@ function renderOverview() {
   const billPend = (B['bill-pending']||0) + (B['less-entries']||0);
 
   document.getElementById('ov-stats').innerHTML =
-    sc('Total Brands',     totalBrands,          '',               '') +
-    sc('Bills Need Attention', billPend,          'Pending + Less entries', billPend>0?'sv-red':'') +
-    sc('Active Mediators', MS.totalMediators||0, 'This period',    '') +
-    sc('Completion Rate',  (MS.overallRate||0)+'%', 'Refunds / Orders', MS.overallRate>=80?'sv-green':MS.overallRate>=60?'sv-amber':'sv-red');
+    sc('Total Brands',      totalBrands,           '',                       '') +
+    sc('Bills Need Attention', billPend,           'Pending + Less entries',  billPend>0?'sv-red':'') +
+    sc('Active Mediators',  MS.totalMediators||0,  'This period',             '') +
+    sc('Orders This Period', MS.totalClaimed||0,   'All active mediators',    'sv-purple');
 
   const pipeOrder = ['bill-pending','less-entries','not-started','billed','all-wrapped'];
   document.getElementById('ov-pipeline').innerHTML = pipeOrder.map(k => {
@@ -703,8 +715,12 @@ function renderMediators() {
   }).join('');
   // table header
   document.getElementById('m-thead').innerHTML=
+    '<colgroup><col style="width:38px"><col style="width:130px">'+
+    medMonths.map(()=>'<col style="width:68px">').join('')+
+    '<col style="width:64px"><col style="width:110px"><col style="width:82px"></colgroup>'+
     '<th style="width:38px">#</th><th>MCS Code</th>'+
     medMonths.map(m=>`<th class="m-nc" style="width:68px">${m.short}${m.isCurrent?'<span style="color:#22c55e;font-size:9px"> ●</span>':''}</th>`).join('')+
+    '<th class="m-nc" style="width:64px">Total</th><th style="width:110px">Share</th><th style="width:82px">Tier</th>';font-size:9px"> ●</span>':''}</th>`).join('')+
     '<th class="m-nc">Total</th><th style="min-width:100px">Share</th><th>Tier</th>';
 
   renderMedTop5(); renderMedChart(); applyMedFilters();
@@ -738,9 +754,9 @@ function renderMedTop5(sortByKey) {
     return `<div class="m-t5 ${rcls[i]}">
       <div class="m-t5-rank">${emojis[i]}</div>
       <div class="m-t5-code">${r.code}</div>
+      <span class="m-tier-badge ${t.cls}" style="margin-bottom:10px;display:inline-block">${t.label}</span>
       <div class="m-t5-num">${r[key]}</div>
       <div class="m-t5-sub">${isTot?'total orders':(mo?.label||'')+' orders'}</div>
-      <span class="m-tier-badge ${t.cls}">${t.label}</span>
     </div>`;
   }).join('');
 }
@@ -771,10 +787,8 @@ function applyMedFilters() {
 }
 
 function renderMedTable(rows) {
-  const grand=rows.reduce((s,r)=>s+r.total,0)||1, maxT=Math.max(...rows.map(r=>r.total),1);
   const rbcls=['m-rb1','m-rb2','m-rb3'];
   document.getElementById('m-tbody').innerHTML=rows.map((r,i)=>{
-    const pct=Math.round(r.total/grand*100), barW=Math.round(r.total/maxT*100);
     const t=getMedTier(r.total), rc=rbcls[i]||'';
     const mCells=medMonths.map(m=>{
       const v=r[m.key];
@@ -787,7 +801,6 @@ function renderMedTable(rows) {
       <td><span class="m-code">${r.code}</span></td>
       ${mCells}
       <td class="m-nc" style="font-weight:700">${r.total}</td>
-      <td><div class="m-bar"><div class="m-bar-track"><div class="m-bar-fill" style="width:${barW}%;background:${t.dot}"></div></div><span class="m-bar-pct">${pct}%</span></div></td>
       <td><span class="m-tier-badge ${t.cls}">${t.label}</span></td>
     </tr>`;
   }).join('');
@@ -807,7 +820,7 @@ function top5Card(m,i,monthKey) {
   const months=D.months||[];
   const pills=months.map(mo=>{
     const d=m.months[mo]||{claimed:0,refunded:0};
-    return `<span class="mpill">${MLABEL[mo]||mo}: <b>${d.claimed}</b>${d.refunded>0?`/<span class="rg">${d.refunded}</span>`:''}</span>`;
+    return `<span class="mpill">${MLABEL[mo]||mo}: <b>${d.claimed||0}</b></span>`;
   }).join('');
   return `<div class="t5c">
     <div class="t5-rank">${MEDALS[i]||'#'+(i+1)}</div>
@@ -834,160 +847,291 @@ function mVal(m,mo,f){return m.months?.[mo]?.[f]||0;}
 
 
 // ═══════════════════════════════════════════════════════════════
-//  BUYER TOOLS
+//  BUYER TOOLS — mirrors original WebApp.jsx logic exactly
 // ═══════════════════════════════════════════════════════════════
 const ORDERS_URL  = 'https://script.google.com/macros/s/AKfycbz2yInP38S2j-9q1dZfRZIb4XGVwt6U3eeZUh8J0JDy7aaOdecPb_ghSqE6qpMWkWipHg/exec';
 const REFUNDS_URL = 'https://script.google.com/macros/s/AKfycby9M5np-RHKUPEtGVWi3pEDAjrCu37PXh5fMaOIVGkGJd0Wx3Q7Cujm4k00JxKsC38zDA/exec';
 const PAYMENT_URL = 'https://script.google.com/macros/s/AKfycbzCjPAROwOxwXEteAc-BatPbdnlE0ZMzC2eo85YZYmFFNU5FGGXMYZ9mo4DHrwAVL24ig/exec';
-const BUYER_NT = 2;
-let buyerMode='email', buyerCtrl=null, buyerOrders=[], buyerRefunds=[];
 
-function setBuyerMode(m){
-  buyerMode=m;
-  document.querySelectorAll('.buyer-mode').forEach(b=>b.classList.remove('active'));
-  document.getElementById('mode-'+m).classList.add('active');
-  const labels={email:'Email Address',mcsCode:'MCS Code',orderId:'Order ID'};
-  document.getElementById('buyer-search-label').textContent=labels[m];
-  const ph={email:'buyer@email.com',mcsCode:'e.g. MCSSURAT',orderId:'Amazon / Flipkart Order ID'};
-  document.getElementById('buyer-q').placeholder=ph[m];
+let buyerMode = 'email';
+let buyerCtrl = null;
+let buyerOrders = [];
+let buyerRefunds = [];
+
+// ── MODE SWITCH ───────────────────────────────────────────────
+function setBuyerMode(m) {
+  buyerMode = m;
+  document.querySelectorAll('.buyer-mode').forEach(b => b.classList.remove('active'));
+  document.getElementById('mode-' + m).classList.add('active');
+  const labels = { email:'Email Address', mcsCode:'MCS Code', orderId:'Order ID' };
+  const ph     = { email:'buyer@email.com', mcsCode:'e.g. MCSSURAT', orderId:'Amazon / Flipkart Order ID' };
+  document.getElementById('buyer-search-label').textContent = labels[m];
+  document.getElementById('buyer-q').placeholder = ph[m];
 }
 
-async function doBuyerSearch(){
-  const v=document.getElementById('buyer-q').value.trim();
-  if(!v)return;
-  if(buyerCtrl)buyerCtrl.abort();
-  const ctrl=new AbortController(); buyerCtrl=ctrl; const sig=ctrl.signal;
-  buyerOrders=[]; buyerRefunds=[];
-  showBMsg('Searching...'); hideBErr();
-  document.getElementById('buyer-results').style.display='none';
-  document.getElementById('buyer-empty').style.display='none';
-  document.getElementById('buyer-cancel-btn').style.display='inline-block';
-  document.getElementById('buyer-search-btn').disabled=true;
+// ── SEARCH — progressive: renders as each fetch returns ───────
+async function doBuyerSearch() {
+  const v = document.getElementById('buyer-q').value.trim().toLowerCase();
+  if (!v) return;
 
-  const seenO=new Set(),seenR=new Set();
-  const addO=arr=>(arr||[]).forEach(o=>{const k=String(o.orderId||'').trim().toLowerCase();if(k&&seenO.has(k))return;if(k)seenO.add(k);buyerOrders.push(o);});
-  const addR=arr=>(arr||[]).forEach(r=>{const k=String(r.orderId||'').trim().toLowerCase();if(k&&seenR.has(k))return;if(k)seenR.add(k);buyerRefunds.push(r);});
-  const bUrl=(action,tab)=>`${action==='getOrders'?ORDERS_URL:REFUNDS_URL}?${new URLSearchParams({action,[buyerMode]:v,tab})}`;
+  // Abort any previous search
+  if (buyerCtrl) buyerCtrl.abort();
+  const ctrl = new AbortController(); buyerCtrl = ctrl; const sig = ctrl.signal;
 
-  try{
-    if(buyerMode==='orderId'){
+  // Reset state
+  buyerOrders = []; buyerRefunds = [];
+  const seenO = new Set(), seenR = new Set();
+
+  // UI: show searching state
+  showBMsg('Searching…'); hideBErr();
+  document.getElementById('buyer-results').style.display = 'none';
+  document.getElementById('buyer-empty').style.display   = 'none';
+  document.getElementById('buyer-cancel-btn').style.display = 'inline-block';
+  document.getElementById('buyer-search-btn').disabled   = true;
+
+  // addO / addR — called as each fetch returns, re-renders immediately
+  const addO = arr => {
+    const fresh = (arr || []).filter(o => {
+      const k = String(o.orderId || '').trim().toLowerCase();
+      if (!k || seenO.has(k)) return false;
+      seenO.add(k); return true;
+    });
+    if (fresh.length) {
+      buyerOrders.push(...fresh);
+      renderBuyerResults(); // ← show data immediately
+    }
+  };
+
+  const addR = arr => {
+    const fresh = (arr || []).filter(r => {
+      const k = String(r.orderId || '').trim().toLowerCase();
+      if (!k || seenR.has(k)) return false;
+      seenR.add(k); return true;
+    });
+    if (fresh.length) {
+      buyerRefunds.push(...fresh);
+      renderBuyerResults(); // ← update refund status columns immediately
+    }
+  };
+
+  const bUrl = (action, tab) =>
+    `${action === 'getOrders' ? ORDERS_URL : REFUNDS_URL}?${new URLSearchParams({ action, [buyerMode]: v, tab })}`;
+
+  try {
+    // ── ORDER ID ──────────────────────────────────────────────
+    if (buyerMode === 'orderId') {
+      // Fire orders (tab 0 first, tab 1 fallback) + refunds tab 0 simultaneously
       await Promise.all([
-        (async()=>{for(let t=0;t<BUYER_NT;t++){if(sig.aborted)return;const r=await fetch(bUrl('getOrders',t),{signal:sig});const d=await r.json();if(d.orders?.length){addO(d.orders);return;}}})(),
-        fetch(`${REFUNDS_URL}?action=getRefunds&tab=0&orderId=${encodeURIComponent(v)}`,{signal:sig}).then(r=>r.json()).then(d=>{if(d.refunds?.length)addR(d.refunds);}).catch(()=>{})
+        (async () => {
+          for (let t = 0; t < 2; t++) {
+            if (sig.aborted) return;
+            const r = await fetch(bUrl('getOrders', t), { signal: sig });
+            const d = await r.json();
+            if (d.orders?.length) { addO(d.orders); return; } // stop as soon as found
+          }
+        })(),
+        fetch(`${REFUNDS_URL}?action=getRefunds&tab=0&orderId=${encodeURIComponent(v)}`, { signal: sig })
+          .then(r => r.json()).then(d => { if (d.refunds?.length) addR(d.refunds); }).catch(() => {}),
       ]);
-      if(!sig.aborted){const r=await fetch(`${REFUNDS_URL}?action=getRefunds&tab=1&orderId=${encodeURIComponent(v)}`,{signal:sig}).then(r=>r.json()).catch(()=>null);if(r?.refunds?.length)addR(r.refunds);}
-    }else if(buyerMode==='mcsCode'){
-      await Promise.all(Array.from({length:BUYER_NT},(_,t)=>fetch(bUrl('getOrders',t),{signal:sig}).then(r=>r.json()).then(d=>addO(d.orders||[])).catch(()=>{})));
-      if(!sig.aborted&&buyerOrders.length>0){
-        showBMsg(`Checking refunds for ${buyerOrders.length} orders...`);
-        const ids=[...seenO];
-        for(let i=0;i<ids.length;i+=8){
-          if(sig.aborted)break;
-          await Promise.all(ids.slice(i,i+8).map(id=>fetch(`${REFUNDS_URL}?action=getRefunds&orderId=${encodeURIComponent(id)}`,{signal:sig}).then(r=>r.json()).then(d=>addR(d.refunds||[])).catch(()=>{})));
+      // Refund tab 1 as fallback
+      if (!sig.aborted) {
+        const r = await fetch(`${REFUNDS_URL}?action=getRefunds&tab=1&orderId=${encodeURIComponent(v)}`, { signal: sig })
+          .then(r => r.json()).catch(() => null);
+        if (r?.refunds?.length) addR(r.refunds);
+      }
+
+    // ── MCS CODE ──────────────────────────────────────────────
+    } else if (buyerMode === 'mcsCode') {
+      // Fetch all order tabs in parallel — each renders as it arrives
+      await Promise.all([0, 1].map(t =>
+        fetch(bUrl('getOrders', t), { signal: sig })
+          .then(r => r.json())
+          .then(d => addO(d.orders || []))
+          .catch(() => {})
+      ));
+      // Then batch-check refunds for each order ID found
+      if (!sig.aborted && seenO.size > 0) {
+        showBMsg(`Checking refunds for ${seenO.size} orders…`);
+        const ids = [...seenO];
+        for (let i = 0; i < ids.length; i += 8) {
+          if (sig.aborted) break;
+          await Promise.all(
+            ids.slice(i, i + 8).map(id =>
+              fetch(`${REFUNDS_URL}?action=getRefunds&orderId=${encodeURIComponent(id)}`, { signal: sig })
+                .then(r => r.json()).then(d => addR(d.refunds || [])).catch(() => {})
+            )
+          );
         }
       }
-    }else{
+
+    // ── EMAIL ─────────────────────────────────────────────────
+    } else {
+      // All 4 fetches (2 order tabs + 2 refund tabs) fire at once
       await Promise.all([
-        ...Array.from({length:BUYER_NT},(_,t)=>fetch(bUrl('getOrders',t),{signal:sig}).then(r=>r.json()).then(d=>addO(d.orders||[])).catch(()=>{})),
-        ...Array.from({length:BUYER_NT},(_,t)=>fetch(bUrl('getRefunds',t),{signal:sig}).then(r=>r.json()).then(d=>addR(d.refunds||[])).catch(()=>{}))
+        ...[0, 1].map(t =>
+          fetch(bUrl('getOrders', t), { signal: sig })
+            .then(r => r.json()).then(d => addO(d.orders || [])).catch(() => {})),
+        ...[0, 1].map(t =>
+          fetch(bUrl('getRefunds', t), { signal: sig })
+            .then(r => r.json()).then(d => addR(d.refunds || [])).catch(() => {})),
       ]);
     }
-  }catch(e){if(!sig.aborted)showBErr('Could not load data. Check your connection.');}
-
-  if(!sig.aborted){hideBMsg();renderBuyerResults();document.getElementById('buyer-cancel-btn').style.display='none';document.getElementById('buyer-search-btn').disabled=false;}
-}
-
-function cancelBuyerSearch(){if(buyerCtrl)buyerCtrl.abort();hideBMsg();document.getElementById('buyer-cancel-btn').style.display='none';document.getElementById('buyer-search-btn').disabled=false;}
-
-function renderBuyerResults(){
-  const rIds=new Set(buyerRefunds.map(r=>String(r.orderId||'').trim().toLowerCase()).filter(Boolean));
-  const rDates=new Map(buyerRefunds.filter(r=>r.orderId&&r.timestamp).map(r=>[String(r.orderId).trim().toLowerCase(),r.timestamp]));
-  const pending=buyerOrders.filter(o=>{const k=String(o.orderId||'').trim().toLowerCase();return k&&!rIds.has(k);}).length;
-  const total=buyerOrders.reduce((s,o)=>s+(parseFloat(o.orderAmount)||0),0);
-
-  if(!buyerOrders.length){
-    document.getElementById('buyer-empty').innerHTML='<div style="padding:40px 0;text-align:center;color:#94A3B8"><div style="font-size:32px;margin-bottom:8px">😶</div><div style="font-size:13px;font-weight:700;color:#64748B">No orders found</div><div style="font-size:12px;margin-top:4px">Try a different value</div></div>';
-    document.getElementById('buyer-empty').style.display='block';
-    return;
+  } catch(e) {
+    if (!sig.aborted) showBErr('Could not load data. Check your internet connection.');
   }
 
-  document.getElementById('buyer-stats').innerHTML=[
-    ['Total Orders',buyerOrders.length,'#0F172A'],
-    ['Refund Pending',pending,pending>0?'#D97706':'#059669'],
-    ['Refund Submitted',buyerOrders.length-pending,'#059669'],
-    ['Total Amount','₹'+total.toLocaleString('en-IN'),'#0F172A'],
-  ].map(([l,v,c])=>`<div class="bstat"><div class="bstat-l">${l}</div><div class="bstat-v" style="color:${c}">${v}</div></div>`).join('');
+  if (!sig.aborted) {
+    hideBMsg();
+    if (!buyerOrders.length) {
+      document.getElementById('buyer-empty').style.display = 'block';
+      document.getElementById('buyer-empty').innerHTML =
+        '<div style="padding:40px 0;text-align:center;color:#94A3B8">' +
+        '<div style="font-size:32px;margin-bottom:8px">😶</div>' +
+        '<div style="font-size:13px;font-weight:700;color:#64748B">No orders found</div>' +
+        '<div style="font-size:12px;margin-top:4px">Try a different search value</div></div>';
+    }
+    document.getElementById('buyer-cancel-btn').style.display = 'none';
+    document.getElementById('buyer-search-btn').disabled = false;
+  }
+}
 
-  const fmtD=ts=>ts?new Date(ts).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'2-digit'}):'—';
+function cancelBuyerSearch() {
+  if (buyerCtrl) { buyerCtrl.abort(); buyerCtrl = null; }
+  hideBMsg();
+  document.getElementById('buyer-cancel-btn').style.display = 'none';
+  document.getElementById('buyer-search-btn').disabled = false;
+}
 
-  document.getElementById('buyer-tbody').innerHTML=buyerOrders.map((o,i)=>{
-    const k=String(o.orderId||'').trim().toLowerCase();
-    const pend=k&&!rIds.has(k); const rd=k&&rDates.get(k);
-    const badge=pend
-      ?'<span style="display:inline-block;padding:2px 8px;border-radius:99px;font-size:10px;font-weight:700;background:#FEF3C7;color:#92400E">⚠ Pending</span>'
-      :'<span style="display:inline-block;padding:2px 8px;border-radius:99px;font-size:10px;font-weight:700;background:#D1FAE5;color:#065F46">✓ Submitted</span>';
-    return `<tr style="border-top:1px solid #F8FAFC;background:${pend?'rgba(251,191,36,0.04)':'transparent'}">
-      <td style="padding:9px 12px;border-left:3px solid ${pend?'#F59E0B':'transparent'}">${pend?'⚠️':'📦'}</td>
-      <td style="padding:9px 12px;font-weight:600;color:#0F172A">${o.buyerName||'—'}</td>
-      <td style="padding:9px 12px;font-family:monospace;font-size:11px;color:#0E7490">${o.orderId||'—'}</td>
-      <td style="padding:9px 12px;color:#64748B">${o.productCode||'—'}</td>
-      <td style="padding:9px 12px;font-family:monospace;font-size:11px;color:#64748B">${o.mcsCode||'—'}</td>
-      <td style="padding:9px 12px;color:#64748B">${o.marketplace||'—'}</td>
-      <td style="padding:9px 12px;font-weight:700;color:${pend?'#D97706':'#059669'}">₹${parseFloat(o.orderAmount||0).toLocaleString('en-IN')}</td>
-      <td style="padding:9px 12px;color:#94A3B8;white-space:nowrap">${fmtD(o.timestamp)}</td>
-      <td style="padding:9px 12px;color:${rd?'#059669':'#94A3B8'};white-space:nowrap">${fmtD(rd)}</td>
-      <td style="padding:9px 12px">${badge}</td>
+// ── RENDER RESULTS ────────────────────────────────────────────
+// Called progressively as data arrives — always uses latest state
+function renderBuyerResults() {
+  if (!buyerOrders.length) return;
+
+  const rIds   = new Set(buyerRefunds.map(r => String(r.orderId || '').trim().toLowerCase()).filter(Boolean));
+  const rDates = new Map(
+    buyerRefunds.filter(r => r.orderId && r.timestamp)
+                .map(r => [String(r.orderId).trim().toLowerCase(), r.timestamp])
+  );
+
+  const pending = buyerOrders.filter(o => {
+    const k = String(o.orderId || '').trim().toLowerCase();
+    return k && !rIds.has(k);
+  }).length;
+  const total = buyerOrders.reduce((s, o) => s + (parseFloat(o.orderAmount) || 0), 0);
+
+  // Stats bar
+  document.getElementById('buyer-stats').innerHTML = [
+    ['Total Orders',     buyerOrders.length,            '#0F172A'],
+    ['Refund Pending',   pending,                        pending > 0 ? '#D97706' : '#059669'],
+    ['Refund Submitted', buyerOrders.length - pending,  '#059669'],
+    ['Total Amount',     '₹' + total.toLocaleString('en-IN'), '#0F172A'],
+  ].map(([l, v, c]) =>
+    `<div class="bstat"><div class="bstat-l">${l}</div><div class="bstat-v" style="color:${c}">${v}</div></div>`
+  ).join('');
+
+  const fmtD = ts => {
+    if (!ts) return '—';
+    try { return new Date(ts).toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'2-digit' }); }
+    catch { return '—'; }
+  };
+
+  // Table rows
+  const clip = 'overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:0';
+
+  document.getElementById('buyer-tbody').innerHTML = buyerOrders.map((o, i) => {
+    const k    = String(o.orderId || '').trim().toLowerCase();
+    const pend = k && !rIds.has(k);
+    const rd   = k && rDates.get(k);
+    const badge = pend
+      ? '<span style="display:inline-block;padding:2px 8px;border-radius:99px;font-size:10px;font-weight:700;background:#FEF3C7;color:#92400E">⚠ Pending</span>'
+      : '<span style="display:inline-block;padding:2px 8px;border-radius:99px;font-size:10px;font-weight:700;background:#D1FAE5;color:#065F46">✓ Submitted</span>';
+    return `<tr style="border-top:1px solid #F8FAFC;background:${pend ? 'rgba(251,191,36,0.04)' : 'transparent'}">
+      <td style="padding:9px 10px;border-left:3px solid ${pend ? '#F59E0B' : 'transparent'};text-align:center">${pend ? '⚠️' : '📦'}</td>
+      <td style="padding:9px 10px;font-weight:600;color:#0F172A;${clip}" title="${o.buyerName||''}">${o.buyerName || '—'}</td>
+      <td style="padding:9px 10px;font-family:monospace;font-size:11px;color:#0E7490;${clip}" title="${o.orderId||''}">${o.orderId || '—'}</td>
+      <td style="padding:9px 10px;color:#64748B;${clip}" title="${o.productCode||''}">${o.productCode || '—'}</td>
+      <td style="padding:9px 10px;font-family:monospace;font-size:11px;color:#64748B;${clip}" title="${o.mcsCode||''}">${o.mcsCode || '—'}</td>
+      <td style="padding:9px 10px;color:#64748B;${clip}">${o.marketplace || '—'}</td>
+      <td style="padding:9px 10px;font-weight:700;color:${pend ? '#D97706' : '#059669'};white-space:nowrap">₹${parseFloat(o.orderAmount || 0).toLocaleString('en-IN')}</td>
+      <td style="padding:9px 10px;color:#94A3B8;white-space:nowrap;font-size:11px">${fmtD(o.timestamp)}</td>
+      <td style="padding:9px 10px;color:${rd ? '#059669' : '#94A3B8'};white-space:nowrap;font-size:11px">${fmtD(rd)}</td>
+      <td style="padding:9px 10px">${badge}</td>
     </tr>`;
   }).join('');
 
-  document.getElementById('buyer-results').style.display='block';
-  document.getElementById('buyer-empty').style.display='none';
+  // Show results section
+  document.getElementById('buyer-results').style.display = 'block';
+  document.getElementById('buyer-empty').style.display   = 'none';
 }
 
-async function doPayCheck(){
-  const oid=document.getElementById('pay-oid').value.trim();
-  if(!oid)return;
-  const mcs=document.getElementById('pay-mcs').value.trim();
-  document.getElementById('pay-btn').disabled=true;
-  document.getElementById('pay-btn').textContent='...';
-  document.getElementById('pay-err').style.display='none';
-  document.getElementById('pay-result').style.display='none';
-  document.getElementById('pay-empty').style.display='none';
-  try{
-    const p=new URLSearchParams({action:'checkPayment',orderId:oid});
-    if(mcs)p.append('mcsCode',mcs);
-    const r=await fetch(`${PAYMENT_URL}?${p}`);
-    const d=await r.json();
-    if(d.error){document.getElementById('pay-err').textContent=d.error;document.getElementById('pay-err').style.display='block';}
-    else renderPayResult(d);
-  }catch{document.getElementById('pay-err').textContent='Could not connect.';document.getElementById('pay-err').style.display='block';}
-  document.getElementById('pay-btn').disabled=false;
-  document.getElementById('pay-btn').textContent='Check';
-}
+// ── PAYMENT CHECK ─────────────────────────────────────────────
+async function doPayCheck() {
+  const oid = document.getElementById('pay-oid').value.trim();
+  if (!oid) return;
+  const mcs = document.getElementById('pay-mcs').value.trim();
 
-function renderPayResult(d){
-  const paid=d.paid,col=paid?'#059669':'#D97706',bg=paid?'#ECFDF5':'#FFFBEB',bdr=paid?'#A7F3D0':'#FDE68A';
-  let h=`<div style="padding:18px;border-radius:12px;background:${bg};border:1.5px solid ${bdr}">
-    <div style="display:flex;align-items:center;gap:12px;margin-bottom:${paid?'14px':'0'}">
-      <span style="font-size:28px">${paid?'✅':'⏳'}</span>
-      <div><div style="font-size:17px;font-weight:800;color:${col}">${paid?'Payment Done':'Not Paid Yet'}</div>
-      ${d.sheet?`<div style="font-size:11px;color:#94A3B8;margin-top:2px">Found in: ${d.sheet}</div>`:''}</div>
-    </div>`;
-  if(paid){
-    const rows=[['Order ID',d.orderId],['Date Paid',d.date||'—'],['Amount',d.amount?'₹'+d.amount:'—'],['Less',d.less?'₹'+d.less:'—'],['MCS Code',d.mcsCode||'—'],d.paidBy?['Paid By',d.paidBy]:null].filter(Boolean);
-    h+=`<div style="display:grid;grid-template-columns:110px 1fr;gap:6px 14px;font-size:13px">${rows.map(([l,v])=>`<div style="color:#64748B">${l}</div><div style="color:#0F172A;font-weight:600">${v}</div>`).join('')}</div>`;
-  }else{
-    h+=`<p style="font-size:12px;color:#64748B;margin-top:10px;line-height:1.7">If refund form was filled 15+ days ago, contact your point of contact.</p>`;
+  const btn = document.getElementById('pay-btn');
+  btn.disabled = true; btn.textContent = '…';
+  document.getElementById('pay-err').style.display    = 'none';
+  document.getElementById('pay-result').style.display = 'none';
+  document.getElementById('pay-empty').style.display  = 'none';
+
+  try {
+    const p = new URLSearchParams({ action: 'checkPayment', orderId: oid });
+    if (mcs) p.append('mcsCode', mcs);
+    const r = await fetch(`${PAYMENT_URL}?${p}`);
+    const d = await r.json();
+    if (d.error) {
+      document.getElementById('pay-err').textContent = d.error;
+      document.getElementById('pay-err').style.display = 'block';
+    } else {
+      renderPayResult(d);
+    }
+  } catch {
+    document.getElementById('pay-err').textContent = 'Could not connect. Check your internet.';
+    document.getElementById('pay-err').style.display = 'block';
   }
-  h+='</div>';
-  document.getElementById('pay-result').innerHTML=h;
-  document.getElementById('pay-result').style.display='block';
+
+  btn.disabled = false; btn.textContent = 'Check';
 }
 
-function showBMsg(m){const el=document.getElementById('buyer-msg');el.textContent=m;el.style.display='block';}
-function hideBMsg(){document.getElementById('buyer-msg').style.display='none';}
-function showBErr(m){const el=document.getElementById('buyer-err');el.textContent=m;el.style.display='block';}
-function hideBErr(){document.getElementById('buyer-err').style.display='none';}
+function renderPayResult(d) {
+  const paid = d.paid;
+  const col  = paid ? '#059669'  : '#D97706';
+  const bg   = paid ? '#ECFDF5'  : '#FFFBEB';
+  const bdr  = paid ? '#A7F3D0'  : '#FDE68A';
+  let h = `<div style="padding:18px;border-radius:12px;background:${bg};border:1.5px solid ${bdr}">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:${paid ? '14px' : '0'}">
+      <span style="font-size:28px">${paid ? '✅' : '⏳'}</span>
+      <div>
+        <div style="font-size:17px;font-weight:800;color:${col}">${paid ? 'Payment Done' : 'Not Paid Yet'}</div>
+        ${d.sheet ? `<div style="font-size:11px;color:#94A3B8;margin-top:2px">Found in: ${d.sheet}</div>` : ''}
+      </div>
+    </div>`;
+  if (paid) {
+    const rows = [
+      ['Order ID',  d.orderId], ['Date Paid', d.date || '—'],
+      ['Amount',    d.amount ? '₹' + d.amount : '—'],
+      ['Less',      d.less   ? '₹' + d.less   : '—'],
+      ['MCS Code',  d.mcsCode || '—'],
+      d.paidBy ? ['Paid By', d.paidBy] : null,
+    ].filter(Boolean);
+    h += `<div style="display:grid;grid-template-columns:110px 1fr;gap:6px 14px;font-size:13px">
+      ${rows.map(([l, v]) => `<div style="color:#64748B">${l}</div><div style="color:#0F172A;font-weight:600">${v}</div>`).join('')}
+    </div>`;
+  } else {
+    h += `<p style="font-size:12px;color:#64748B;margin-top:10px;line-height:1.7">If your refund form was filled 15+ days ago, contact your point of contact.</p>`;
+  }
+  h += '</div>';
+  document.getElementById('pay-result').innerHTML = h;
+  document.getElementById('pay-result').style.display = 'block';
+}
+
+// ── UI HELPERS ────────────────────────────────────────────────
+function showBMsg(m) { const el = document.getElementById('buyer-msg'); el.textContent = m; el.style.display = 'block'; }
+function hideBMsg()   { document.getElementById('buyer-msg').style.display = 'none'; }
+function showBErr(m)  { const el = document.getElementById('buyer-err'); el.textContent = m; el.style.display = 'block'; }
+function hideBErr()   { document.getElementById('buyer-err').style.display = 'none'; }
 
 // Auto-refresh at midnight
 (function sched(){
