@@ -552,8 +552,8 @@ tr:hover td{background:#FAFAFA}
           </div>
 
           <!-- Search row -->
-          <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px;align-items:flex-end">
-            <div style="flex:1;min-width:200px">
+          <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px;align-items:flex-end">
+            <div style="flex:1 1 220px;min-width:180px">
               <div style="font-size:10px;font-weight:700;color:#64748B;text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px" id="buyer-search-label">Email Address</div>
               <div style="display:flex;gap:6px">
                 <input id="buyer-q" placeholder="Enter value…" onkeydown="if(event.key==='Enter')doBuyerSearch()" style="flex:1;padding:8px 12px;border:1.5px solid #E2E8F0;border-radius:8px;font-size:13px;outline:none;font-family:inherit;color:#0F172A"/>
@@ -561,6 +561,23 @@ tr:hover td{background:#FAFAFA}
                 <button onclick="cancelBuyerSearch()" id="buyer-cancel-btn" style="display:none;padding:8px 14px;background:#FEE2E2;color:#DC2626;border:none;border-radius:8px;font-weight:700;cursor:pointer;font-size:13px;font-family:inherit">✕</button>
               </div>
             </div>
+          </div>
+
+          <!-- Quick filters row -->
+          <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px;align-items:flex-end;padding:10px 12px;background:#F8FAFC;border:1px solid #F1F5F9;border-radius:9px">
+            <div style="flex:1 1 130px;min-width:120px">
+              <div style="font-size:10px;font-weight:700;color:#64748B;text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px">From Month</div>
+              <select id="buyer-fd" style="width:100%;padding:7px 10px;border:1.5px solid #E2E8F0;border-radius:8px;font-size:13px;outline:none;font-family:inherit;color:#0F172A;background:#fff"></select>
+            </div>
+            <div style="flex:1 1 130px;min-width:120px">
+              <div style="font-size:10px;font-weight:700;color:#64748B;text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px">To Month</div>
+              <select id="buyer-td" style="width:100%;padding:7px 10px;border:1.5px solid #E2E8F0;border-radius:8px;font-size:13px;outline:none;font-family:inherit;color:#0F172A;background:#fff"></select>
+            </div>
+            <div style="flex:1 1 130px;min-width:120px">
+              <div style="font-size:10px;font-weight:700;color:#64748B;text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px">Product Code <span style="font-weight:400;text-transform:none;color:#94A3B8">(optional)</span></div>
+              <input id="buyer-pc" placeholder="e.g. M183P01" onkeydown="if(event.key==='Enter')doBuyerSearch()" style="width:100%;padding:7px 10px;border:1.5px solid #E2E8F0;border-radius:8px;font-size:13px;outline:none;font-family:inherit;color:#0F172A"/>
+            </div>
+            <button onclick="clearBuyerFilters()" style="padding:7px 14px;background:#fff;border:1.5px solid #E2E8F0;border-radius:8px;font-weight:700;cursor:pointer;font-size:11px;font-family:inherit;color:#64748B;white-space:nowrap">↺ Clear</button>
           </div>
 
           <!-- Status / error -->
@@ -572,9 +589,10 @@ tr:hover td{background:#FAFAFA}
             <!-- Stats row -->
             <div id="buyer-stats" style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px"></div>
             <!-- Legend -->
-            <div style="display:flex;gap:14px;font-size:11px;color:#94A3B8;margin-bottom:8px">
+            <div style="display:flex;gap:14px;font-size:11px;color:#94A3B8;margin-bottom:8px;flex-wrap:wrap;align-items:center">
               <span style="display:flex;align-items:center;gap:4px"><span style="width:3px;height:14px;border-radius:2px;background:#F59E0B;display:inline-block"></span>Refund form pending</span>
               <span style="display:flex;align-items:center;gap:4px"><span style="width:3px;height:14px;border-radius:2px;background:#E2E8F0;display:inline-block"></span>Refund submitted</span>
+              <span style="margin-left:auto;color:#CBD5E1;font-style:italic">Showing last 10 months only</span>
             </div>
             <!-- Table -->
             <div style="border:1px solid #F1F5F9;border-radius:10px;overflow:hidden;overflow-x:auto">
@@ -1159,6 +1177,35 @@ function setBuyerMode(m) {
   document.getElementById('buyer-q').placeholder = ph[m];
 }
 
+// Populate From/To month dropdowns once on first load
+function initBuyerFilters() {
+  const fdEl = document.getElementById('buyer-fd');
+  const tdEl = document.getElementById('buyer-td');
+  if (!fdEl || fdEl.options.length > 1) return; // already done
+
+  const NAMES = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const now = new Date();
+  const opts = ['<option value="">Any</option>'];
+  // 10 months including current
+  for (let i = 0; i < 10; i++) {
+    const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+    const val = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0');
+    const lbl = NAMES[d.getMonth()] + ' ' + d.getFullYear();
+    opts.push(`<option value="${val}">${lbl}</option>`);
+  }
+  fdEl.innerHTML = opts.join('');
+  tdEl.innerHTML = opts.join('');
+}
+
+function clearBuyerFilters() {
+  document.getElementById('buyer-fd').value = '';
+  document.getElementById('buyer-td').value = '';
+  document.getElementById('buyer-pc').value = '';
+}
+
+// Call init on page load
+document.addEventListener('DOMContentLoaded', initBuyerFilters);
+
 // ── SEARCH — progressive: renders as each fetch returns ───────
 async function doBuyerSearch() {
   const v = document.getElementById('buyer-q').value.trim().toLowerCase();
@@ -1179,33 +1226,74 @@ async function doBuyerSearch() {
   document.getElementById('buyer-cancel-btn').style.display = 'inline-block';
   document.getElementById('buyer-search-btn').disabled   = true;
 
+  // Client-side cutoff: use From Month if set, else default 10 months back
+  const cutoff = new Date();
+  if (fd) {
+    const [yy, mm] = fd.split('-').map(Number);
+    cutoff.setFullYear(yy, mm - 1, 1);
+  } else {
+    cutoff.setMonth(cutoff.getMonth() - 10);
+  }
+  cutoff.setHours(0, 0, 0, 0);
+
+  // To-date cutoff (optional)
+  let toCutoff = null;
+  if (td) {
+    const [yy, mm] = td.split('-').map(Number);
+    toCutoff = new Date(yy, mm, 0, 23, 59, 59);   // last day of month
+  }
+
+  const withinCutoff = ts => {
+    if (!ts) return false;
+    const d = new Date(ts);
+    if (isNaN(d.getTime())) return false;
+    if (d < cutoff) return false;
+    if (toCutoff && d > toCutoff) return false;
+    return true;
+  };
+
   // addO / addR — called as each fetch returns, re-renders immediately
   const addO = arr => {
     const fresh = (arr || []).filter(o => {
+      if (!withinCutoff(o.timestamp)) return false;          // ← drop old rows
       const k = String(o.orderId || '').trim().toLowerCase();
       if (!k || seenO.has(k)) return false;
       seenO.add(k); return true;
     });
     if (fresh.length) {
       buyerOrders.push(...fresh);
-      renderBuyerResults(); // ← show data immediately
+      renderBuyerResults();
     }
   };
 
   const addR = arr => {
     const fresh = (arr || []).filter(r => {
+      if (!withinCutoff(r.timestamp)) return false;          // ← drop old rows
       const k = String(r.orderId || '').trim().toLowerCase();
       if (!k || seenR.has(k)) return false;
       seenR.add(k); return true;
     });
     if (fresh.length) {
       buyerRefunds.push(...fresh);
-      renderBuyerResults(); // ← update refund status columns immediately
+      renderBuyerResults();
     }
   };
 
-  const bUrl = (action, tab) =>
-    `${action === 'getOrders' ? ORDERS_URL : REFUNDS_URL}?${new URLSearchParams({ action, [buyerMode]: v, tab })}`;
+  // Read quick-filter values
+  const fd = (document.getElementById('buyer-fd')?.value || '').trim();
+  const td = (document.getElementById('buyer-td')?.value || '').trim();
+  const pc = (document.getElementById('buyer-pc')?.value || '').trim();
+  // Convert YYYY-MM → YYYY-MM-01 (from) and YYYY-MM-31 (to)
+  const fromDate = fd ? fd + '-01' : '';
+  const toDate   = td ? td + '-31' : '';
+
+  const bUrl = (action, tab) => {
+    const p = new URLSearchParams({ action, [buyerMode]: v, tab });
+    if (fromDate) p.append('fromDate', fromDate);
+    if (toDate)   p.append('toDate',   toDate);
+    if (pc)       p.append('productCode', pc);
+    return `${action === 'getOrders' ? ORDERS_URL : REFUNDS_URL}?${p}`;
+  };
 
   try {
     // ── ORDER ID ──────────────────────────────────────────────
@@ -1220,12 +1308,12 @@ async function doBuyerSearch() {
             if (d.orders?.length) { addO(d.orders); return; } // stop as soon as found
           }
         })(),
-        fetch(`${REFUNDS_URL}?action=getRefunds&tab=0&orderId=${encodeURIComponent(v)}`, { signal: sig })
+        fetch(bUrl('getRefunds', 0), { signal: sig })
           .then(r => r.json()).then(d => { if (d.refunds?.length) addR(d.refunds); }).catch(() => {}),
       ]);
       // Refund tab 1 as fallback
       if (!sig.aborted) {
-        const r = await fetch(`${REFUNDS_URL}?action=getRefunds&tab=1&orderId=${encodeURIComponent(v)}`, { signal: sig })
+        const r = await fetch(bUrl('getRefunds', 1), { signal: sig })
           .then(r => r.json()).catch(() => null);
         if (r?.refunds?.length) addR(r.refunds);
       }
