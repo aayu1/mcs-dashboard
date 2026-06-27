@@ -521,15 +521,22 @@ function showMain(name) {
 }
 
 // ── LOAD DATA ─────────────────────────────────────────────────
-const CACHE_KEY = 'mcs_dash_v1';
-function getCached(){try{const r=localStorage.getItem(CACHE_KEY);if(!r)return null;const{ts,data}=JSON.parse(r);if(Date.now()-ts>300000)return null;return data;}catch{return null;}}
-function saveCache(d){try{localStorage.setItem(CACHE_KEY,JSON.stringify({ts:Date.now(),data:d}));}catch{}}
+const CACHE_KEY_OV  = 'mcs_dash_ov_v2';
+const CACHE_KEY_MD = 'mcs_dash_md_v2';
+function getCached(key){try{const r=localStorage.getItem(key);if(!r)return null;const{ts,data}=JSON.parse(r);if(Date.now()-ts>300000)return null;return data;}catch{return null;}}
+function saveCache(key,d){try{localStorage.setItem(key,JSON.stringify({ts:Date.now(),data:d}));}catch{}}
 
+// Two-phase load:
+//   Phase 1: Show cached data instantly (if any)
+//   Phase 2: Fetch /action=overview (~1 sec) → renders Overview + Brands tabs
+//   Phase 3: Fetch /action=mediators (~2-3 sec) → renders Mediators tab
 async function loadData() {
-  // Show cached data instantly, then refresh in background
-  const cached = getCached();
-  if (cached) {
-    D = cached;
+  // ── Phase 1: instant cached render ─────────────────────────
+  const cOv = getCached(CACHE_KEY_OV);
+  const cMd = getCached(CACHE_KEY_MD);
+  if (cOv) {
+    D = { ...cOv };
+    if (cMd) D = { ...D, ...cMd };
     renderAll();
     showMain('dash');
     document.getElementById('upd').textContent = 'Cached · refreshing…';
@@ -539,32 +546,50 @@ async function loadData() {
     document.getElementById('tb-sub').textContent = 'Loading…';
   }
 
+  // ── Phase 2: fetch overview (brands + system links) ─────────
   try {
-    const res  = await fetch(SURL + '?action=dashboard&t=' + Date.now());
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-    const json = await res.json();
-    if (json.error) throw new Error(json.error);
-    D = json;
-    saveCache(json);
-    renderAll();
+    const r1 = await fetch(SURL + '?action=overview&t=' + Date.now());
+    if (!r1.ok) throw new Error('HTTP ' + r1.status);
+    const ov = await r1.json();
+    if (ov.error) throw new Error(ov.error);
+    saveCache(CACHE_KEY_OV, ov);
+    D = D ? { ...D, ...ov } : ov;
+    // Render overview + brands immediately
+    renderOverview();
+    renderBrands();
     showMain('dash');
-    const now = new Date();
-    document.getElementById('upd').textContent = 'Updated ' + now.toLocaleTimeString();
-    document.getElementById('sb-foot').textContent = now.toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'});
-    document.getElementById('tb-sub').textContent = (D.brands||[]).length + ' brands · ' + (D.mediatorSummary?.totalMediators||0) + ' mediators';
+    document.getElementById('tb-sub').textContent = (D.brands||[]).length + ' brands · loading mediators…';
   } catch(err) {
     if (!D) {
       document.getElementById('err-t').textContent = 'Could not load data';
       document.getElementById('err-d').textContent = err.message + ' — Make sure Apps Script access is set to "Anyone".';
       showMain('err');
       document.getElementById('tb-sub').textContent = 'Error loading data';
-    } else {
-      // Still showing cached data — just update indicator
-      document.getElementById('upd').textContent = 'Cached (refresh failed)';
+      return;
+    }
+  }
+
+  // ── Phase 3: fetch mediators in background ──────────────────
+  try {
+    const r2 = await fetch(SURL + '?action=mediators&t=' + Date.now());
+    if (!r2.ok) throw new Error('HTTP ' + r2.status);
+    const md = await r2.json();
+    if (md.error) throw new Error(md.error);
+    saveCache(CACHE_KEY_MD, md);
+    D = { ...D, ...md };
+    renderOverview(); // re-render with mediator top5
+    renderMediators();
+    const now = new Date();
+    document.getElementById('upd').textContent = 'Updated ' + now.toLocaleTimeString();
+    document.getElementById('sb-foot').textContent = now.toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'});
+    document.getElementById('tb-sub').textContent = (D.brands||[]).length + ' brands · ' + (D.mediatorSummary?.totalMediators||0) + ' mediators';
+  } catch(err) {
+    if (D?.brands) {
+      // Overview loaded but mediators failed — show what we have
+      document.getElementById('upd').textContent = 'Mediator data unavailable';
     }
   }
 }
-
 
 // ── TAB SWITCH ────────────────────────────────────────────────
 function switchTab(name) {
@@ -617,13 +642,17 @@ function renderOverview() {
     `<a class="qlink" href="${l.url}" target="_blank">${l.icon} ${l.label}</a>`
   ).join('');
 
-  const top5 = (D.mediators||[])
-    .filter(m=>mVal(m,curMonth,'claimed')>0)
-    .sort((a,b)=>mVal(b,curMonth,'claimed')-mVal(a,curMonth,'claimed'))
-    .slice(0,5);
-  document.getElementById('ov-top5').innerHTML = top5.length
-    ? top5.map((m,i)=>top5Card(m,i,curMonth)).join('')
-    : `<div style="color:#94A3B8;font-size:13px">No mediator data for ${MLABEL[curMonth]||curMonth}</div>`;
+  if (!D.mediators) {
+    document.getElementById('ov-top5').innerHTML = '<div style="color:#94A3B8;font-size:13px;display:flex;align-items:center;gap:8px"><div style="width:14px;height:14px;border:2px solid #E2E8F0;border-top-color:#F59E0B;border-radius:50%;animation:spin 0.7s linear infinite"></div>Loading mediator data…</div>';
+  } else {
+    const top5 = (D.mediators||[])
+      .filter(m=>mVal(m,curMonth,'claimed')>0)
+      .sort((a,b)=>mVal(b,curMonth,'claimed')-mVal(a,curMonth,'claimed'))
+      .slice(0,5);
+    document.getElementById('ov-top5').innerHTML = top5.length
+      ? top5.map((m,i)=>top5Card(m,i,curMonth)).join('')
+      : `<div style="color:#94A3B8;font-size:13px">No mediator data for ${MLABEL[curMonth]||curMonth}</div>`;
+  }
 }
 
 function goBrandsFilter(filter) {
@@ -689,7 +718,16 @@ function bSort(k) { bSortKey===k?bSortDir*=-1:(bSortKey=k,bSortDir=1); renderBra
 //  MEDIATORS
 // ═══════════════════════════════════════════════════════════════
 function renderMediators() {
-  if (!D?.mediators?.length) return;
+  if (!D?.mediators) {
+    // Show loading state in mediators tab
+    document.getElementById('m-top5-grid').innerHTML = '<div style="color:#94A3B8;font-size:13px;padding:20px;display:flex;align-items:center;gap:8px"><div style="width:14px;height:14px;border:2px solid #E2E8F0;border-top-color:#F59E0B;border-radius:50%;animation:spin 0.7s linear infinite"></div>Loading mediator data from Orders sheet…</div>';
+    document.getElementById('m-tbody').innerHTML = '';
+    return;
+  }
+  if (!D.mediators.length) {
+    document.getElementById('m-top5-grid').innerHTML = '<div style="color:#94A3B8;font-size:13px;padding:20px">No mediator data found</div>';
+    return;
+  }
   medMonths = (D.months||[]).map((mk,i)=>{
     const [y,mo]=mk.split('-'); const idx=parseInt(mo)-1;
     return {key:mk,label:MED_NAMES[idx]+' '+y,short:MED_NAMES[idx],
@@ -717,11 +755,10 @@ function renderMediators() {
   document.getElementById('m-thead').innerHTML=
     '<colgroup><col style="width:38px"><col style="width:130px">'+
     medMonths.map(()=>'<col style="width:68px">').join('')+
-    '<col style="width:64px"><col style="width:110px"><col style="width:82px"></colgroup>'+
+    '<col style="width:72px"><col style="width:90px"></colgroup>'+
     '<th style="width:38px">#</th><th>MCS Code</th>'+
     medMonths.map(m=>`<th class="m-nc" style="width:68px">${m.short}${m.isCurrent?'<span style="color:#22c55e;font-size:9px"> ●</span>':''}</th>`).join('')+
-    '<th class="m-nc" style="width:64px">Total</th><th style="width:110px">Share</th><th style="width:82px">Tier</th>';font-size:9px"> ●</span>':''}</th>`).join('')+
-    '<th class="m-nc">Total</th><th style="min-width:100px">Share</th><th>Tier</th>';
+    '<th class="m-nc" style="width:72px">Total</th><th style="width:90px">Tier</th>';
 
   renderMedTop5(); renderMedChart(); applyMedFilters();
 }
