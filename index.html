@@ -257,6 +257,11 @@ tr:hover td{background:#FAFAFA}
         <div class="pipeline" id="ov-pipeline"></div>
         <div class="section-h">Quick Links</div>
         <div class="qlinks" id="ov-links"></div>
+        <div class="section-h">📈 Daily Order Trend — Last 30 Days <span id="ov-trend-sub" style="font-size:11px;color:#94A3B8;font-weight:400;margin-left:8px"></span></div>
+        <div style="background:#fff;border-radius:12px;border:1px solid #E2E8F0;padding:16px 18px;margin-bottom:22px;box-shadow:0 1px 3px rgba(0,0,0,.06)">
+          <div style="position:relative;height:200px"><canvas id="ov-daily-chart"></canvas></div>
+        </div>
+
         <div class="section-h">🏆 Top 5 Mediators This Month</div>
         <div class="top5-grid" id="ov-top5"></div>
       </div>
@@ -276,6 +281,7 @@ tr:hover td{background:#FAFAFA}
                 <th onclick="bSort('code')">Code <span class="sa" id="sa-code">↕</span></th>
                 <th onclick="bSort('lastBillDate')">Last Bill <span class="sa" id="sa-lastBillDate">↕</span></th>
                 <th onclick="bSort('billStatus')">Status <span class="sa" id="sa-billStatus">↕</span></th>
+                <th style="text-align:right">Orders <span style="font-size:9px;color:#94A3B8">(this month)</span></th>
                 <th>Sheet</th>
               </tr>
             </thead>
@@ -653,6 +659,78 @@ function renderOverview() {
       ? top5.map((m,i)=>top5Card(m,i,curMonth)).join('')
       : `<div style="color:#94A3B8;font-size:13px">No mediator data for ${MLABEL[curMonth]||curMonth}</div>`;
   }
+
+  // Render daily trend chart (if data is available)
+  renderDailyTrendChart();
+}
+
+let ovDailyChart = null;
+function renderDailyTrendChart() {
+  const canvas = document.getElementById('ov-daily-chart');
+  if (!canvas) return;
+  const subEl = document.getElementById('ov-trend-sub');
+
+  // Build 30-day labels
+  const days = [];
+  for (let i = 29; i >= 0; i--) {
+    const d = new Date();
+    d.setDate(d.getDate() - i);
+    d.setHours(0,0,0,0);
+    const key = d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+    const lbl = d.toLocaleDateString('en-IN',{day:'numeric',month:'short'});
+    days.push({key, lbl});
+  }
+
+  if (!D?.dailyCounts) {
+    // Show skeleton: empty chart with loading text
+    if (subEl) subEl.textContent = '(loading…)';
+    if (ovDailyChart) { ovDailyChart.destroy(); ovDailyChart = null; }
+    return;
+  }
+
+  const counts = days.map(d => D.dailyCounts[d.key] || 0);
+  const total  = counts.reduce((s,c) => s+c, 0);
+  const avg    = Math.round(total / 30);
+  const peak   = Math.max(...counts);
+  const peakIdx = counts.indexOf(peak);
+  const peakDay = peak > 0 ? days[peakIdx].lbl : '—';
+  if (subEl) subEl.textContent = `${total} orders · avg ${avg}/day · peak ${peak} on ${peakDay}`;
+
+  if (ovDailyChart) { ovDailyChart.destroy(); ovDailyChart = null; }
+  ovDailyChart = new Chart(canvas, {
+    type: 'line',
+    data: {
+      labels: days.map(d=>d.lbl),
+      datasets: [{
+        label: 'Orders',
+        data: counts,
+        borderColor: '#F59E0B',
+        backgroundColor: 'rgba(245,158,11,0.08)',
+        borderWidth: 2,
+        tension: 0.3,
+        pointRadius: 0,
+        pointHoverRadius: 5,
+        pointHoverBackgroundColor: '#F59E0B',
+        fill: true,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor:'#fff', borderColor:'rgba(0,0,0,.1)', borderWidth:1,
+          titleColor:'#0F172A', bodyColor:'#64748B', padding:10,
+          callbacks: { label: ctx => ctx.parsed.y + ' orders' }
+        }
+      },
+      scales: {
+        x: { ticks: { color:'#94A3B8', font:{size:10}, maxRotation:0, autoSkip:true, maxTicksLimit:10 }, grid:{ color:'rgba(0,0,0,.04)' } },
+        y: { beginAtZero:true, ticks:{ color:'#94A3B8', font:{size:11} }, grid:{ color:'rgba(0,0,0,.06)' } }
+      }
+    }
+  });
 }
 
 function goBrandsFilter(filter) {
@@ -695,6 +773,15 @@ function renderBrands() {
   document.getElementById('brands-body').innerHTML = rows.length
     ? rows.map(b => {
         const meta = BILL_META[b.billStatus]||BILL_META['other'];
+        // Brand order count this month (from D.brandOrderCounts, keyed by uppercase brand code)
+        const brandCodeUp = (b.code||'').toUpperCase();
+        const orderCount = D?.brandOrderCounts?.[brandCodeUp];
+        const ocDisplay = orderCount === undefined
+          ? (D?.brandOrderCounts ? '<span style="color:#CBD5E1">—</span>' : '<span style="color:#94A3B8;font-size:11px">…</span>')
+          : orderCount === 0
+            ? '<span style="color:#CBD5E1">0</span>'
+            : `<span style="font-weight:800;color:${orderCount>=30?'#059669':orderCount>=10?'#D97706':'#64748B'}">${orderCount}</span>`;
+
         return `<tr>
           <td style="font-weight:700;max-width:200px;overflow:hidden;text-overflow:ellipsis">
             <a href="${b.sheetLink}" target="_blank" style="color:#0F172A;text-decoration:none" onmouseover="this.style.color='#B45309'" onmouseout="this.style.color='#0F172A'">${b.name}</a>
@@ -702,13 +789,14 @@ function renderBrands() {
           <td style="font-family:monospace;font-size:12px;color:#0E7490;font-weight:700">${b.code||'—'}</td>
           <td style="color:#64748B">${b.lastBillDate||'—'}</td>
           <td><span class="bs ${meta.cls}">${meta.label}</span></td>
+          <td style="text-align:right">${ocDisplay}</td>
           <td style="display:flex;gap:6px">
             <a href="${b.sheetLink}" target="_blank" style="font-size:11px;padding:4px 10px;border:1.5px solid #E2E8F0;border-radius:6px;color:#64748B;text-decoration:none;white-space:nowrap" onmouseover="this.style.color='#0F172A'" onmouseout="this.style.color='#64748B'">↗ Open</a>
             ${b.extraLink?`<a href="${b.extraLink}" target="_blank" style="font-size:11px;padding:4px 10px;border:1.5px solid #E2E8F0;border-radius:6px;color:#64748B;text-decoration:none;white-space:nowrap" onmouseover="this.style.color='#0F172A'" onmouseout="this.style.color='#64748B'">↗ Extra</a>`:''}
           </td>
         </tr>`;
       }).join('')
-    : `<tr><td colspan="5" class="no-rows">No brands found</td></tr>`;
+    : `<tr><td colspan="6" class="no-rows">No brands found</td></tr>`;
 }
 
 function setBF(k) { bFilter=k; renderBrands(); }
@@ -851,24 +939,17 @@ function sc(label,value,sub,cls) {
 
 function top5Card(m,i,monthKey) {
   const cl=monthKey?mVal(m,monthKey,'claimed'):(m.totalClaimed||0);
-  const rf=monthKey?mVal(m,monthKey,'refunded'):(m.totalRefunded||0);
-  const rate=cl>0?Math.round(rf/cl*100):0;
-  const rc=rate>=80?'#059669':rate>=60?'#D97706':'#DC2626';
   const months=D.months||[];
   const pills=months.map(mo=>{
-    const d=m.months[mo]||{claimed:0,refunded:0};
+    const d=m.months[mo]||{claimed:0};
     return `<span class="mpill">${MLABEL[mo]||mo}: <b>${d.claimed||0}</b></span>`;
   }).join('');
   return `<div class="t5c">
     <div class="t5-rank">${MEDALS[i]||'#'+(i+1)}</div>
     <div class="t5-code">${m.code}</div>
     <span class="tier-badge tier-${m.tier}">${m.tier}</span>
-    <div class="t5-nums">
-      <div><div class="t5-nl">Claimed</div><div class="t5-nv">${cl}</div></div>
-      <div><div class="t5-nl">Refunds</div><div class="t5-nv" style="color:#059669">${rf}</div></div>
-    </div>
-    <div class="rbar-bg"><div class="rbar-fill" style="width:${rate}%;background:${rc}"></div></div>
-    <div class="rbar-lbl">${rate}% completion</div>
+    <div style="font-size:28px;font-weight:800;color:#0F172A;margin:10px 0 2px;line-height:1">${cl}</div>
+    <div style="font-size:11px;color:#94A3B8;margin-bottom:10px">${monthKey?'orders this month':'total orders'}</div>
     <div class="month-pills">${pills}</div>
   </div>`;
 }
