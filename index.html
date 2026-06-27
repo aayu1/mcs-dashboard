@@ -141,7 +141,55 @@ tr:hover td{background:#FAFAFA}
 .mbar-bg{flex-shrink:0;width:60px;height:4px;background:#F1F5F9;border-radius:99px;overflow:hidden}
 .mbar-fill{height:100%;border-radius:99px}
 .mbar-txt{font-weight:700;min-width:36px;font-size:12px}
+
+/* ── MEDIATOR SECTION (dark cards, matches old dashboard) ── */
+.m-card{background:#1a1a1a;border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:20px 22px;margin-bottom:18px}
+.m-card-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px;font-size:14px;font-weight:700;color:#f0f0f0}
+.m-card small{font-size:11px;color:#555;font-weight:400;margin-left:4px}
+.m-month-tabs{display:flex;gap:5px;flex-wrap:wrap}
+.m-mtab{padding:4px 12px;border-radius:7px;border:1px solid rgba(255,255,255,.08);background:#242424;color:#a0a0a0;font-size:11px;font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap;transition:.15s}
+.m-mtab.active{background:rgba(34,197,94,.15);border-color:rgba(34,197,94,.3);color:#22c55e}
+.m-top5-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.m-t5{background:#242424;border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:16px;position:relative}
+.m-t5.r1{border-color:rgba(245,158,11,.5)}.m-t5.r2{border-color:rgba(180,180,180,.3)}.m-t5.r3{border-color:rgba(180,120,80,.35)}
+.m-t5-rank{position:absolute;top:12px;right:12px;font-size:20px}
+.m-t5-code{font-family:monospace;font-size:11px;font-weight:700;color:#14b8a6;margin-bottom:8px;padding-right:26px;word-break:break-all}
+.m-t5-num{font-size:32px;font-weight:800;line-height:1;margin-bottom:3px;color:#f0f0f0}
+.m-t5-sub{font-size:11px;color:#555;margin-bottom:8px}
+.m-tier-badge{display:inline-block;padding:2px 9px;border-radius:99px;font-size:10px;font-weight:700}
+.m-tier-key{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.m-tk-item{display:flex;align-items:center;gap:6px;font-size:11px;color:#a0a0a0;background:#242424;border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:4px 11px}
+.m-tk-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.m-filter-row{display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+.m-input,.m-select{padding:6px 11px;border-radius:8px;border:1px solid rgba(255,255,255,.14);background:#242424;color:#f0f0f0;font-size:12px;outline:none;font-family:inherit}
+.m-input{width:180px}.m-input:focus,.m-select:focus{border-color:rgba(34,197,94,.4)}
+.m-rcount{font-size:12px;color:#555;margin-left:auto}
+.m-card table{width:100%;border-collapse:collapse;min-width:520px}
+.m-card thead th{font-size:10px;font-weight:700;color:#a0a0a0;text-transform:uppercase;letter-spacing:.5px;padding:8px 12px;text-align:left;white-space:nowrap;border-bottom:1px solid rgba(255,255,255,.1);background:#1a1a1a}
+.m-card tbody tr{border-bottom:1px solid rgba(255,255,255,.05)}
+.m-card tbody tr:hover{background:rgba(255,255,255,.03)}
+.m-card tbody td{padding:9px 12px;font-size:12px;color:#f0f0f0;vertical-align:middle}
+.m-code{font-family:monospace;font-size:12px;font-weight:700;color:#14b8a6}
+.m-rb{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;font-size:11px;font-weight:700;background:#2e2e2e;color:#a0a0a0}
+.m-rb1{background:rgba(245,158,11,.2);color:#f59e0b}.m-rb2{background:rgba(180,180,180,.1);color:#9ca3af}.m-rb3{background:rgba(180,120,80,.18);color:#b47850}
+.m-nc{text-align:center}.m-nz{color:#555}
+.m-cur{display:inline-block;padding:2px 9px;border-radius:99px;font-size:11px;font-weight:700;background:rgba(34,197,94,.15);color:#22c55e;border:1px solid rgba(34,197,94,.25)}
+.m-cur.zero{background:#242424;color:#555;border-color:rgba(255,255,255,.08)}
+.m-bar{display:flex;align-items:center;gap:6px}
+.m-bar-track{flex:1;height:4px;background:#2e2e2e;border-radius:3px;overflow:hidden;min-width:40px}
+.m-bar-fill{height:100%;border-radius:3px}
+.m-bar-pct{font-size:11px;color:#a0a0a0;min-width:28px;text-align:right}
+.m-legend{display:flex;flex-wrap:wrap;gap:10px}
+.m-li{display:flex;align-items:center;gap:5px;font-size:11px;color:#a0a0a0}
+.m-lsq{width:9px;height:9px;border-radius:2px;flex-shrink:0}
+/* tier colours */
+.t-elite{background:rgba(139,92,246,.15);color:#a78bfa;border:1px solid rgba(139,92,246,.25)}
+.t-prime{background:rgba(34,197,94,.15);color:#22c55e;border:1px solid rgba(34,197,94,.2)}
+.t-standard{background:rgba(59,130,246,.15);color:#60a5fa;border:1px solid rgba(59,130,246,.2)}
+.t-active{background:rgba(245,158,11,.15);color:#f59e0b;border:1px solid rgba(245,158,11,.2)}
+.t-passive{background:rgba(239,68,68,.12);color:#ef4444;border:1px solid rgba(239,68,68,.18)}
 </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 </head>
 <body>
 
@@ -206,7 +254,6 @@ tr:hover td{background:#FAFAFA}
 
       <!-- BRANDS -->
       <div class="tab-pane" id="tab-brands">
-        <div id="slot-status" style="display:none;align-items:center;gap:8px;background:#FFFBEB;border:1px solid #FDE68A;color:#92400E;padding:9px 14px;border-radius:9px;font-size:12px;font-weight:600;margin-bottom:12px"></div>
         <div class="controls">
           <input class="search-in" id="b-search" placeholder="Search brand or code…" oninput="renderBrands()"/>
           <div class="filter-btns" id="b-filters"></div>
@@ -230,21 +277,43 @@ tr:hover td{background:#FAFAFA}
 
       <!-- MEDIATORS -->
       <div class="tab-pane" id="tab-mediators">
-        <div class="month-row">
-          <div class="mtabs" id="m-tabs"></div>
-          <div style="font-size:11px;color:#94A3B8" id="m-legend"></div>
+
+        <!-- Top 5 -->
+        <div class="m-card">
+          <div class="m-card-hd">
+            <span>Top 5 Mediators <small id="m-top5-sub"></small></span>
+            <div class="m-month-tabs" id="m-top5-tabs"></div>
+          </div>
+          <div class="m-top5-grid" id="m-top5-grid"></div>
         </div>
-        <div class="stat-grid" id="m-stats"></div>
-        <div class="section-h">Top 5 Mediators</div>
-        <div class="top5-grid" id="m-top5"></div>
-        <div class="section-h">All Mediators</div>
-        <div class="controls">
-          <input class="search-in" id="m-search" placeholder="Search MCS code…" oninput="renderMedTable()"/>
-          <span class="tcount" id="m-count"></span>
+
+        <!-- Chart -->
+        <div class="m-card">
+          <div class="m-card-hd">
+            <span>Monthly breakdown — top 10</span>
+            <div class="m-legend" id="m-chart-legend"></div>
+          </div>
+          <div style="position:relative;height:280px"><canvas id="m-chart"></canvas></div>
         </div>
-        <div class="table-wrap">
-          <table><thead id="m-thead"></thead><tbody id="m-tbody"></tbody></table>
+
+        <!-- Table -->
+        <div class="m-card">
+          <div class="m-card-hd">All Mediators</div>
+          <div class="m-tier-key" id="m-tier-key"></div>
+          <div class="m-filter-row">
+            <input class="m-input" id="m-search" placeholder="Search MCS code…" oninput="applyMedFilters()"/>
+            <select class="m-select" id="m-tier-filter" onchange="applyMedFilters()">
+              <option value="">All tiers</option>
+              <option>Elite</option><option>Prime</option><option>Standard</option><option>Active</option><option>Passive</option>
+            </select>
+            <div class="m-month-tabs" id="m-sort-tabs"></div>
+            <span class="m-rcount" id="m-rcount"></span>
+          </div>
+          <div style="overflow-x:auto">
+            <table><thead><tr id="m-thead"></tr></thead><tbody id="m-tbody"></tbody></table>
+          </div>
         </div>
+
       </div>
 
     </div><!-- #dash -->
@@ -256,7 +325,7 @@ tr:hover td{background:#FAFAFA}
 const SURL = "https://script.google.com/macros/s/AKfycbwChK4A4Ly4yM9PShdrfy9gEafOzpTf_K0Q2mqzbhBcFbX7sWCktLh2ptLJvQiA9iC9Lg/exec";
 
 // ── STATE ─────────────────────────────────────────────────────
-let D = null, SD = null, activeTab = 'overview';
+let D = null, activeTab = 'overview';
 let bSortKey = 'name', bSortDir = 1, bFilter = 'all';
 let selMonth = 'all', mSortKey = 'totalClaimed', mSortDir = -1, mSearchQ = '';
 
@@ -295,7 +364,6 @@ async function loadData() {
     D = json;
     renderAll();
     showMain('dash');
-    loadSlotData(); // async — loads brand plan tab data
     const now = new Date();
     document.getElementById('upd').textContent = 'Updated ' + now.toLocaleTimeString();
     document.getElementById('sb-foot').textContent = now.toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'});
@@ -308,25 +376,6 @@ async function loadData() {
   }
 }
 
-
-// ── LOAD BRAND SLOT DATA (separate async fetch) ───────────────
-async function loadSlotData() {
-  // Show loading indicator in brands tab
-  const el = document.getElementById('slot-status');
-  if (el) { el.style.display = 'flex'; el.textContent = '⏳ Loading slot data from brand sheets…'; }
-
-  try {
-    const res  = await fetch(SURL + '?action=brandSlots&t=' + Date.now());
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-    const json = await res.json();
-    if (json.error) throw new Error(json.error);
-    SD = json;
-    if (el) el.style.display = 'none';
-    renderBrands(); // re-render with slot data
-  } catch(err) {
-    if (el) { el.textContent = '⚠ Could not load slot data: ' + err.message; el.style.color = '#DC2626'; }
-  }
-}
 
 // ── TAB SWITCH ────────────────────────────────────────────────
 function switchTab(name) {
@@ -428,18 +477,6 @@ function renderBrands() {
   document.getElementById('brands-body').innerHTML = rows.length
     ? rows.map(b => {
         const meta = BILL_META[b.billStatus]||BILL_META['other'];
-        // Look up slot data for this brand
-        const slotEntry = SD?.brandSlots?.find(s => s.brandName === b.name || (b.code && s.code && s.code.toLowerCase()===b.code.toLowerCase()));
-        const hasSlots  = !!slotEntry;
-        const given     = hasSlots ? slotEntry.totalGiven : null;
-        const done      = hasSlots ? slotEntry.totalDone  : null;
-        const pct       = hasSlots ? slotEntry.completionPct : null;
-        const barCol    = pct===null?'#E2E8F0':pct>=80?'#059669':pct>=50?'#D97706':'#DC2626';
-        const pctTxt    = pct===null?'':pct+'%';
-
-        // Per-platform tooltip text
-        const platformTip = hasSlots ? Object.entries(slotEntry.byPlatform).map(([plt,v])=>`${plt}: ${v.done}/${v.given}`).join(' · ') : '';
-
         return `<tr>
           <td style="font-weight:700;max-width:200px;overflow:hidden;text-overflow:ellipsis">
             <a href="${b.sheetLink}" target="_blank" style="color:#0F172A;text-decoration:none" onmouseover="this.style.color='#B45309'" onmouseout="this.style.color='#0F172A'">${b.name}</a>
@@ -447,16 +484,6 @@ function renderBrands() {
           <td style="font-family:monospace;font-size:12px;color:#0E7490;font-weight:700">${b.code||'—'}</td>
           <td style="color:#64748B">${b.lastBillDate||'—'}</td>
           <td><span class="bs ${meta.cls}">${meta.label}</span></td>
-          <td style="text-align:right;font-weight:700;color:#0F172A">${given!==null?given.toLocaleString('en-IN'):SD?'—':'<span style="color:#94A3B8;font-size:11px">loading…</span>'}</td>
-          <td style="text-align:right;font-weight:700;color:${done>0?'#059669':'#64748B'}">${done!==null?done.toLocaleString('en-IN'):SD?'—':''}</td>
-          <td>
-            ${hasSlots ? `<div title="${platformTip}" style="display:flex;align-items:center;gap:7px;cursor:default">
-              <div style="width:70px;height:5px;background:#F1F5F9;border-radius:99px;overflow:hidden;flex-shrink:0">
-                <div style="width:${pct}%;height:100%;background:${barCol};border-radius:99px"></div>
-              </div>
-              <span style="font-weight:700;font-size:12px;color:${barCol}">${pctTxt}</span>
-            </div>` : SD ? '—' : ''}
-          </td>
           <td style="display:flex;gap:6px">
             <a href="${b.sheetLink}" target="_blank" style="font-size:11px;padding:4px 10px;border:1.5px solid #E2E8F0;border-radius:6px;color:#64748B;text-decoration:none;white-space:nowrap" onmouseover="this.style.color='#0F172A'" onmouseout="this.style.color='#64748B'">↗ Open</a>
             ${b.extraLink?`<a href="${b.extraLink}" target="_blank" style="font-size:11px;padding:4px 10px;border:1.5px solid #E2E8F0;border-radius:6px;color:#64748B;text-decoration:none;white-space:nowrap" onmouseover="this.style.color='#0F172A'" onmouseout="this.style.color='#64748B'">↗ Extra</a>`:''}
@@ -473,87 +500,123 @@ function bSort(k) { bSortKey===k?bSortDir*=-1:(bSortKey=k,bSortDir=1); renderBra
 //  MEDIATORS
 // ═══════════════════════════════════════════════════════════════
 function renderMediators() {
-  const months = D.months||[];
-  const MS = D.mediatorSummary||{};
-  const tabsEl = document.getElementById('m-tabs');
-  tabsEl.innerHTML = '';
-  addMTab(tabsEl,'all','All Months');
-  months.forEach(m => addMTab(tabsEl,m,MLABEL[m]||m));
-  document.getElementById('m-legend').textContent =
-    `Priority: ${MS.priority||0}  ·  Standard: ${MS.standard||0}  ·  Passive: ${MS.passive||0}`;
-  renderMedStats(); renderMedTop5(); renderMedTable();
-}
-
-function addMTab(c,val,label) {
-  const b=document.createElement('button');
-  b.className='mtab'+(selMonth===val?' active':'');
-  b.textContent=label;
-  b.onclick=()=>{selMonth=val;b.closest('.mtabs').querySelectorAll('.mtab').forEach(x=>x.classList.remove('active'));b.classList.add('active');renderMedStats();renderMedTop5();renderMedTable();};
-  c.appendChild(b);
-}
-
-function renderMedStats() {
-  const meds=filteredMeds(),cl=meds.reduce((s,m)=>s+mClaimed(m),0),rf=meds.reduce((s,m)=>s+mRefunded(m),0);
-  const rate=cl>0?Math.round(rf/cl*100):0;
-  document.getElementById('m-stats').innerHTML =
-    sc('Active Mediators',meds.filter(m=>mClaimed(m)>0).length,'','') +
-    sc('Orders Claimed',cl,'This period','') +
-    sc('Refunds Submitted',rf,'Forms done','sv-green') +
-    sc('Completion Rate',rate+'%','',rate>=80?'sv-green':rate>=60?'sv-amber':'sv-red');
-}
-
-function renderMedTop5() {
-  document.getElementById('m-top5').innerHTML = filteredMeds().slice(0,5).map((m,i)=>top5Card(m,i,selMonth==='all'?null:selMonth)).join('');
-}
-
-function renderMedTable() {
-  const months=D.months||[];
-  let meds=filteredMeds();
-  const q=(document.getElementById('m-search').value||'').toLowerCase();
-  if(q) meds=meds.filter(m=>m.code.toLowerCase().includes(q));
-  meds=[...meds].sort((a,b)=>{
-    let va,vb;
-    if(mSortKey.startsWith('m_')){const mo=mSortKey.slice(2);va=mVal(a,mo,'claimed');vb=mVal(b,mo,'claimed');}
-    else if(mSortKey==='rate'){const ca=mClaimed(a),ra=mRefunded(a),cb=mClaimed(b),rb=mRefunded(b);va=ca>0?ra/ca:0;vb=cb>0?rb/cb:0;}
-    else{va=a[mSortKey]??0;vb=b[mSortKey]??0;}
-    return mSortDir*(va<vb?-1:va>vb?1:0);
+  if (!D?.mediators?.length) return;
+  medMonths = (D.months||[]).map((mk,i)=>{
+    const [y,mo]=mk.split('-'); const idx=parseInt(mo)-1;
+    return {key:mk,label:MED_NAMES[idx]+' '+y,short:MED_NAMES[idx],
+            isCurrent:mk===(D.months||[])[D.months.length-1],color:MED_COLORS[i%MED_COLORS.length]};
   });
-  document.getElementById('m-count').textContent=meds.length+' mediators';
+  medAllRows = D.mediators.map(m=>{
+    const row={code:m.code}; let tot=0;
+    medMonths.forEach(mo=>{const c=m.months?.[mo.key]?.claimed||0;row[mo.key]=c;tot+=c;});
+    row.total=tot; return row;
+  }).filter(r=>r.total>0).sort((a,b)=>b.total-a.total);
 
-  const sa=k=>mSortKey===k?(mSortDir===-1?'↓':'↑'):'↕';
-  const sc2=k=>mSortKey===k?'sorted':'';
-  const sh=(k,l)=>`<th class="${sc2(k)}" onclick="mSort('${k}')">${l} <span class="sa">${sa(k)}</span></th>`;
-  const mCols=selMonth==='all'?months.map(m=>sh('m_'+m,MLABEL[m]||m)).join(''):'';
+  // top5 tabs
+  document.getElementById('m-top5-tabs').innerHTML=
+    mMtab('total','Total',true)+medMonths.map(m=>mMtab(m.key,m.short)).join('');
+  // sort tabs
+  document.getElementById('m-sort-tabs').innerHTML=
+    mSortTab('total','Total',true)+medMonths.map(m=>mSortTab(m.key,m.short)).join('');
+  // tier key
+  document.getElementById('m-tier-key').innerHTML=MED_TIERS.map((t,i)=>{
+    const next=MED_TIERS[i-1];
+    const range=i===0?'≥'+t.min:t===MED_TIERS[MED_TIERS.length-1]?'<'+MED_TIERS[MED_TIERS.length-2].min:t.min+'–'+(next.min-1);
+    return `<div class="m-tk-item"><div class="m-tk-dot" style="background:${t.dot}"></div>${t.label} ${range}</div>`;
+  }).join('');
+  // table header
+  document.getElementById('m-thead').innerHTML=
+    '<th style="width:38px">#</th><th>MCS Code</th>'+
+    medMonths.map(m=>`<th class="m-nc" style="width:68px">${m.short}${m.isCurrent?'<span style="color:#22c55e;font-size:9px"> ●</span>':''}</th>`).join('')+
+    '<th class="m-nc">Total</th><th style="min-width:100px">Share</th><th>Tier</th>';
 
-  document.getElementById('m-thead').innerHTML=`<tr>
-    <th style="width:34px">#</th>
-    ${sh('code','MCS Code')}${mCols}
-    ${sh('totalClaimed','Claimed')}${sh('totalRefunded','Refunds')}${sh('rate','Rate')}
-    <th>Tier</th>
-  </tr>`;
-
-  document.getElementById('m-tbody').innerHTML = !meds.length
-    ? `<tr><td colspan="${4+months.length}" class="no-rows">No mediators found</td></tr>`
-    : meds.map((m,i)=>{
-        const cl=mClaimed(m),rf=mRefunded(m),rate=cl>0?Math.round(rf/cl*100):0;
-        const rc=rate>=80?'#059669':rate>=60?'#D97706':'#DC2626';
-        const mCells=selMonth==='all'?months.map(mo=>{const c=mVal(m,mo,'claimed');return`<td style="text-align:right">${c>0?c:'<span style="color:#E2E8F0">—</span>'}</td>`;}).join(''):'';
-        return `<tr>
-          <td style="color:#94A3B8;font-weight:600;font-size:12px">${i+1}</td>
-          <td style="font-weight:700;font-family:monospace;font-size:13px;color:#0F172A">${m.code}</td>
-          ${mCells}
-          <td style="text-align:right;font-weight:800;font-size:14px">${cl}</td>
-          <td style="text-align:right;color:#059669;font-weight:700">${rf}</td>
-          <td><div class="mbar"><div class="mbar-bg"><div class="mbar-fill" style="width:${rate}%;background:${rc}"></div></div><span class="mbar-txt" style="color:${rc}">${rate}%</span></div></td>
-          <td><span class="tier-badge tier-${m.tier}">${m.tier}</span></td>
-        </tr>`;
-      }).join('');
+  renderMedTop5(); renderMedChart(); applyMedFilters();
 }
 
-function mSort(k){mSortKey===k?mSortDir*=-1:(mSortKey=k,mSortDir=-1);renderMedTable();}
+let medAllRows=[], medMonths=[], medSortKey='total', medChartInst=null;
+const MED_TIERS=[
+  {label:'Elite',    min:600,cls:'t-elite',   dot:'#a78bfa'},
+  {label:'Prime',    min:300,cls:'t-prime',   dot:'#22c55e'},
+  {label:'Standard', min:100,cls:'t-standard',dot:'#60a5fa'},
+  {label:'Active',   min:20, cls:'t-active',  dot:'#f59e0b'},
+  {label:'Passive',  min:0,  cls:'t-passive', dot:'#ef4444'},
+];
+const MED_COLORS=['#3b82f6','#14b8a6','#f59e0b','#22c55e','#a78bfa','#f472b6'];
+const MED_NAMES=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+function getMedTier(t){for(const x of MED_TIERS)if(t>=x.min)return x;return MED_TIERS[MED_TIERS.length-1];}
+function mMtab(key,label,active){return `<div class="m-mtab${active?' active':''}" onclick="setMedTop5Month('${key}',this)">${label}</div>`;}
+function mSortTab(key,label,active){return `<div class="m-mtab${active?' active':''}" onclick="setMedSort('${key}',this)">${label}</div>`;}
+function setMedTop5Month(key,el){document.querySelectorAll('#m-top5-tabs .m-mtab').forEach(t=>t.classList.remove('active'));el.classList.add('active');renderMedTop5(key);}
+function setMedSort(key,el){medSortKey=key;document.querySelectorAll('#m-sort-tabs .m-mtab').forEach(t=>t.classList.remove('active'));el.classList.add('active');applyMedFilters();}
 
-// ═══════════════════════════════════════════════════════════════
-//  HELPERS
+function renderMedTop5(sortByKey) {
+  const key=sortByKey||'total', isTot=key==='total', mo=medMonths.find(m=>m.key===key);
+  document.getElementById('m-top5-sub').textContent=isTot
+    ?'· '+medMonths.map(m=>m.label).join(', ')
+    :'· '+(mo?.label||'')+' only';
+  const ranked=[...medAllRows].filter(r=>r[key]>0).sort((a,b)=>b[key]-a[key]).slice(0,5);
+  const emojis=['🥇','🥈','🥉','4️⃣','5️⃣'], rcls=['r1','r2','r3','',''];
+  document.getElementById('m-top5-grid').innerHTML=ranked.map((r,i)=>{
+    const t=getMedTier(r.total);
+    return `<div class="m-t5 ${rcls[i]}">
+      <div class="m-t5-rank">${emojis[i]}</div>
+      <div class="m-t5-code">${r.code}</div>
+      <div class="m-t5-num">${r[key]}</div>
+      <div class="m-t5-sub">${isTot?'total orders':(mo?.label||'')+' orders'}</div>
+      <span class="m-tier-badge ${t.cls}">${t.label}</span>
+    </div>`;
+  }).join('');
+}
+
+function renderMedChart() {
+  const active=medAllRows.slice(0,10);
+  const labels=active.map(r=>r.code.replace('MCS',''));
+  const datasets=medMonths.map(m=>({label:m.label,data:active.map(r=>r[m.key]),backgroundColor:m.color,borderRadius:3,borderWidth:0}));
+  document.getElementById('m-chart-legend').innerHTML=medMonths.map(m=>`<div class="m-li"><div class="m-lsq" style="background:${m.color}"></div>${m.label}</div>`).join('');
+  if(medChartInst){medChartInst.destroy();medChartInst=null;}
+  medChartInst=new Chart(document.getElementById('m-chart'),{
+    type:'bar',data:{labels,datasets},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{backgroundColor:'#1a1a1a',borderColor:'rgba(255,255,255,.1)',borderWidth:1,titleColor:'#f0f0f0',bodyColor:'#a0a0a0',padding:10}},
+      scales:{x:{ticks:{color:'#666',font:{size:10},autoSkip:false,maxRotation:40},grid:{color:'rgba(255,255,255,.04)'}},
+              y:{beginAtZero:true,ticks:{color:'#666',font:{size:11}},grid:{color:'rgba(255,255,255,.06)'}}}}
+  });
+}
+
+function applyMedFilters() {
+  const q=(document.getElementById('m-search')?.value||'').trim().toLowerCase();
+  const tf=document.getElementById('m-tier-filter')?.value||'';
+  let rows=[...medAllRows].sort((a,b)=>b[medSortKey]-a[medSortKey]);
+  if(q) rows=rows.filter(r=>r.code.toLowerCase().includes(q));
+  if(tf) rows=rows.filter(r=>getMedTier(r.total).label===tf);
+  document.getElementById('m-rcount').textContent=rows.length+' mediators';
+  renderMedTable(rows);
+}
+
+function renderMedTable(rows) {
+  const grand=rows.reduce((s,r)=>s+r.total,0)||1, maxT=Math.max(...rows.map(r=>r.total),1);
+  const rbcls=['m-rb1','m-rb2','m-rb3'];
+  document.getElementById('m-tbody').innerHTML=rows.map((r,i)=>{
+    const pct=Math.round(r.total/grand*100), barW=Math.round(r.total/maxT*100);
+    const t=getMedTier(r.total), rc=rbcls[i]||'';
+    const mCells=medMonths.map(m=>{
+      const v=r[m.key];
+      return m.isCurrent
+        ?`<td class="m-nc"><span class="m-cur${v>0?'':' zero'}">${v>0?v:'—'}</span></td>`
+        :v>0?`<td class="m-nc">${v}</td>`:`<td class="m-nc m-nz">—</td>`;
+    }).join('');
+    return `<tr>
+      <td><span class="m-rb ${rc}">${i+1}</span></td>
+      <td><span class="m-code">${r.code}</span></td>
+      ${mCells}
+      <td class="m-nc" style="font-weight:700">${r.total}</td>
+      <td><div class="m-bar"><div class="m-bar-track"><div class="m-bar-fill" style="width:${barW}%;background:${t.dot}"></div></div><span class="m-bar-pct">${pct}%</span></div></td>
+      <td><span class="m-tier-badge ${t.cls}">${t.label}</span></td>
+    </tr>`;
+  }).join('');
+}
+
+
 // ═══════════════════════════════════════════════════════════════
 function sc(label,value,sub,cls) {
   return `<div class="stat-card"><div class="sl">${label}</div><div class="sv ${cls}">${value}</div>${sub?`<div class="ss">${sub}</div>`:''}</div>`;
