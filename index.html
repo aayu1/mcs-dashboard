@@ -3,310 +3,290 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MCS Media — Combined Dashboard</title>
+<title>MCS Media Dashboard</title>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --bg:#0c0c0c;--bg2:#171717;--bg3:#222;--bg4:#2a2a2a;
-  --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.13);
-  --text:#f0f0f0;--text2:#a0a0a0;--text3:#555;
-  --green:#22c55e;--amber:#f59e0b;--red:#ef4444;--blue:#3b82f6;--teal:#14b8a6;--purple:#a855f7;
-}
-body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:14px;line-height:1.5;min-height:100vh}
+body{font-family:Inter,system-ui,sans-serif;background:#F0F4F8;color:#0F172A;height:100vh;overflow:hidden;display:flex}
 
-/* ── TOPBAR ── */
-.topbar{display:flex;align-items:center;gap:12px;padding:11px 22px;border-bottom:1px solid var(--border2);background:var(--bg2);position:sticky;top:0;z-index:200;flex-wrap:wrap}
-.logo{font-weight:800;font-size:15px;letter-spacing:-.2px;white-space:nowrap}
-.logo-g{color:var(--green)}
-.live-pill{display:flex;align-items:center;gap:5px;background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.2);color:var(--green);border-radius:99px;padding:3px 10px;font-size:11px;font-weight:600}
-.ldot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
+/* ── SIDEBAR ── */
+#sidebar{width:220px;min-width:220px;background:#0F172A;display:flex;flex-direction:column;height:100vh;flex-shrink:0}
+.sb-logo{padding:22px 20px 18px;border-bottom:1px solid rgba(255,255,255,.06)}
+.sb-logo-name{font-weight:900;font-size:18px;color:#F59E0B;letter-spacing:-.3px}
+.sb-logo-sub{font-size:11px;color:#475569;margin-top:3px;letter-spacing:.3px}
+.sb-nav{flex:1;padding-top:10px}
+.nav-item{width:100%;text-align:left;padding:11px 20px;border:none;border-left:3px solid transparent;background:none;color:#64748B;cursor:pointer;display:flex;align-items:center;gap:12px;font-size:14px;font-weight:500;font-family:inherit;transition:all .15s}
+.nav-item.active{background:rgba(245,158,11,.12);border-left-color:#F59E0B;color:#F59E0B;font-weight:700}
+.nav-item:hover:not(.active){color:#94A3B8}
+.nav-item .ni{font-size:16px}
+.sb-foot{padding:14px 20px;border-top:1px solid rgba(255,255,255,.06);font-size:11px;color:#334155}
+
+/* ── MAIN AREA ── */
+#main{flex:1;display:flex;flex-direction:column;overflow:hidden;height:100vh}
+
+/* ── TOP BAR ── */
+.topbar{background:#fff;border-bottom:1px solid #E2E8F0;padding:13px 24px;display:flex;align-items:center;gap:12px;flex-shrink:0}
+.tb-titles{flex:1}
+.tb-title{font-size:16px;font-weight:800;color:#0F172A}
+.tb-sub{font-size:12px;color:#94A3B8;margin-top:1px}
+.live-pill{display:flex;align-items:center;gap:5px;background:#ECFDF5;border:1px solid #A7F3D0;color:#065F46;border-radius:99px;padding:3px 10px;font-size:11px;font-weight:700}
+.ldot{width:6px;height:6px;border-radius:50%;background:#10B981;animation:pulse 2s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
-.topbar-r{margin-left:auto;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-.upd{font-size:12px;color:var(--text3)}
-.btn{border:1px solid var(--border2);background:var(--bg3);color:var(--text2);padding:5px 13px;border-radius:7px;cursor:pointer;font-size:12px;font-weight:600;transition:.15s;font-family:inherit}
-.btn:hover{background:var(--bg4);color:var(--text)}
+.upd-txt{font-size:12px;color:#94A3B8}
+.btn{border:1.5px solid #E2E8F0;background:#fff;color:#64748B;padding:6px 14px;border-radius:8px;cursor:pointer;font-size:12px;font-weight:700;font-family:inherit;transition:.15s}
+.btn:hover{background:#F8FAFC;color:#0F172A;border-color:#CBD5E1}
 
-/* ── TAB NAV ── */
-.tab-nav{display:flex;gap:0;background:var(--bg2);border-bottom:1px solid var(--border2);padding:0 22px;overflow-x:auto}
-.tnav{padding:11px 18px;border:none;background:none;color:var(--text2);cursor:pointer;font-size:13px;font-weight:600;border-bottom:2px solid transparent;margin-bottom:-1px;white-space:nowrap;font-family:inherit;transition:.15s}
-.tnav:hover{color:var(--text)}
-.tnav.active{color:var(--green);border-bottom-color:var(--green)}
-.tnav .badge{display:inline-block;margin-left:6px;background:rgba(239,68,68,.18);color:var(--red);font-size:10px;font-weight:800;padding:1px 6px;border-radius:99px;vertical-align:middle}
+/* ── CONTENT AREA ── */
+#content{flex:1;overflow-y:auto;padding:24px}
 
 /* ── SCREENS ── */
-.screen{display:none;flex-direction:column;align-items:center;justify-content:center;min-height:70vh;padding:32px;text-align:center}
+.screen{display:none;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;text-align:center}
 .screen.on{display:flex}
-.setup-card{background:var(--bg2);border:1px solid var(--border2);border-radius:16px;padding:32px 36px;max-width:520px;width:100%}
-.setup-title{font-size:19px;font-weight:800;margin-bottom:6px}
-.setup-sub{color:var(--text2);font-size:13px;margin-bottom:22px;line-height:1.65}
-.url-in{width:100%;background:var(--bg3);border:1px solid var(--border2);color:var(--text);padding:10px 13px;border-radius:8px;font-size:12px;font-family:monospace;outline:none;margin-bottom:12px}
-.url-in:focus{border-color:var(--green)}
-.btn-p{background:var(--green);color:#000;border:none;padding:11px 24px;border-radius:8px;font-weight:800;cursor:pointer;font-size:14px;width:100%;font-family:inherit}
-.btn-p:hover{opacity:.88}
-.spinner{width:36px;height:36px;border:3px solid var(--border2);border-top-color:var(--green);border-radius:50%;animation:spin .75s linear infinite;margin-bottom:14px}
+.spinner{width:36px;height:36px;border:3px solid #E2E8F0;border-top-color:#F59E0B;border-radius:50%;animation:spin .75s linear infinite;margin-bottom:14px}
 @keyframes spin{to{transform:rotate(360deg)}}
+.load-txt{color:#64748B;font-size:14px}
 .err-icon{font-size:38px;margin-bottom:10px}
-.err-t{font-weight:700;color:var(--red);margin-bottom:6px;font-size:16px}
-.err-d{color:var(--text2);font-size:13px;max-width:460px;margin-bottom:20px;line-height:1.6}
-.err-acts{display:flex;gap:10px;justify-content:center}
+.err-t{font-weight:800;color:#DC2626;font-size:16px;margin-bottom:6px}
+.err-d{color:#64748B;font-size:13px;max-width:460px;margin-bottom:20px;line-height:1.6}
+.btn-primary{background:#F59E0B;color:#fff;border:none;padding:10px 24px;border-radius:8px;font-weight:800;cursor:pointer;font-size:14px;font-family:inherit}
+.btn-primary:hover{opacity:.88}
 
-/* ── TABS CONTENT ── */
-#dash{display:none}
-.tab-pane{display:none;padding:20px 22px 48px}
+/* ── TAB PANES ── */
+.tab-pane{display:none}
 .tab-pane.on{display:block}
 
-/* ── COMMON ── */
-.section-h{font-size:14px;font-weight:700;margin:20px 0 12px;color:var(--text)}
-.grid4{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:11px;margin-bottom:22px}
-.stat-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:15px 18px}
-.sl{font-size:10px;color:var(--text2);font-weight:700;text-transform:uppercase;letter-spacing:.7px;margin-bottom:6px}
-.sv{font-size:25px;font-weight:800;line-height:1}
-.ss{font-size:11px;color:var(--text3);margin-top:3px}
-.green{color:var(--green)} .amber{color:var(--amber)} .red{color:var(--red)} .blue{color:var(--blue)} .teal{color:var(--teal)} .purple{color:var(--purple)}
+/* ── STAT CARDS ── */
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-bottom:22px}
+.stat-card{background:#fff;border-radius:12px;box-shadow:0 1px 3px rgba(0,0,0,.06),0 1px 2px rgba(0,0,0,.04);padding:16px 18px}
+.sl{font-size:11px;color:#64748B;font-weight:700;text-transform:uppercase;letter-spacing:.7px;margin-bottom:6px}
+.sv{font-size:26px;font-weight:800;color:#0F172A;line-height:1}
+.ss{font-size:12px;color:#94A3B8;margin-top:4px}
+.sv-green{color:#059669}.sv-amber{color:#D97706}.sv-red{color:#DC2626}.sv-purple{color:#7C3AED}.sv-teal{color:#0E7490}
 
-.table-wrap{background:var(--bg2);border:1px solid var(--border);border-radius:12px;overflow:hidden;overflow-x:auto;margin-bottom:22px}
-table{width:100%;border-collapse:collapse;font-size:13px}
-th{padding:9px 13px;text-align:left;color:var(--text2);font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid var(--border2);white-space:nowrap;cursor:pointer;user-select:none;background:var(--bg2)}
-th:hover{color:var(--text)}
-th.sorted{color:var(--green)}
-td{padding:10px 13px;border-top:1px solid var(--border);white-space:nowrap}
-tr:hover td{background:rgba(255,255,255,.025)}
-.no-rows{text-align:center;padding:32px;color:var(--text3);font-size:13px}
+/* ── SECTION HEADER ── */
+.section-h{font-size:14px;font-weight:700;color:#0F172A;margin:20px 0 13px}
 
-/* ── BILLING STATUS BADGES ── */
-.bs{display:inline-block;font-size:10px;font-weight:700;padding:2px 8px;border-radius:99px;text-transform:uppercase;letter-spacing:.4px}
-.bs-bill-pending{background:rgba(239,68,68,.15);color:var(--red);border:1px solid rgba(239,68,68,.22)}
-.bs-less-entries{background:rgba(245,158,11,.15);color:var(--amber);border:1px solid rgba(245,158,11,.22)}
-.bs-all-wrapped{background:rgba(34,197,94,.15);color:var(--green);border:1px solid rgba(34,197,94,.22)}
-.bs-billed{background:rgba(20,184,166,.15);color:var(--teal);border:1px solid rgba(20,184,166,.22)}
-.bs-not-started{background:rgba(255,255,255,.05);color:var(--text3);border:1px solid var(--border2)}
-.bs-other{background:rgba(59,130,246,.1);color:var(--blue);border:1px solid rgba(59,130,246,.2)}
-
-/* ── CONTROLS ── */
-.controls{display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap}
-.search-in{background:var(--bg2);border:1px solid var(--border2);color:var(--text);padding:7px 12px;border-radius:8px;font-size:13px;outline:none;width:200px;font-family:inherit}
-.search-in::placeholder{color:var(--text3)}
-.filter-btns{display:flex;gap:5px;flex-wrap:wrap}
-.fbtn{padding:4px 11px;border-radius:6px;border:1px solid var(--border2);background:none;color:var(--text2);font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;transition:.15s}
-.fbtn.active{background:var(--bg4);color:var(--text);border-color:rgba(255,255,255,.25)}
-.tcount{font-size:12px;color:var(--text3);margin-left:auto}
-.sa{margin-left:3px;opacity:.5;font-size:10px}
+/* ── PIPELINE ── */
+.pipeline{display:flex;gap:10px;margin-bottom:22px;flex-wrap:wrap}
+.pipe-card{flex:1;min-width:128px;background:#fff;border:1.5px solid #E2E8F0;border-radius:12px;padding:14px 18px;cursor:pointer;transition:.15s}
+.pipe-card:hover{box-shadow:0 2px 8px rgba(0,0,0,.08);border-color:#CBD5E1}
+.pipe-n{font-size:28px;font-weight:900}
+.pipe-l{font-size:11px;color:#64748B;margin-top:4px;font-weight:600}
 
 /* ── QUICK LINKS ── */
 .qlinks{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:22px}
-.qlink{display:flex;align-items:center;gap:7px;background:var(--bg2);border:1px solid var(--border);border-radius:9px;padding:8px 14px;text-decoration:none;color:var(--text2);font-size:12px;font-weight:600;transition:.15s}
-.qlink:hover{color:var(--text);border-color:var(--border2);background:var(--bg3)}
-.qlink-icon{font-size:15px}
+.qlink{display:flex;align-items:center;gap:7px;background:#fff;border:1.5px solid #E2E8F0;border-radius:9px;padding:8px 14px;text-decoration:none;color:#374151;font-size:12px;font-weight:700;transition:.15s}
+.qlink:hover{border-color:#F59E0B;color:#B45309}
 
-/* ── BILLING PIPELINE ── */
-.pipeline{display:flex;gap:10px;margin-bottom:22px;flex-wrap:wrap}
-.pipe-card{flex:1;min-width:130px;background:var(--bg2);border:1px solid var(--border);border-radius:11px;padding:13px 16px;cursor:pointer;transition:.15s}
-.pipe-card:hover{border-color:var(--border2)}
-.pipe-card.active{border-color:currentColor}
-.pipe-n{font-size:26px;font-weight:900}
-.pipe-l{font-size:11px;color:var(--text2);margin-top:3px;font-weight:600}
+/* ── STATUS BADGES ── */
+.bs{display:inline-block;font-size:11px;font-weight:700;padding:3px 10px;border-radius:99px}
+.bs-bill-pending{background:#FEE2E2;color:#991B1B}
+.bs-less-entries{background:#FEF3C7;color:#92400E}
+.bs-all-wrapped{background:#BBF7D0;color:#14532D}
+.bs-billed{background:#CFFAFE;color:#155E75}
+.bs-not-started{background:#F1F5F9;color:#64748B}
+.bs-other{background:#EDE9FE;color:#5B21B6}
+
+/* ── TIER BADGES ── */
+.tier-badge{display:inline-block;font-size:11px;font-weight:700;padding:3px 10px;border-radius:99px;margin-bottom:10px}
+.tier-Priority{background:#D1FAE5;color:#065F46}
+.tier-Standard{background:#FEF3C7;color:#92400E}
+.tier-Passive{background:#FEE2E2;color:#991B1B}
+
+/* ── TABLE ── */
+.table-wrap{background:#fff;border-radius:12px;box-shadow:0 1px 3px rgba(0,0,0,.06);overflow:hidden;overflow-x:auto;margin-bottom:22px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{padding:10px 14px;text-align:left;color:#64748B;font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:.5px;border-bottom:2px solid #F1F5F9;white-space:nowrap;cursor:pointer;user-select:none;background:#F8FAFC}
+th:hover{color:#0F172A}
+th.sorted{color:#F59E0B}
+td{padding:10px 14px;border-top:1px solid #F8FAFC;white-space:nowrap}
+tr:hover td{background:#FAFAFA}
+.no-rows{text-align:center;padding:32px;color:#94A3B8;font-size:13px}
+.sa{margin-left:3px;opacity:.5;font-size:10px}
+
+/* ── CONTROLS ── */
+.controls{display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap}
+.search-in{background:#fff;border:1.5px solid #E2E8F0;color:#0F172A;padding:8px 12px;border-radius:8px;font-size:13px;outline:none;width:200px;font-family:inherit;transition:.15s}
+.search-in:focus{border-color:#F59E0B}
+.search-in::placeholder{color:#94A3B8}
+.filter-btns{display:flex;gap:5px;flex-wrap:wrap}
+.fbtn{padding:5px 12px;border-radius:7px;border:1.5px solid #E2E8F0;background:#fff;color:#64748B;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;transition:.15s}
+.fbtn.active{background:#0F172A;color:#F59E0B;border-color:#0F172A}
+.tcount{font-size:12px;color:#94A3B8;margin-left:auto}
 
 /* ── TOP 5 ── */
-.top5-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:11px;margin-bottom:22px}
-.t5c{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:16px;position:relative}
-.t5-rank{position:absolute;top:12px;right:13px;font-size:18px}
-.t5-code{font-size:14px;font-weight:800;letter-spacing:.3px;margin-bottom:3px}
-.tier-badge{display:inline-block;font-size:10px;font-weight:700;padding:2px 8px;border-radius:99px;text-transform:uppercase;margin-bottom:10px}
-.tier-Priority{background:rgba(34,197,94,.15);color:var(--green);border:1px solid rgba(34,197,94,.22)}
-.tier-Standard{background:rgba(245,158,11,.15);color:var(--amber);border:1px solid rgba(245,158,11,.22)}
-.tier-Passive{background:rgba(239,68,68,.1);color:var(--red);border:1px solid rgba(239,68,68,.18)}
-.t5-nums{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
-.t5-nl{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.4px}
-.t5-nv{font-size:18px;font-weight:800}
-.rbar-bg{height:5px;background:var(--bg4);border-radius:99px;overflow:hidden}
-.rbar-fill{height:100%;border-radius:99px;transition:width .45s ease}
-.rbar-lbl{font-size:11px;color:var(--text2);margin-top:4px;font-weight:600}
+.top5-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(205px,1fr));gap:12px;margin-bottom:22px}
+.t5c{background:#fff;border-radius:12px;box-shadow:0 1px 3px rgba(0,0,0,.06);padding:18px;position:relative}
+.t5-rank{position:absolute;top:14px;right:14px;font-size:20px}
+.t5-code{font-size:15px;font-weight:800;color:#0F172A;margin-bottom:3px}
+.t5-nums{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0 12px}
+.t5-nl{font-size:10px;color:#94A3B8;text-transform:uppercase;letter-spacing:.4px}
+.t5-nv{font-size:20px;font-weight:800;color:#0F172A}
+.rbar-bg{height:6px;background:#F1F5F9;border-radius:99px;overflow:hidden}
+.rbar-fill{height:100%;border-radius:99px;transition:width .4s ease}
+.rbar-lbl{font-size:11px;color:#64748B;margin-top:5px;font-weight:600}
+.month-pills{display:flex;flex-wrap:wrap;gap:4px;margin-top:10px}
+.mpill{font-size:10px;padding:2px 7px;border-radius:5px;background:#F8FAFC;border:1px solid #E2E8F0;color:#64748B}
+.mpill b{color:#0F172A}
+.mpill .rg{color:#059669}
 
 /* ── MONTH TABS ── */
 .month-row{display:flex;align-items:center;gap:12px;margin-bottom:18px;flex-wrap:wrap}
-.mtabs{display:flex;gap:4px;background:var(--bg2);border:1px solid var(--border);border-radius:9px;padding:4px}
-.mtab{padding:5px 14px;border-radius:6px;border:none;background:none;color:var(--text2);cursor:pointer;font-size:12px;font-weight:600;font-family:inherit;white-space:nowrap;transition:.15s}
-.mtab.active{background:var(--bg4);color:var(--text);border:1px solid var(--border2)}
-.mtab:hover:not(.active){color:var(--text)}
+.mtabs{display:flex;gap:4px;background:#F1F5F9;border-radius:10px;padding:4px}
+.mtab{padding:6px 14px;border-radius:7px;border:none;background:none;color:#64748B;cursor:pointer;font-size:12px;font-weight:700;font-family:inherit;white-space:nowrap;transition:.15s}
+.mtab.active{background:#fff;color:#0F172A;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.mtab:hover:not(.active){color:#0F172A}
 
-/* ── MINI BAR ── */
+/* ── MINI RATE BAR ── */
 .mbar{display:flex;align-items:center;gap:7px}
-.mbar-bg{flex-shrink:0;width:55px;height:4px;background:var(--bg4);border-radius:99px;overflow:hidden}
+.mbar-bg{flex-shrink:0;width:60px;height:4px;background:#F1F5F9;border-radius:99px;overflow:hidden}
 .mbar-fill{height:100%;border-radius:99px}
-.mbar-txt{font-weight:700;min-width:34px;font-size:12px}
-
-/* ── PENDING ── */
-.pending-head{display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap}
-.p-badge{background:rgba(239,68,68,.12);color:var(--red);border:1px solid rgba(239,68,68,.2);font-size:11px;font-weight:700;padding:2px 9px;border-radius:99px}
-.p-sub{font-size:12px;color:var(--text3)}
+.mbar-txt{font-weight:700;min-width:36px;font-size:12px}
 </style>
 </head>
 <body>
 
-<!-- TOP BAR -->
-<div class="topbar">
-  <div class="logo">MCS <span class="logo-g">Media</span> — Combined Dashboard</div>
-  <div class="live-pill"><span class="ldot"></span>Live</div>
-  <div class="topbar-r">
-    <span class="upd" id="upd">—</span>
+<!-- SIDEBAR -->
+<aside id="sidebar">
+  <div class="sb-logo">
+    <div class="sb-logo-name">MCS Media</div>
+    <div class="sb-logo-sub">Deal Dashboard</div>
+  </div>
+  <nav class="sb-nav">
+    <button class="nav-item active" data-tab="overview"   onclick="switchTab('overview')">  <span class="ni">📊</span> Overview</button>
+    <button class="nav-item"        data-tab="brands"     onclick="switchTab('brands')">    <span class="ni">🏷️</span> Brands &amp; Billing</button>
+    <button class="nav-item"        data-tab="mediators"  onclick="switchTab('mediators')"> <span class="ni">👥</span> Mediators</button>
+  </nav>
+  <div class="sb-foot" id="sb-foot">—</div>
+</aside>
+
+<!-- MAIN -->
+<div id="main">
+
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div class="tb-titles">
+      <div class="tb-title" id="tb-title">Overview</div>
+      <div class="tb-sub"   id="tb-sub">Loading…</div>
+    </div>
+    <div class="live-pill"><span class="ldot"></span>Live</div>
+    <span class="upd-txt" id="upd">—</span>
     <button class="btn" onclick="loadData()">↻ Refresh</button>
   </div>
-</div>
 
-<!-- TAB NAVIGATION -->
-<div class="tab-nav" id="tab-nav" style="display:none">
-  <button class="tnav active" onclick="switchTab('overview')">🏠 Overview</button>
-  <button class="tnav" onclick="switchTab('brands')" id="tnav-brands">🏷 Brands &amp; Billing</button>
-  <button class="tnav" onclick="switchTab('mediators')">👥 Mediators</button>
-  <button class="tnav" onclick="switchTab('pending')" id="tnav-pending">⚠ Pending Refunds</button>
-</div>
+  <!-- CONTENT -->
+  <div id="content">
 
-<!-- Setup screen removed — URL hardcoded below -->
-
-<!-- LOADING -->
-<div class="screen" id="s-load">
-  <div class="spinner"></div>
-  <div id="load-msg" style="color:var(--text2);font-size:14px">Loading dashboard…</div>
-</div>
-
-<!-- ERROR -->
-<div class="screen" id="s-err">
-  <div class="err-icon">⚠️</div>
-  <div class="err-t" id="err-t">Could not load data</div>
-  <div class="err-d" id="err-d">Check the Apps Script URL and make sure access is set to "Anyone".</div>
-  <div class="err-acts">
-    <button class="btn-p" style="width:auto;padding:10px 28px" onclick="loadData()">Retry</button>
-  </div>
-</div>
-
-<!-- MAIN DASHBOARD -->
-<div id="dash">
-
-  <!-- OVERVIEW TAB -->
-  <div class="tab-pane on" id="tab-overview">
-    <div class="grid4" id="ov-stats"></div>
-
-    <div class="section-h">Billing Pipeline</div>
-    <div class="pipeline" id="ov-pipeline"></div>
-
-    <div class="section-h">Quick Links</div>
-    <div class="qlinks" id="ov-links"></div>
-
-    <div class="section-h">🏆 Top 5 Mediators This Month</div>
-    <div class="top5-grid" id="ov-top5"></div>
-  </div>
-
-  <!-- BRANDS TAB -->
-  <div class="tab-pane" id="tab-brands">
-    <div class="controls">
-      <input class="search-in" id="b-search" placeholder="Search brand or code…" oninput="renderBrands()"/>
-      <div class="filter-btns" id="b-filters"></div>
-      <span class="tcount" id="b-count"></span>
+    <!-- LOADING -->
+    <div class="screen on" id="s-load">
+      <div class="spinner"></div>
+      <div class="load-txt">Loading dashboard…</div>
     </div>
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th onclick="bSort('name')">Brand <span class="sa" id="sa-name">↕</span></th>
-            <th onclick="bSort('code')">Code <span class="sa" id="sa-code">↕</span></th>
-            <th onclick="bSort('lastBillDate')">Last Bill <span class="sa" id="sa-lastBillDate">↕</span></th>
-            <th onclick="bSort('billStatus')">Status <span class="sa" id="sa-billStatus">↕</span></th>
-            <th>Sheet</th>
-          </tr>
-        </thead>
-        <tbody id="brands-body"></tbody>
-      </table>
-    </div>
-  </div>
 
-  <!-- MEDIATORS TAB -->
-  <div class="tab-pane" id="tab-mediators">
-    <div class="month-row">
-      <div class="mtabs" id="m-tabs"></div>
-      <div style="font-size:11px;color:var(--text3)" id="m-legend"></div>
+    <!-- ERROR -->
+    <div class="screen" id="s-err">
+      <div class="err-icon">⚠️</div>
+      <div class="err-t" id="err-t">Could not load data</div>
+      <div class="err-d" id="err-d">Make sure the Apps Script is deployed with access set to "Anyone".</div>
+      <button class="btn-primary" onclick="loadData()">Retry</button>
     </div>
-    <div class="grid4" id="m-stats"></div>
-    <div class="section-h">Top 5 Mediators</div>
-    <div class="top5-grid" id="m-top5"></div>
-    <div class="section-h">All Mediators</div>
-    <div class="controls">
-      <input class="search-in" id="m-search" placeholder="Search MCS code…" oninput="renderMedTable()"/>
-      <span class="tcount" id="m-count"></span>
-    </div>
-    <div class="table-wrap">
-      <table>
-        <thead id="m-thead"></thead>
-        <tbody id="m-tbody"></tbody>
-      </table>
-    </div>
-  </div>
 
-  <!-- PENDING TAB -->
-  <div class="tab-pane" id="tab-pending">
-    <div class="pending-head">
-      <div class="section-h" style="margin:0">Orders without Refund Form</div>
-      <span class="p-badge" id="p-badge">0</span>
-      <span class="p-sub" id="p-sub"></span>
-    </div>
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th>Order ID</th><th>Buyer Name</th><th>MCS Code</th><th>Marketplace</th><th style="text-align:right">Amount</th>
-          </tr>
-        </thead>
-        <tbody id="p-body"></tbody>
-      </table>
-    </div>
-  </div>
+    <!-- DASHBOARD TABS -->
+    <div id="dash" style="display:none">
 
-</div><!-- #dash -->
+      <!-- OVERVIEW -->
+      <div class="tab-pane on" id="tab-overview">
+        <div class="stat-grid" id="ov-stats"></div>
+        <div class="section-h">Billing Pipeline</div>
+        <div class="pipeline" id="ov-pipeline"></div>
+        <div class="section-h">Quick Links</div>
+        <div class="qlinks" id="ov-links"></div>
+        <div class="section-h">🏆 Top 5 Mediators This Month</div>
+        <div class="top5-grid" id="ov-top5"></div>
+      </div>
+
+      <!-- BRANDS -->
+      <div class="tab-pane" id="tab-brands">
+        <div id="slot-status" style="display:none;align-items:center;gap:8px;background:#FFFBEB;border:1px solid #FDE68A;color:#92400E;padding:9px 14px;border-radius:9px;font-size:12px;font-weight:600;margin-bottom:12px"></div>
+        <div class="controls">
+          <input class="search-in" id="b-search" placeholder="Search brand or code…" oninput="renderBrands()"/>
+          <div class="filter-btns" id="b-filters"></div>
+          <span class="tcount" id="b-count"></span>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th onclick="bSort('name')">Brand <span class="sa" id="sa-name">↕</span></th>
+                <th onclick="bSort('code')">Code <span class="sa" id="sa-code">↕</span></th>
+                <th onclick="bSort('lastBillDate')">Last Bill <span class="sa" id="sa-lastBillDate">↕</span></th>
+                <th onclick="bSort('billStatus')">Status <span class="sa" id="sa-billStatus">↕</span></th>
+                <th>Sheet</th>
+              </tr>
+            </thead>
+            <tbody id="brands-body"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- MEDIATORS -->
+      <div class="tab-pane" id="tab-mediators">
+        <div class="month-row">
+          <div class="mtabs" id="m-tabs"></div>
+          <div style="font-size:11px;color:#94A3B8" id="m-legend"></div>
+        </div>
+        <div class="stat-grid" id="m-stats"></div>
+        <div class="section-h">Top 5 Mediators</div>
+        <div class="top5-grid" id="m-top5"></div>
+        <div class="section-h">All Mediators</div>
+        <div class="controls">
+          <input class="search-in" id="m-search" placeholder="Search MCS code…" oninput="renderMedTable()"/>
+          <span class="tcount" id="m-count"></span>
+        </div>
+        <div class="table-wrap">
+          <table><thead id="m-thead"></thead><tbody id="m-tbody"></tbody></table>
+        </div>
+      </div>
+
+    </div><!-- #dash -->
+  </div><!-- #content -->
+</div><!-- #main -->
 
 <script>
-// ── CONFIG — paste your Apps Script /exec URL here ───────────
+// ── CONFIG ────────────────────────────────────────────────────
 const SURL = "https://script.google.com/macros/s/AKfycbwChK4A4Ly4yM9PShdrfy9gEafOzpTf_K0Q2mqzbhBcFbX7sWCktLh2ptLJvQiA9iC9Lg/exec";
-// ─────────────────────────────────────────────────────────────
 
-let D        = null;
-let activeTab= 'overview';
-
-// Brands state
+// ── STATE ─────────────────────────────────────────────────────
+let D = null, SD = null, activeTab = 'overview';
 let bSortKey = 'name', bSortDir = 1, bFilter = 'all';
-
-// Mediators state
-let selMonth  = 'all', mSortKey = 'totalClaimed', mSortDir = -1, mSearchQ = '';
+let selMonth = 'all', mSortKey = 'totalClaimed', mSortDir = -1, mSearchQ = '';
 
 const MLABEL = {'2026-03':'Mar','2026-04':'Apr','2026-05':'May','2026-06':'Jun','2026-07':'Jul','2026-08':'Aug'};
-const MEDALS = ['🥇','🥈','🥉','4th','5th'];
+const MEDALS  = ['🥇','🥈','🥉','4th','5th'];
+const TAB_TITLES = { overview:'Overview', brands:'Brands & Billing', mediators:'Mediators' };
 
-const BILL_LABELS = {
-  'bill-pending':  { label:'Last Bill Pending', cls:'bs-bill-pending', color:'var(--red)',    icon:'🔴' },
-  'less-entries':  { label:'Less Entries',      cls:'bs-less-entries', color:'var(--amber)',  icon:'🟡' },
-  'all-wrapped':   { label:'All Wrapped',        cls:'bs-all-wrapped',  color:'var(--green)', icon:'🟢' },
-  'billed':        { label:'Billed',             cls:'bs-billed',       color:'var(--teal)',  icon:'🔵' },
-  'not-started':   { label:'Not Started',        cls:'bs-not-started',  color:'var(--text3)', icon:'⚫' },
-  'other':         { label:'Other',              cls:'bs-other',        color:'var(--blue)',  icon:'🔷' },
+const BILL_META = {
+  'bill-pending': { label:'Last Bill Pending', cls:'bs-bill-pending', color:'#DC2626', icon:'🔴' },
+  'less-entries': { label:'Less Entries',      cls:'bs-less-entries', color:'#D97706', icon:'🟡' },
+  'all-wrapped':  { label:'All Wrapped',        cls:'bs-all-wrapped',  color:'#059669', icon:'🟢' },
+  'billed':       { label:'Billed',             cls:'bs-billed',       color:'#0E7490', icon:'🔵' },
+  'not-started':  { label:'Not Started',        cls:'bs-not-started',  color:'#64748B', icon:'⚫' },
+  'other':        { label:'Other',              cls:'bs-other',        color:'#7C3AED', icon:'🔷' },
 };
 
 // ── BOOT ──────────────────────────────────────────────────────
-window.addEventListener('DOMContentLoaded', () => {
-  loadData();
-});
+window.addEventListener('DOMContentLoaded', loadData);
 
-// ── SCREEN CONTROL ────────────────────────────────────────────
-function showScreen(name) {
+// ── SCREENS ───────────────────────────────────────────────────
+function showMain(name) {
   document.getElementById('s-load').classList.toggle('on', name==='load');
   document.getElementById('s-err').classList.toggle('on',  name==='err');
-  document.getElementById('dash').style.display     = name==='dash' ? 'block' : 'none';
-  document.getElementById('tab-nav').style.display  = name==='dash' ? 'flex'  : 'none';
+  document.getElementById('dash').style.display = name==='dash' ? 'block' : 'none';
 }
-
-// URL is hardcoded — no setup needed
 
 // ── LOAD DATA ─────────────────────────────────────────────────
 async function loadData() {
-  showScreen('load');
-  document.getElementById('load-msg').textContent = 'Loading from Google Sheets…';
+  showMain('load');
+  document.getElementById('tb-sub').textContent = 'Loading…';
   try {
     const res  = await fetch(SURL + '?action=dashboard&t=' + Date.now());
     if (!res.ok) throw new Error('HTTP ' + res.status);
@@ -314,311 +294,280 @@ async function loadData() {
     if (json.error) throw new Error(json.error);
     D = json;
     renderAll();
-    showScreen('dash');
-    document.getElementById('upd').textContent = 'Updated ' + new Date().toLocaleTimeString();
-    // badges
-    const pending = (D.pendingRefunds||[]).length;
-    const billPending = (D.billingSummary||{})['bill-pending'] || 0;
-    const bBadge = billPending > 0 ? `<span class="badge">${billPending}</span>` : '';
-    document.getElementById('tnav-brands').innerHTML = `🏷 Brands &amp; Billing ${bBadge}`;
-    document.getElementById('tnav-pending').innerHTML = `⚠ Pending Refunds <span class="badge">${pending}</span>`;
+    showMain('dash');
+    loadSlotData(); // async — loads brand plan tab data
+    const now = new Date();
+    document.getElementById('upd').textContent = 'Updated ' + now.toLocaleTimeString();
+    document.getElementById('sb-foot').textContent = now.toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'});
+    document.getElementById('tb-sub').textContent = (D.brands||[]).length + ' brands · ' + (D.mediatorSummary?.totalMediators||0) + ' mediators';
   } catch(err) {
     document.getElementById('err-t').textContent = 'Could not load data';
-    document.getElementById('err-d').textContent = err.message + ' — Make sure the Apps Script is deployed with access: Anyone (no Google account required).';
-    showScreen('err');
+    document.getElementById('err-d').textContent = err.message + ' — Make sure the Apps Script is deployed with access: Anyone.';
+    showMain('err');
+    document.getElementById('tb-sub').textContent = 'Error loading data';
   }
 }
 
-// ── RENDER ALL ────────────────────────────────────────────────
-function renderAll() {
-  renderOverview();
-  renderBrands();
-  renderMediators();
-  renderPending();
+
+// ── LOAD BRAND SLOT DATA (separate async fetch) ───────────────
+async function loadSlotData() {
+  // Show loading indicator in brands tab
+  const el = document.getElementById('slot-status');
+  if (el) { el.style.display = 'flex'; el.textContent = '⏳ Loading slot data from brand sheets…'; }
+
+  try {
+    const res  = await fetch(SURL + '?action=brandSlots&t=' + Date.now());
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const json = await res.json();
+    if (json.error) throw new Error(json.error);
+    SD = json;
+    if (el) el.style.display = 'none';
+    renderBrands(); // re-render with slot data
+  } catch(err) {
+    if (el) { el.textContent = '⚠ Could not load slot data: ' + err.message; el.style.color = '#DC2626'; }
+  }
 }
 
-// ── TAB SWITCHING ─────────────────────────────────────────────
+// ── TAB SWITCH ────────────────────────────────────────────────
 function switchTab(name) {
   activeTab = name;
-  document.querySelectorAll('.tab-pane').forEach(el => el.classList.remove('on'));
-  document.getElementById('tab-'+name).classList.add('on');
-  document.querySelectorAll('.tnav').forEach(el => el.classList.remove('active'));
-  event.currentTarget.classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(el => el.classList.toggle('active', el.dataset.tab===name));
+  document.querySelectorAll('.tab-pane').forEach(el => el.classList.toggle('on', el.id==='tab-'+name));
+  document.getElementById('tb-title').textContent = TAB_TITLES[name] || name;
 }
+
+// ── RENDER ALL ────────────────────────────────────────────────
+function renderAll() { renderOverview(); renderBrands(); renderMediators(); }
 
 // ═══════════════════════════════════════════════════════════════
 //  OVERVIEW
 // ═══════════════════════════════════════════════════════════════
 function renderOverview() {
-  const B  = D.billingSummary   || {};
-  const MS = D.mediatorSummary  || {};
-  const months = D.months       || [];
+  const B   = D.billingSummary  || {};
+  const MS  = D.mediatorSummary || {};
+  const months   = D.months     || [];
   const curMonth = months[months.length-1] || '';
+  const totalBrands = (D.brands||[]).length;
+  const billPend = (B['bill-pending']||0) + (B['less-entries']||0);
 
-  // Stats
-  const totalBrands  = (D.brands||[]).length;
-  const billPending  = (B['bill-pending']||0) + (B['less-entries']||0);
   document.getElementById('ov-stats').innerHTML =
-    sc('Total Brands',   totalBrands,         '',         '') +
-    sc('Bills Pending',  billPending,          'Need attention', billPending>0?'red':'green') +
-    sc('Active Mediators', MS.totalMediators||0, 'This period', '') +
-    sc('Completion Rate',  (MS.overallRate||0)+'%', 'Refunds / Orders', MS.overallRate>=80?'green':MS.overallRate>=60?'amber':'red');
+    sc('Total Brands',     totalBrands,          '',               '') +
+    sc('Bills Need Attention', billPend,          'Pending + Less entries', billPend>0?'sv-red':'') +
+    sc('Active Mediators', MS.totalMediators||0, 'This period',    '') +
+    sc('Completion Rate',  (MS.overallRate||0)+'%', 'Refunds / Orders', MS.overallRate>=80?'sv-green':MS.overallRate>=60?'sv-amber':'sv-red');
 
-  // Billing pipeline
-  const pOrder = ['bill-pending','less-entries','not-started','billed','all-wrapped'];
-  document.getElementById('ov-pipeline').innerHTML = pOrder.map(k => {
-    const meta = BILL_LABELS[k];
-    const n    = B[k] || 0;
-    return `<div class="pipe-card" style="color:${meta.color}" onclick="switchToTab('brands','${k}')">
-      <div class="pipe-n">${n}</div>
-      <div class="pipe-l">${meta.icon} ${meta.label}</div>
+  const pipeOrder = ['bill-pending','less-entries','not-started','billed','all-wrapped'];
+  document.getElementById('ov-pipeline').innerHTML = pipeOrder.map(k => {
+    const m = BILL_META[k]; const n = B[k]||0;
+    return `<div class="pipe-card" style="border-left:4px solid ${m.color}" onclick="goBrandsFilter('${k}')">
+      <div class="pipe-n" style="color:${m.color}">${n}</div>
+      <div class="pipe-l">${m.icon} ${m.label}</div>
     </div>`;
   }).join('');
 
-  // Quick links
   const sl = D.sysLinks || {};
   const links = [
-    { label:'Order Sheet',    icon:'📋', url:sl.orderSheet },
-    { label:'Refund Sheet',   icon:'💸', url:sl.refundSheet },
-    { label:'Army Sheet',     icon:'🪖', url:sl.armySheet },
-    { label:'Army Buyers',    icon:'👥', url:sl.armyBuyerSheet },
-    { label:'Task Sheet',     icon:'✅', url:sl.taskSheet },
-    { label:'Bulk Deals',     icon:'📦', url:sl.bulkDeals },
-    { label:'Payment Sheet',  icon:'💳', url:sl.paymentSheet },
-  ].filter(l => l.url);
+    {label:'Order Sheet',   icon:'📋',url:sl.orderSheet},
+    {label:'Refund Sheet',  icon:'💸',url:sl.refundSheet},
+    {label:'Army Sheet',    icon:'🪖',url:sl.armySheet},
+    {label:'Army Buyers',   icon:'👥',url:sl.armyBuyerSheet},
+    {label:'Task Sheet',    icon:'✅',url:sl.taskSheet},
+    {label:'Bulk Deals',    icon:'📦',url:sl.bulkDeals},
+    {label:'Payment Sheet', icon:'💳',url:sl.paymentSheet},
+  ].filter(l=>l.url);
   document.getElementById('ov-links').innerHTML = links.map(l =>
-    `<a class="qlink" href="${l.url}" target="_blank"><span class="qlink-icon">${l.icon}</span>${l.label}</a>`
+    `<a class="qlink" href="${l.url}" target="_blank">${l.icon} ${l.label}</a>`
   ).join('');
 
-  // Top 5 for current month
-  const top5meds = (D.mediators||[])
-    .filter(m => mVal(m, curMonth, 'claimed') > 0)
-    .sort((a,b) => mVal(b,curMonth,'claimed') - mVal(a,curMonth,'claimed'))
+  const top5 = (D.mediators||[])
+    .filter(m=>mVal(m,curMonth,'claimed')>0)
+    .sort((a,b)=>mVal(b,curMonth,'claimed')-mVal(a,curMonth,'claimed'))
     .slice(0,5);
-  document.getElementById('ov-top5').innerHTML = top5meds.length
-    ? top5meds.map((m,i) => top5Card(m,i,curMonth)).join('')
-    : `<div style="color:var(--text3);font-size:13px">No mediator data for ${MLABEL[curMonth]||curMonth}</div>`;
+  document.getElementById('ov-top5').innerHTML = top5.length
+    ? top5.map((m,i)=>top5Card(m,i,curMonth)).join('')
+    : `<div style="color:#94A3B8;font-size:13px">No mediator data for ${MLABEL[curMonth]||curMonth}</div>`;
 }
 
-function switchToTab(tab, filter) {
-  document.querySelectorAll('.tnav').forEach((el,i) => el.classList.toggle('active', i===['overview','brands','mediators','pending'].indexOf(tab)));
-  document.querySelectorAll('.tab-pane').forEach(el => el.classList.remove('on'));
-  document.getElementById('tab-'+tab).classList.add('on');
-  if (filter && tab === 'brands') { bFilter = filter; renderBrands(); }
+function goBrandsFilter(filter) {
+  bFilter = filter;
+  switchTab('brands');
+  renderBrands();
 }
 
 // ═══════════════════════════════════════════════════════════════
 //  BRANDS
 // ═══════════════════════════════════════════════════════════════
-const B_FILTER_ORDER = ['all','bill-pending','less-entries','not-started','billed','all-wrapped'];
+const B_FILTERS = ['all','bill-pending','less-entries','not-started','billed','all-wrapped'];
 
 function renderBrands() {
-  const brands = D.brands || [];
-  const q      = (document.getElementById('b-search').value||'').toLowerCase().trim();
+  const brands = D.brands||[];
+  const q = (document.getElementById('b-search').value||'').toLowerCase().trim();
+  const B = D.billingSummary||{};
 
-  // Build filter buttons
-  const B = D.billingSummary || {};
-  document.getElementById('b-filters').innerHTML = B_FILTER_ORDER.map(k => {
+  document.getElementById('b-filters').innerHTML = B_FILTERS.map(k => {
     const isAll = k==='all';
-    const meta  = BILL_LABELS[k] || {};
+    const meta = BILL_META[k]||{};
     const count = isAll ? brands.length : (B[k]||0);
-    const label = isAll ? 'All' : (meta.icon+' '+meta.label);
-    return `<button class="fbtn ${bFilter===k?'active':''}" onclick="setBFilter('${k}')">${label} <span style="opacity:.6">${count}</span></button>`;
+    const label = isAll ? 'All' : `${meta.icon} ${meta.label}`;
+    return `<button class="fbtn ${bFilter===k?'active':''}" onclick="setBF('${k}')">${label} <span style="opacity:.55">${count}</span></button>`;
   }).join('');
 
-  // Filter + search
   let rows = brands.filter(b =>
-    (bFilter==='all' || b.billStatus===bFilter) &&
-    (!q || b.name.toLowerCase().includes(q) || b.code.toLowerCase().includes(q))
+    (bFilter==='all'||b.billStatus===bFilter) &&
+    (!q||b.name.toLowerCase().includes(q)||b.code.toLowerCase().includes(q))
   );
+  rows = [...rows].sort((a,b) => bSortDir*(a[bSortKey]||'').toLowerCase().localeCompare((b[bSortKey]||'').toLowerCase()));
 
-  // Sort
-  rows = [...rows].sort((a,b) => {
-    const va = (a[bSortKey]||'').toLowerCase();
-    const vb = (b[bSortKey]||'').toLowerCase();
-    return bSortDir * va.localeCompare(vb);
-  });
-
-  document.getElementById('b-count').textContent = rows.length + ' brands';
+  document.getElementById('b-count').textContent = rows.length+' brands';
   ['name','code','lastBillDate','billStatus'].forEach(k => {
-    const el = document.getElementById('sa-'+k);
-    if (el) el.textContent = bSortKey===k ? (bSortDir===1?'↑':'↓') : '↕';
-    const th = el?.closest('th');
-    if (th) th.classList.toggle('sorted', bSortKey===k);
+    const el=document.getElementById('sa-'+k);
+    if(el) el.textContent = bSortKey===k?(bSortDir===1?'↑':'↓'):'↕';
+    const th=el?.closest('th'); if(th) th.classList.toggle('sorted',bSortKey===k);
   });
 
-  if (!rows.length) {
-    document.getElementById('brands-body').innerHTML = `<tr><td colspan="5" class="no-rows">No brands found</td></tr>`;
-    return;
-  }
+  document.getElementById('brands-body').innerHTML = rows.length
+    ? rows.map(b => {
+        const meta = BILL_META[b.billStatus]||BILL_META['other'];
+        // Look up slot data for this brand
+        const slotEntry = SD?.brandSlots?.find(s => s.brandName === b.name || (b.code && s.code && s.code.toLowerCase()===b.code.toLowerCase()));
+        const hasSlots  = !!slotEntry;
+        const given     = hasSlots ? slotEntry.totalGiven : null;
+        const done      = hasSlots ? slotEntry.totalDone  : null;
+        const pct       = hasSlots ? slotEntry.completionPct : null;
+        const barCol    = pct===null?'#E2E8F0':pct>=80?'#059669':pct>=50?'#D97706':'#DC2626';
+        const pctTxt    = pct===null?'':pct+'%';
 
-  document.getElementById('brands-body').innerHTML = rows.map(b => {
-    const meta = BILL_LABELS[b.billStatus] || BILL_LABELS['other'];
-    const billDisp = b.lastBillDate || '—';
-    return `<tr>
-      <td style="font-weight:700;max-width:240px">
-        <a href="${b.sheetLink}" target="_blank" style="color:var(--text);text-decoration:none;hover:color:var(--green)"
-          onmouseover="this.style.color='var(--green)'" onmouseout="this.style.color='var(--text)'">${b.name}</a>
-      </td>
-      <td style="font-family:monospace;font-size:12px;color:var(--teal)">${b.code||'—'}</td>
-      <td style="color:var(--text2)">${billDisp}</td>
-      <td><span class="bs ${meta.cls}">${meta.label}</span></td>
-      <td>
-        <a href="${b.sheetLink}" target="_blank" style="color:var(--text3);font-size:11px;text-decoration:none;padding:3px 8px;border:1px solid var(--border2);border-radius:5px"
-          onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--text3)'">↗ Open</a>
-        ${b.extraLink ? `<a href="${b.extraLink}" target="_blank" style="color:var(--text3);font-size:11px;text-decoration:none;padding:3px 8px;border:1px solid var(--border2);border-radius:5px;margin-left:5px"
-          onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--text3)'">↗ Extra</a>` : ''}
-      </td>
-    </tr>`;
-  }).join('');
+        // Per-platform tooltip text
+        const platformTip = hasSlots ? Object.entries(slotEntry.byPlatform).map(([plt,v])=>`${plt}: ${v.done}/${v.given}`).join(' · ') : '';
+
+        return `<tr>
+          <td style="font-weight:700;max-width:200px;overflow:hidden;text-overflow:ellipsis">
+            <a href="${b.sheetLink}" target="_blank" style="color:#0F172A;text-decoration:none" onmouseover="this.style.color='#B45309'" onmouseout="this.style.color='#0F172A'">${b.name}</a>
+          </td>
+          <td style="font-family:monospace;font-size:12px;color:#0E7490;font-weight:700">${b.code||'—'}</td>
+          <td style="color:#64748B">${b.lastBillDate||'—'}</td>
+          <td><span class="bs ${meta.cls}">${meta.label}</span></td>
+          <td style="text-align:right;font-weight:700;color:#0F172A">${given!==null?given.toLocaleString('en-IN'):SD?'—':'<span style="color:#94A3B8;font-size:11px">loading…</span>'}</td>
+          <td style="text-align:right;font-weight:700;color:${done>0?'#059669':'#64748B'}">${done!==null?done.toLocaleString('en-IN'):SD?'—':''}</td>
+          <td>
+            ${hasSlots ? `<div title="${platformTip}" style="display:flex;align-items:center;gap:7px;cursor:default">
+              <div style="width:70px;height:5px;background:#F1F5F9;border-radius:99px;overflow:hidden;flex-shrink:0">
+                <div style="width:${pct}%;height:100%;background:${barCol};border-radius:99px"></div>
+              </div>
+              <span style="font-weight:700;font-size:12px;color:${barCol}">${pctTxt}</span>
+            </div>` : SD ? '—' : ''}
+          </td>
+          <td style="display:flex;gap:6px">
+            <a href="${b.sheetLink}" target="_blank" style="font-size:11px;padding:4px 10px;border:1.5px solid #E2E8F0;border-radius:6px;color:#64748B;text-decoration:none;white-space:nowrap" onmouseover="this.style.color='#0F172A'" onmouseout="this.style.color='#64748B'">↗ Open</a>
+            ${b.extraLink?`<a href="${b.extraLink}" target="_blank" style="font-size:11px;padding:4px 10px;border:1.5px solid #E2E8F0;border-radius:6px;color:#64748B;text-decoration:none;white-space:nowrap" onmouseover="this.style.color='#0F172A'" onmouseout="this.style.color='#64748B'">↗ Extra</a>`:''}
+          </td>
+        </tr>`;
+      }).join('')
+    : `<tr><td colspan="5" class="no-rows">No brands found</td></tr>`;
 }
 
-function setBFilter(k) { bFilter=k; renderBrands(); }
-function bSort(k) { bSortKey===k ? bSortDir*=-1 : (bSortKey=k, bSortDir=1); renderBrands(); }
+function setBF(k) { bFilter=k; renderBrands(); }
+function bSort(k) { bSortKey===k?bSortDir*=-1:(bSortKey=k,bSortDir=1); renderBrands(); }
 
 // ═══════════════════════════════════════════════════════════════
 //  MEDIATORS
 // ═══════════════════════════════════════════════════════════════
 function renderMediators() {
-  const months = D.months || [];
-  const MS     = D.mediatorSummary || {};
-
-  // Month tabs
+  const months = D.months||[];
+  const MS = D.mediatorSummary||{};
   const tabsEl = document.getElementById('m-tabs');
   tabsEl.innerHTML = '';
   addMTab(tabsEl,'all','All Months');
-  months.forEach(m => addMTab(tabsEl, m, MLABEL[m]||m));
-
+  months.forEach(m => addMTab(tabsEl,m,MLABEL[m]||m));
   document.getElementById('m-legend').textContent =
     `Priority: ${MS.priority||0}  ·  Standard: ${MS.standard||0}  ·  Passive: ${MS.passive||0}`;
-
-  renderMedStats();
-  renderMedTop5();
-  renderMedTable();
+  renderMedStats(); renderMedTop5(); renderMedTable();
 }
 
-function addMTab(container, val, label) {
-  const b = document.createElement('button');
-  b.className = 'mtab'+(selMonth===val?' active':'');
-  b.textContent = label;
-  b.onclick = () => { selMonth=val; renderMedStats(); renderMedTop5(); renderMedTable(); b.closest('.mtabs').querySelectorAll('.mtab').forEach(x=>x.classList.remove('active')); b.classList.add('active'); };
-  container.appendChild(b);
+function addMTab(c,val,label) {
+  const b=document.createElement('button');
+  b.className='mtab'+(selMonth===val?' active':'');
+  b.textContent=label;
+  b.onclick=()=>{selMonth=val;b.closest('.mtabs').querySelectorAll('.mtab').forEach(x=>x.classList.remove('active'));b.classList.add('active');renderMedStats();renderMedTop5();renderMedTable();};
+  c.appendChild(b);
 }
 
 function renderMedStats() {
-  const meds = filteredMeds();
-  const cl   = meds.reduce((s,m)=>s+mClaimed(m),0);
-  const rf   = meds.reduce((s,m)=>s+mRefunded(m),0);
-  const rate = cl>0?Math.round(rf/cl*100):0;
+  const meds=filteredMeds(),cl=meds.reduce((s,m)=>s+mClaimed(m),0),rf=meds.reduce((s,m)=>s+mRefunded(m),0);
+  const rate=cl>0?Math.round(rf/cl*100):0;
   document.getElementById('m-stats').innerHTML =
-    sc('Active Mediators', meds.filter(m=>mClaimed(m)>0).length, '', '') +
-    sc('Orders Claimed',   cl,     'This period', '') +
-    sc('Refunds Submitted',rf,     'Forms done',  'green') +
-    sc('Completion Rate',  rate+'%','',            rate>=80?'green':rate>=60?'amber':'red');
+    sc('Active Mediators',meds.filter(m=>mClaimed(m)>0).length,'','') +
+    sc('Orders Claimed',cl,'This period','') +
+    sc('Refunds Submitted',rf,'Forms done','sv-green') +
+    sc('Completion Rate',rate+'%','',rate>=80?'sv-green':rate>=60?'sv-amber':'sv-red');
 }
 
 function renderMedTop5() {
-  const top5 = filteredMeds().slice(0,5);
-  document.getElementById('m-top5').innerHTML = top5.map((m,i)=>top5Card(m,i,selMonth==='all'?null:selMonth)).join('');
+  document.getElementById('m-top5').innerHTML = filteredMeds().slice(0,5).map((m,i)=>top5Card(m,i,selMonth==='all'?null:selMonth)).join('');
 }
 
 function renderMedTable() {
-  const months = D.months||[];
-  let meds = filteredMeds();
-  const q  = document.getElementById('m-search').value.toLowerCase().trim();
-  if (q) meds = meds.filter(m=>m.code.toLowerCase().includes(q));
-
-  meds = [...meds].sort((a,b) => {
+  const months=D.months||[];
+  let meds=filteredMeds();
+  const q=(document.getElementById('m-search').value||'').toLowerCase();
+  if(q) meds=meds.filter(m=>m.code.toLowerCase().includes(q));
+  meds=[...meds].sort((a,b)=>{
     let va,vb;
-    if (mSortKey.startsWith('m_')) { const mo=mSortKey.slice(2); va=mVal(a,mo,'claimed'); vb=mVal(b,mo,'claimed'); }
-    else if (mSortKey==='rate') { const ca=mClaimed(a),ra=mRefunded(a),cb=mClaimed(b),rb=mRefunded(b); va=ca>0?ra/ca:0; vb=cb>0?rb/cb:0; }
-    else { va=a[mSortKey]??0; vb=b[mSortKey]??0; }
+    if(mSortKey.startsWith('m_')){const mo=mSortKey.slice(2);va=mVal(a,mo,'claimed');vb=mVal(b,mo,'claimed');}
+    else if(mSortKey==='rate'){const ca=mClaimed(a),ra=mRefunded(a),cb=mClaimed(b),rb=mRefunded(b);va=ca>0?ra/ca:0;vb=cb>0?rb/cb:0;}
+    else{va=a[mSortKey]??0;vb=b[mSortKey]??0;}
     return mSortDir*(va<vb?-1:va>vb?1:0);
   });
+  document.getElementById('m-count').textContent=meds.length+' mediators';
 
-  document.getElementById('m-count').textContent = meds.length+' mediators';
+  const sa=k=>mSortKey===k?(mSortDir===-1?'↓':'↑'):'↕';
+  const sc2=k=>mSortKey===k?'sorted':'';
+  const sh=(k,l)=>`<th class="${sc2(k)}" onclick="mSort('${k}')">${l} <span class="sa">${sa(k)}</span></th>`;
+  const mCols=selMonth==='all'?months.map(m=>sh('m_'+m,MLABEL[m]||m)).join(''):'';
 
-  const sa = k => mSortKey===k?(mSortDir===-1?'↓':'↑'):'↕';
-  const sc2 = k => mSortKey===k?'sorted':'';
-  const sh = (k,l) => `<th class="${sc2(k)}" onclick="mSort('${k}')">${l} <span class="sa">${sa(k)}</span></th>`;
-  const mCols = selMonth==='all' ? months.map(m=>sh('m_'+m,MLABEL[m]||m)).join('') : '';
-
-  document.getElementById('m-thead').innerHTML = `<tr>
+  document.getElementById('m-thead').innerHTML=`<tr>
     <th style="width:34px">#</th>
-    ${sh('code','MCS Code')}
-    ${mCols}
-    ${sh('totalClaimed','Claimed')}
-    ${sh('totalRefunded','Refunds')}
-    ${sh('rate','Rate')}
+    ${sh('code','MCS Code')}${mCols}
+    ${sh('totalClaimed','Claimed')}${sh('totalRefunded','Refunds')}${sh('rate','Rate')}
     <th>Tier</th>
   </tr>`;
 
-  if (!meds.length) {
-    document.getElementById('m-tbody').innerHTML=`<tr><td colspan="${4+months.length}" class="no-rows">No mediators found</td></tr>`;
-    return;
-  }
-
-  document.getElementById('m-tbody').innerHTML = meds.map((m,i)=>{
-    const cl=mClaimed(m),rf=mRefunded(m);
-    const rate=cl>0?Math.round(rf/cl*100):0;
-    const rc=rate>=80?'var(--green)':rate>=60?'var(--amber)':'var(--red)';
-    const mCells=selMonth==='all'?months.map(mo=>{
-      const c=mVal(m,mo,'claimed');
-      return `<td style="text-align:right">${c>0?c:'<span style="color:var(--text3)">—</span>'}</td>`;
-    }).join(''):'';
-    return `<tr>
-      <td style="color:var(--text3);font-weight:600;font-size:12px">${i+1}</td>
-      <td style="font-weight:700;font-family:monospace;font-size:13px">${m.code}</td>
-      ${mCells}
-      <td style="text-align:right;font-weight:700">${cl}</td>
-      <td style="text-align:right;color:var(--green)">${rf}</td>
-      <td><div class="mbar"><div class="mbar-bg"><div class="mbar-fill" style="width:${rate}%;background:${rc}"></div></div><span class="mbar-txt" style="color:${rc}">${rate}%</span></div></td>
-      <td><span class="tier-badge tier-${m.tier}">${m.tier}</span></td>
-    </tr>`;
-  }).join('');
+  document.getElementById('m-tbody').innerHTML = !meds.length
+    ? `<tr><td colspan="${4+months.length}" class="no-rows">No mediators found</td></tr>`
+    : meds.map((m,i)=>{
+        const cl=mClaimed(m),rf=mRefunded(m),rate=cl>0?Math.round(rf/cl*100):0;
+        const rc=rate>=80?'#059669':rate>=60?'#D97706':'#DC2626';
+        const mCells=selMonth==='all'?months.map(mo=>{const c=mVal(m,mo,'claimed');return`<td style="text-align:right">${c>0?c:'<span style="color:#E2E8F0">—</span>'}</td>`;}).join(''):'';
+        return `<tr>
+          <td style="color:#94A3B8;font-weight:600;font-size:12px">${i+1}</td>
+          <td style="font-weight:700;font-family:monospace;font-size:13px;color:#0F172A">${m.code}</td>
+          ${mCells}
+          <td style="text-align:right;font-weight:800;font-size:14px">${cl}</td>
+          <td style="text-align:right;color:#059669;font-weight:700">${rf}</td>
+          <td><div class="mbar"><div class="mbar-bg"><div class="mbar-fill" style="width:${rate}%;background:${rc}"></div></div><span class="mbar-txt" style="color:${rc}">${rate}%</span></div></td>
+          <td><span class="tier-badge tier-${m.tier}">${m.tier}</span></td>
+        </tr>`;
+      }).join('');
 }
 
-function mSort(k) { mSortKey===k?mSortDir*=-1:(mSortKey=k,mSortDir=-1); renderMedTable(); }
+function mSort(k){mSortKey===k?mSortDir*=-1:(mSortKey=k,mSortDir=-1);renderMedTable();}
 
 // ═══════════════════════════════════════════════════════════════
-//  PENDING
+//  HELPERS
 // ═══════════════════════════════════════════════════════════════
-function renderPending() {
-  const pending  = D.pendingRefunds||[];
-  const months   = D.months||[];
-  const curMonth = months[months.length-1]||'';
-  document.getElementById('p-badge').textContent = pending.length;
-  document.getElementById('p-sub').textContent   = curMonth ? `(Orders in ${MLABEL[curMonth]||curMonth} with no refund form)` : '';
-
-  if (!pending.length) {
-    document.getElementById('p-body').innerHTML = `<tr><td colspan="5" class="no-rows">🎉 All orders have refund forms for ${MLABEL[curMonth]||curMonth}</td></tr>`;
-    return;
-  }
-  document.getElementById('p-body').innerHTML = pending.map(p=>`<tr>
-    <td style="font-family:monospace;font-size:12px;color:var(--amber)">${p.orderId||'—'}</td>
-    <td>${p.buyerName||'—'}</td>
-    <td style="font-weight:700;font-family:monospace;font-size:12px">${p.mcsCode}</td>
-    <td>${p.marketplace||'—'}</td>
-    <td style="text-align:right;color:var(--red);font-weight:700">₹${Number(p.amount||0).toLocaleString('en-IN')}</td>
-  </tr>`).join('');
-}
-
-// ═══════════════════════════════════════════════════════════════
-//  SHARED HELPERS
-// ═══════════════════════════════════════════════════════════════
-function sc(label, value, sub, cls) {
+function sc(label,value,sub,cls) {
   return `<div class="stat-card"><div class="sl">${label}</div><div class="sv ${cls}">${value}</div>${sub?`<div class="ss">${sub}</div>`:''}</div>`;
 }
 
-function top5Card(m, i, monthKey) {
-  const cl = monthKey ? mVal(m,monthKey,'claimed')  : (m.totalClaimed||0);
-  const rf = monthKey ? mVal(m,monthKey,'refunded') : (m.totalRefunded||0);
-  const rate = cl>0?Math.round(rf/cl*100):0;
-  const rc   = rate>=80?'var(--green)':rate>=60?'var(--amber)':'var(--red)';
-  const months = D.months||[];
-  const pills  = months.map(mo=>{
+function top5Card(m,i,monthKey) {
+  const cl=monthKey?mVal(m,monthKey,'claimed'):(m.totalClaimed||0);
+  const rf=monthKey?mVal(m,monthKey,'refunded'):(m.totalRefunded||0);
+  const rate=cl>0?Math.round(rf/cl*100):0;
+  const rc=rate>=80?'#059669':rate>=60?'#D97706':'#DC2626';
+  const months=D.months||[];
+  const pills=months.map(mo=>{
     const d=m.months[mo]||{claimed:0,refunded:0};
-    return `<span style="font-size:10px;padding:2px 7px;border-radius:5px;background:var(--bg3);border:1px solid var(--border);color:var(--text2)">${MLABEL[mo]||mo}: <b style="color:var(--text)">${d.claimed}</b>${d.refunded>0?`/<span style="color:var(--green)">${d.refunded}</span>`:''}</span>`;
+    return `<span class="mpill">${MLABEL[mo]||mo}: <b>${d.claimed}</b>${d.refunded>0?`/<span class="rg">${d.refunded}</span>`:''}</span>`;
   }).join('');
   return `<div class="t5c">
     <div class="t5-rank">${MEDALS[i]||'#'+(i+1)}</div>
@@ -626,29 +575,28 @@ function top5Card(m, i, monthKey) {
     <span class="tier-badge tier-${m.tier}">${m.tier}</span>
     <div class="t5-nums">
       <div><div class="t5-nl">Claimed</div><div class="t5-nv">${cl}</div></div>
-      <div><div class="t5-nl">Refunds</div><div class="t5-nv" style="color:var(--green)">${rf}</div></div>
+      <div><div class="t5-nl">Refunds</div><div class="t5-nv" style="color:#059669">${rf}</div></div>
     </div>
     <div class="rbar-bg"><div class="rbar-fill" style="width:${rate}%;background:${rc}"></div></div>
     <div class="rbar-lbl">${rate}% completion</div>
-    <div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:10px">${pills}</div>
+    <div class="month-pills">${pills}</div>
   </div>`;
 }
 
-function filteredMeds() {
-  const meds = D.mediators||[];
-  if (selMonth==='all') return meds;
-  return meds.filter(m=>mVal(m,selMonth,'claimed')>0)
-             .sort((a,b)=>mVal(b,selMonth,'claimed')-mVal(a,selMonth,'claimed'));
+function filteredMeds(){
+  const meds=D.mediators||[];
+  if(selMonth==='all') return meds;
+  return meds.filter(m=>mVal(m,selMonth,'claimed')>0).sort((a,b)=>mVal(b,selMonth,'claimed')-mVal(a,selMonth,'claimed'));
 }
-function mClaimed(m)  { return selMonth==='all'?(m.totalClaimed||0):mVal(m,selMonth,'claimed'); }
-function mRefunded(m) { return selMonth==='all'?(m.totalRefunded||0):mVal(m,selMonth,'refunded'); }
-function mVal(m,mo,f) { return m.months?.[mo]?.[f]||0; }
+function mClaimed(m){return selMonth==='all'?(m.totalClaimed||0):mVal(m,selMonth,'claimed');}
+function mRefunded(m){return selMonth==='all'?(m.totalRefunded||0):mVal(m,selMonth,'refunded');}
+function mVal(m,mo,f){return m.months?.[mo]?.[f]||0;}
 
-// Auto-refresh midnight
-(function sched() {
+// Auto-refresh at midnight
+(function sched(){
   const now=new Date(),mn=new Date(now);
-  mn.setDate(mn.getDate()+1); mn.setHours(0,0,0,0);
-  setTimeout(()=>{ if(D)loadData(); sched(); }, mn-now);
+  mn.setDate(mn.getDate()+1);mn.setHours(0,0,0,0);
+  setTimeout(()=>{if(D)loadData();sched();},mn-now);
 })();
 </script>
 </body>
