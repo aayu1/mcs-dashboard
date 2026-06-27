@@ -142,52 +142,52 @@ tr:hover td{background:#FAFAFA}
 .mbar-fill{height:100%;border-radius:99px}
 .mbar-txt{font-weight:700;min-width:36px;font-size:12px}
 
-/* ── MEDIATOR SECTION (dark cards, matches old dashboard) ── */
-.m-card{background:#1a1a1a;border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:20px 22px;margin-bottom:18px}
-.m-card-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px;font-size:14px;font-weight:700;color:#f0f0f0}
-.m-card small{font-size:11px;color:#555;font-weight:400;margin-left:4px}
+/* ── MEDIATOR SECTION (light theme) ── */
+.m-card{background:#fff;border:1px solid #E2E8F0;border-radius:12px;padding:20px 22px;margin-bottom:18px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.m-card-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px;font-size:14px;font-weight:700;color:#0F172A}
+.m-card small{font-size:11px;color:#94A3B8;font-weight:400;margin-left:4px}
 .m-month-tabs{display:flex;gap:5px;flex-wrap:wrap}
-.m-mtab{padding:4px 12px;border-radius:7px;border:1px solid rgba(255,255,255,.08);background:#242424;color:#a0a0a0;font-size:11px;font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap;transition:.15s}
-.m-mtab.active{background:rgba(34,197,94,.15);border-color:rgba(34,197,94,.3);color:#22c55e}
+.m-mtab{padding:5px 13px;border-radius:7px;border:1.5px solid #E2E8F0;background:#fff;color:#64748B;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;transition:.15s}
+.m-mtab.active{background:#F0F4F8;border-color:#CBD5E1;color:#0F172A}
+.m-mtab:hover:not(.active){color:#0F172A}
 .m-top5-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
-.m-t5{background:#242424;border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:16px;position:relative}
-.m-t5.r1{border-color:rgba(245,158,11,.5)}.m-t5.r2{border-color:rgba(180,180,180,.3)}.m-t5.r3{border-color:rgba(180,120,80,.35)}
+.m-t5{background:#F8FAFC;border:1.5px solid #E2E8F0;border-radius:10px;padding:16px;position:relative}
+.m-t5.r1{border-color:#FDE68A;background:#FFFBEB}.m-t5.r2{border-color:#CBD5E1}.m-t5.r3{border-color:#DEB897;background:#FDFAF7}
 .m-t5-rank{position:absolute;top:12px;right:12px;font-size:20px}
-.m-t5-code{font-family:monospace;font-size:11px;font-weight:700;color:#14b8a6;margin-bottom:8px;padding-right:26px;word-break:break-all}
-.m-t5-num{font-size:32px;font-weight:800;line-height:1;margin-bottom:3px;color:#f0f0f0}
-.m-t5-sub{font-size:11px;color:#555;margin-bottom:8px}
+.m-t5-code{font-family:monospace;font-size:11px;font-weight:700;color:#0E7490;margin-bottom:8px;padding-right:26px;word-break:break-all}
+.m-t5-num{font-size:32px;font-weight:800;line-height:1;margin-bottom:3px;color:#0F172A}
+.m-t5-sub{font-size:11px;color:#94A3B8;margin-bottom:8px}
 .m-tier-badge{display:inline-block;padding:2px 9px;border-radius:99px;font-size:10px;font-weight:700}
 .m-tier-key{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
-.m-tk-item{display:flex;align-items:center;gap:6px;font-size:11px;color:#a0a0a0;background:#242424;border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:4px 11px}
+.m-tk-item{display:flex;align-items:center;gap:6px;font-size:11px;color:#64748B;background:#F8FAFC;border:1px solid #E2E8F0;border-radius:8px;padding:4px 11px}
 .m-tk-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
 .m-filter-row{display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap}
-.m-input,.m-select{padding:6px 11px;border-radius:8px;border:1px solid rgba(255,255,255,.14);background:#242424;color:#f0f0f0;font-size:12px;outline:none;font-family:inherit}
-.m-input{width:180px}.m-input:focus,.m-select:focus{border-color:rgba(34,197,94,.4)}
-.m-rcount{font-size:12px;color:#555;margin-left:auto}
+.m-input,.m-select{padding:6px 11px;border-radius:8px;border:1.5px solid #E2E8F0;background:#fff;color:#0F172A;font-size:12px;outline:none;font-family:inherit;transition:.15s}
+.m-input{width:180px}.m-input:focus,.m-select:focus{border-color:#F59E0B}
+.m-rcount{font-size:12px;color:#94A3B8;margin-left:auto}
 .m-card table{width:100%;border-collapse:collapse;min-width:520px}
-.m-card thead th{font-size:10px;font-weight:700;color:#a0a0a0;text-transform:uppercase;letter-spacing:.5px;padding:8px 12px;text-align:left;white-space:nowrap;border-bottom:1px solid rgba(255,255,255,.1);background:#1a1a1a}
-.m-card tbody tr{border-bottom:1px solid rgba(255,255,255,.05)}
-.m-card tbody tr:hover{background:rgba(255,255,255,.03)}
-.m-card tbody td{padding:9px 12px;font-size:12px;color:#f0f0f0;vertical-align:middle}
-.m-code{font-family:monospace;font-size:12px;font-weight:700;color:#14b8a6}
-.m-rb{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;font-size:11px;font-weight:700;background:#2e2e2e;color:#a0a0a0}
-.m-rb1{background:rgba(245,158,11,.2);color:#f59e0b}.m-rb2{background:rgba(180,180,180,.1);color:#9ca3af}.m-rb3{background:rgba(180,120,80,.18);color:#b47850}
-.m-nc{text-align:center}.m-nz{color:#555}
-.m-cur{display:inline-block;padding:2px 9px;border-radius:99px;font-size:11px;font-weight:700;background:rgba(34,197,94,.15);color:#22c55e;border:1px solid rgba(34,197,94,.25)}
-.m-cur.zero{background:#242424;color:#555;border-color:rgba(255,255,255,.08)}
+.m-card thead th{font-size:10px;font-weight:700;color:#64748B;text-transform:uppercase;letter-spacing:.5px;padding:9px 12px;text-align:left;white-space:nowrap;border-bottom:2px solid #F1F5F9;background:#F8FAFC}
+.m-card tbody tr{border-bottom:1px solid #F8FAFC}
+.m-card tbody tr:hover{background:#FAFAFA}
+.m-card tbody td{padding:9px 12px;font-size:13px;color:#0F172A;vertical-align:middle}
+.m-code{font-family:monospace;font-size:12px;font-weight:700;color:#0E7490}
+.m-rb{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;font-size:11px;font-weight:700;background:#F1F5F9;color:#64748B}
+.m-rb1{background:#FEF3C7;color:#D97706}.m-rb2{background:#F1F5F9;color:#64748B}.m-rb3{background:#FEF0E6;color:#9A6B4B}
+.m-nc{text-align:center}.m-nz{color:#CBD5E1}
+.m-cur{display:inline-block;padding:2px 9px;border-radius:99px;font-size:11px;font-weight:700;background:#ECFDF5;color:#059669;border:1px solid #A7F3D0}
+.m-cur.zero{background:#F8FAFC;color:#94A3B8;border-color:#E2E8F0}
 .m-bar{display:flex;align-items:center;gap:6px}
-.m-bar-track{flex:1;height:4px;background:#2e2e2e;border-radius:3px;overflow:hidden;min-width:40px}
+.m-bar-track{flex:1;height:5px;background:#F1F5F9;border-radius:3px;overflow:hidden;min-width:40px}
 .m-bar-fill{height:100%;border-radius:3px}
-.m-bar-pct{font-size:11px;color:#a0a0a0;min-width:28px;text-align:right}
+.m-bar-pct{font-size:11px;color:#64748B;min-width:28px;text-align:right}
 .m-legend{display:flex;flex-wrap:wrap;gap:10px}
-.m-li{display:flex;align-items:center;gap:5px;font-size:11px;color:#a0a0a0}
+.m-li{display:flex;align-items:center;gap:5px;font-size:11px;color:#64748B}
 .m-lsq{width:9px;height:9px;border-radius:2px;flex-shrink:0}
-/* tier colours */
-.t-elite{background:rgba(139,92,246,.15);color:#a78bfa;border:1px solid rgba(139,92,246,.25)}
-.t-prime{background:rgba(34,197,94,.15);color:#22c55e;border:1px solid rgba(34,197,94,.2)}
-.t-standard{background:rgba(59,130,246,.15);color:#60a5fa;border:1px solid rgba(59,130,246,.2)}
-.t-active{background:rgba(245,158,11,.15);color:#f59e0b;border:1px solid rgba(245,158,11,.2)}
-.t-passive{background:rgba(239,68,68,.12);color:#ef4444;border:1px solid rgba(239,68,68,.18)}
+.t-elite{background:rgba(139,92,246,.1);color:#7C3AED;border:1px solid rgba(139,92,246,.2)}
+.t-prime{background:#D1FAE5;color:#065F46;border:1px solid #A7F3D0}
+.t-standard{background:#DBEAFE;color:#1D4ED8;border:1px solid #BFDBFE}
+.t-active{background:#FEF3C7;color:#92400E;border:1px solid #FDE68A}
+.t-passive{background:#FEE2E2;color:#991B1B;border:1px solid #FCA5A5}
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 </head>
@@ -353,15 +353,31 @@ function showMain(name) {
 }
 
 // ── LOAD DATA ─────────────────────────────────────────────────
+const CACHE_KEY = 'mcs_dash_v1';
+function getCached(){try{const r=localStorage.getItem(CACHE_KEY);if(!r)return null;const{ts,data}=JSON.parse(r);if(Date.now()-ts>300000)return null;return data;}catch{return null;}}
+function saveCache(d){try{localStorage.setItem(CACHE_KEY,JSON.stringify({ts:Date.now(),data:d}));}catch{}}
+
 async function loadData() {
-  showMain('load');
-  document.getElementById('tb-sub').textContent = 'Loading…';
+  // Show cached data instantly, then refresh in background
+  const cached = getCached();
+  if (cached) {
+    D = cached;
+    renderAll();
+    showMain('dash');
+    document.getElementById('upd').textContent = 'Cached · refreshing…';
+    document.getElementById('tb-sub').textContent = (D.brands||[]).length + ' brands · ' + (D.mediatorSummary?.totalMediators||0) + ' mediators';
+  } else {
+    showMain('load');
+    document.getElementById('tb-sub').textContent = 'Loading…';
+  }
+
   try {
     const res  = await fetch(SURL + '?action=dashboard&t=' + Date.now());
     if (!res.ok) throw new Error('HTTP ' + res.status);
     const json = await res.json();
     if (json.error) throw new Error(json.error);
     D = json;
+    saveCache(json);
     renderAll();
     showMain('dash');
     const now = new Date();
@@ -369,10 +385,15 @@ async function loadData() {
     document.getElementById('sb-foot').textContent = now.toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'});
     document.getElementById('tb-sub').textContent = (D.brands||[]).length + ' brands · ' + (D.mediatorSummary?.totalMediators||0) + ' mediators';
   } catch(err) {
-    document.getElementById('err-t').textContent = 'Could not load data';
-    document.getElementById('err-d').textContent = err.message + ' — Make sure the Apps Script is deployed with access: Anyone.';
-    showMain('err');
-    document.getElementById('tb-sub').textContent = 'Error loading data';
+    if (!D) {
+      document.getElementById('err-t').textContent = 'Could not load data';
+      document.getElementById('err-d').textContent = err.message + ' — Make sure Apps Script access is set to "Anyone".';
+      showMain('err');
+      document.getElementById('tb-sub').textContent = 'Error loading data';
+    } else {
+      // Still showing cached data — just update indicator
+      document.getElementById('upd').textContent = 'Cached (refresh failed)';
+    }
   }
 }
 
@@ -577,9 +598,9 @@ function renderMedChart() {
   medChartInst=new Chart(document.getElementById('m-chart'),{
     type:'bar',data:{labels,datasets},
     options:{responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{display:false},tooltip:{backgroundColor:'#1a1a1a',borderColor:'rgba(255,255,255,.1)',borderWidth:1,titleColor:'#f0f0f0',bodyColor:'#a0a0a0',padding:10}},
-      scales:{x:{ticks:{color:'#666',font:{size:10},autoSkip:false,maxRotation:40},grid:{color:'rgba(255,255,255,.04)'}},
-              y:{beginAtZero:true,ticks:{color:'#666',font:{size:11}},grid:{color:'rgba(255,255,255,.06)'}}}}
+      plugins:{legend:{display:false},tooltip:{backgroundColor:'#fff',borderColor:'rgba(0,0,0,.08)',borderWidth:1,titleColor:'#0F172A',bodyColor:'#64748B',padding:10}},
+      scales:{x:{ticks:{color:'#94A3B8',font:{size:10},autoSkip:false,maxRotation:40},grid:{color:'rgba(0,0,0,.04)'}},
+              y:{beginAtZero:true,ticks:{color:'#94A3B8',font:{size:11}},grid:{color:'rgba(0,0,0,.06)'}}}}
   });
 }
 
