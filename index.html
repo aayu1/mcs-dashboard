@@ -196,6 +196,147 @@ tr:hover td{background:#FAFAFA}
 .bstat{background:#fff;border:1px solid #E2E8F0;border-radius:10px;padding:12px 16px;min-width:120px;flex:1}
 .bstat-l{font-size:10px;color:#64748B;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
 .bstat-v{font-size:22px;font-weight:800;color:#0F172A}
+
+/* ═══════════════════════════════════════════════════════════════
+   MOBILE — bottom nav, stacked layout, scrollable tables, tappable
+   ═══════════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  html, body { overflow-x: hidden; }
+  body { font-size: 13px; }
+
+  /* Layout: stack sidebar to bottom-nav */
+  body { display: flex; flex-direction: column; height: auto; min-height: 100vh; }
+  #sidebar {
+    width: 100%; min-width: 0; height: auto;
+    position: fixed; bottom: 0; left: 0; right: 0; top: auto;
+    flex-direction: row;
+    z-index: 200;
+    box-shadow: 0 -2px 10px rgba(0,0,0,.3);
+    padding-bottom: env(safe-area-inset-bottom, 0);
+  }
+  .sb-logo, .sb-foot { display: none; }
+  .sb-nav {
+    display: flex;
+    flex: 1;
+    flex-direction: row;
+    padding: 0;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .sb-nav::-webkit-scrollbar { display: none; }
+  .nav-item {
+    flex: 1 0 auto;
+    flex-direction: column;
+    justify-content: center;
+    padding: 8px 12px 10px;
+    font-size: 11px;
+    gap: 3px;
+    border-left: none;
+    border-top: 3px solid transparent;
+    text-align: center;
+    min-width: 78px;
+    white-space: nowrap;
+  }
+  .nav-item.active {
+    border-left-color: transparent;
+    border-top-color: #F59E0B;
+  }
+  .nav-item .ni { font-size: 18px; }
+
+  /* Main area pushed up to avoid bottom nav */
+  #main { padding-bottom: 72px; height: auto; }
+
+  /* Top bar */
+  .topbar { padding: 10px 14px; flex-wrap: wrap; gap: 8px; }
+  .tb-title { font-size: 14px; }
+  .tb-sub { font-size: 11px; }
+  .live-pill { font-size: 10px; padding: 2px 8px; }
+  .upd-txt { font-size: 11px; display: none; }   /* hide on phones, save room */
+  .btn { padding: 5px 10px; font-size: 11px; }
+
+  /* Content padding tighter */
+  #content { padding: 12px 12px 30px; }
+
+  /* Section headers */
+  .section-h { font-size: 13px; margin: 14px 0 10px; }
+
+  /* Stat cards: 2 per row */
+  .stat-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .stat-card { padding: 10px 12px; }
+  .sl { font-size: 9px; }
+  .sv { font-size: 19px; }
+  .ss { font-size: 10px; }
+
+  /* Pipeline cards: 2 per row, smaller */
+  .pipeline { gap: 6px; }
+  .pipe-card { flex: 1 1 calc(50% - 4px); min-width: 0; padding: 9px 11px; border-left-width: 3px !important; }
+  .pipe-n { font-size: 20px; }
+  .pipe-l { font-size: 9px; }
+
+  /* Quick links */
+  .qlinks { gap: 5px; }
+  .qlink { font-size: 11px; padding: 6px 10px; flex: 1 1 calc(50% - 3px); justify-content: center; }
+
+  /* Top 5 cards: single column */
+  .top5-grid, .m-top5-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .t5c, .m-t5 { padding: 12px; }
+  .t5-code, .m-t5-code { font-size: 11px; }
+  .m-t5-num { font-size: 24px; }
+  .month-pills { gap: 3px; }
+  .mpill { font-size: 9px; padding: 1px 5px; }
+
+  /* Tables: horizontal scroll */
+  .table-wrap, .m-card { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  table { font-size: 11px !important; }
+  th { padding: 7px 8px !important; font-size: 9px !important; }
+  td { padding: 7px 8px !important; font-size: 11px !important; }
+  .m-card { padding: 12px 14px; margin-bottom: 12px; }
+  .m-card-hd { font-size: 12px; margin-bottom: 12px; }
+
+  /* Search & filter rows */
+  .controls, .m-filter-row { gap: 6px; }
+  .search-in, .m-input, .m-select { width: 100%; flex: 1 1 100%; font-size: 14px; }   /* 16px-ish to prevent iOS zoom */
+  .filter-btns { width: 100%; gap: 4px; overflow-x: auto; -webkit-overflow-scrolling: touch; flex-wrap: nowrap; padding-bottom: 4px; }
+  .filter-btns::-webkit-scrollbar { display: none; }
+  .fbtn { font-size: 10px; padding: 4px 8px; white-space: nowrap; flex-shrink: 0; }
+  .tcount, .m-rcount { width: 100%; text-align: right; }
+  .m-month-tabs { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; flex-wrap: nowrap; padding-bottom: 2px; }
+  .m-mtab { font-size: 10px; padding: 4px 10px; white-space: nowrap; flex-shrink: 0; }
+
+  /* Chart height on phones */
+  #ov-daily-chart, #m-chart { max-height: 200px; }
+
+  /* Buyer Tools */
+  .buyer-mode { font-size: 10px; padding: 5px 10px; }
+  #buyer-q, #pay-oid, #pay-mcs { font-size: 14px !important; }
+
+  /* Form cards in buyer tools — full width single column */
+  #tab-buyer > div:first-child { grid-template-columns: 1fr !important; gap: 10px !important; }
+
+  /* Buyer stats: 2 per row */
+  #buyer-stats { gap: 6px; }
+  .bstat { min-width: 0; padding: 9px 11px; flex: 1 1 calc(50% - 3px); }
+  .bstat-l { font-size: 9px; }
+  .bstat-v { font-size: 17px; }
+
+  /* Modals stay readable */
+  .topbar-r { gap: 6px; }
+
+  /* Tier badge */
+  .tier-badge, .m-tier-badge { font-size: 9px; padding: 1px 6px; }
+
+  /* Hide nav-item count badges on small screens (Brands, Pending) */
+  .nav-item span:last-child:not(.ni) { font-size: 9px; }
+}
+
+/* Extra tight for very small phones */
+@media (max-width: 380px) {
+  .stat-grid { grid-template-columns: 1fr 1fr; }
+  .top5-grid, .m-top5-grid { grid-template-columns: 1fr; }
+  .pipe-card { flex: 1 1 100%; }
+  .qlink { flex: 1 1 100%; }
+}
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 </head>
