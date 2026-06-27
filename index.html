@@ -433,9 +433,8 @@ tr:hover td{background:#FAFAFA}
               <tr>
                 <th onclick="bSort('name')">Brand <span class="sa" id="sa-name">↕</span></th>
                 <th onclick="bSort('code')">Code <span class="sa" id="sa-code">↕</span></th>
-                <th onclick="bSort('lastBillDate')">Last Bill <span class="sa" id="sa-lastBillDate">↕</span></th>
                 <th onclick="bSort('billStatus')">Status <span class="sa" id="sa-billStatus">↕</span></th>
-                <th style="text-align:right;cursor:pointer" onclick="bSort('orderCount')">Orders <span style="font-size:9px;color:#94A3B8">(this month)</span> <span class="sa" id="sa-orderCount">↕</span></th>
+                <th style="text-align:center;cursor:pointer" onclick="bSort('orderCount')">Orders <span style="font-size:9px;color:#94A3B8;font-weight:400">(this month)</span> <span class="sa" id="sa-orderCount">↕</span></th>
                 <th>Sheet</th>
               </tr>
             </thead>
@@ -916,6 +915,47 @@ function goBrandsFilter(filter) {
 // ═══════════════════════════════════════════════════════════════
 const B_FILTERS = ['all','bill-pending','less-entries','not-started','billed','all-wrapped'];
 
+
+// Format the "last bill" date inline beside the status badge.
+// Input is the raw text from Sheets (e.g. "1Jun", "1 Jun", "01/06", "2026-06-01", "1Jun25").
+// We render as "billed on 1 Jun" — no time, no timezone, year shown only if it's not the current year.
+function formatBillDate(raw, status) {
+  if (!raw) return '';
+  // Only show date for 'billed' status (the only one that holds an actual date)
+  if (status !== 'billed') return '';
+
+  // Try parsing a couple of common formats from the sheet
+  const cleaned = raw.toString().trim();
+  if (!cleaned) return '';
+
+  // Try direct Date parsing first (covers "2026-06-01", "Jun 1 2026", etc.)
+  let d = new Date(cleaned);
+  if (isNaN(d.getTime())) {
+    // Try patterns like "1Jun" / "1 Jun" / "1-Jun" / "1Jun25"
+    const m = cleaned.match(/^(\d{1,2})[\s\-]?([A-Za-z]{3,})(?:[\s\-]?(\d{2,4}))?$/);
+    if (m) {
+      const months = { jan:0,feb:1,mar:2,apr:3,may:4,jun:5,jul:6,aug:7,sep:8,oct:9,nov:10,dec:11 };
+      const mo = months[m[2].slice(0,3).toLowerCase()];
+      if (mo !== undefined) {
+        const day = parseInt(m[1],10);
+        let yr = m[3] ? parseInt(m[3],10) : new Date().getFullYear();
+        if (yr < 100) yr += 2000;
+        d = new Date(yr, mo, day);
+      }
+    }
+  }
+  if (isNaN(d.getTime())) {
+    // Fallback: just show raw text as-is
+    return `<span style="font-size:11px;color:#94A3B8;margin-left:6px">· billed ${cleaned}</span>`;
+  }
+
+  const day = d.getDate();
+  const monStr = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getMonth()];
+  const curYr = new Date().getFullYear();
+  const label = `${day} ${monStr}${d.getFullYear() === curYr ? '' : ' ' + d.getFullYear()}`;
+  return `<span style="font-size:11px;color:#94A3B8;margin-left:6px">· billed on ${label}</span>`;
+}
+
 function renderBrands() {
   const brands = D.brands||[];
   const q = (document.getElementById('b-search').value||'').toLowerCase().trim();
@@ -943,7 +983,7 @@ function renderBrands() {
   });
 
   document.getElementById('b-count').textContent = rows.length+' brands';
-  ['name','code','lastBillDate','billStatus','orderCount'].forEach(k => {
+  ['name','code','billStatus','orderCount'].forEach(k => {
     const el=document.getElementById('sa-'+k);
     if(el) el.textContent = bSortKey===k?(bSortDir===1?'↑':'↓'):'↕';
     const th=el?.closest('th'); if(th) th.classList.toggle('sorted',bSortKey===k);
@@ -966,16 +1006,18 @@ function renderBrands() {
             <a href="${b.sheetLink}" target="_blank" style="color:#0F172A;text-decoration:none" onmouseover="this.style.color='#B45309'" onmouseout="this.style.color='#0F172A'">${b.name}</a>
           </td>
           <td style="font-family:monospace;font-size:12px;color:#0E7490;font-weight:700">${b.code||'—'}</td>
-          <td style="color:#64748B">${b.lastBillDate||'—'}</td>
-          <td><span class="bs ${meta.cls}">${meta.label}</span></td>
-          <td style="text-align:right">${ocDisplay}</td>
+          <td>
+            <span class="bs ${meta.cls}">${meta.label}</span>
+            ${formatBillDate(b.lastBillDate, b.billStatus)}
+          </td>
+          <td style="text-align:center">${ocDisplay}</td>
           <td style="display:flex;gap:6px">
             <a href="${b.sheetLink}" target="_blank" style="font-size:11px;padding:4px 10px;border:1.5px solid #E2E8F0;border-radius:6px;color:#64748B;text-decoration:none;white-space:nowrap" onmouseover="this.style.color='#0F172A'" onmouseout="this.style.color='#64748B'">↗ Open</a>
             ${b.extraLink?`<a href="${b.extraLink}" target="_blank" style="font-size:11px;padding:4px 10px;border:1.5px solid #E2E8F0;border-radius:6px;color:#64748B;text-decoration:none;white-space:nowrap" onmouseover="this.style.color='#0F172A'" onmouseout="this.style.color='#64748B'">↗ Extra</a>`:''}
           </td>
         </tr>`;
       }).join('')
-    : `<tr><td colspan="6" class="no-rows">No brands found</td></tr>`;
+    : `<tr><td colspan="5" class="no-rows">No brands found</td></tr>`;
 }
 
 function setBF(k) { bFilter=k; renderBrands(); }
