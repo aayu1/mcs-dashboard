@@ -188,6 +188,14 @@ tr:hover td{background:#FAFAFA}
 .t-standard{background:#DBEAFE;color:#1D4ED8;border:1px solid #BFDBFE}
 .t-active{background:#FEF3C7;color:#92400E;border:1px solid #FDE68A}
 .t-passive{background:#FEE2E2;color:#991B1B;border:1px solid #FCA5A5}
+
+/* ── BUYER TOOLS ── */
+.buyer-mode{padding:6px 14px;border-radius:7px;border:none;background:none;color:#64748B;cursor:pointer;font-size:11px;font-weight:700;font-family:inherit;white-space:nowrap;transition:.15s}
+.buyer-mode.active{background:#fff;color:#0F172A;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.buyer-mode:hover:not(.active){color:#0F172A}
+.bstat{background:#fff;border:1px solid #E2E8F0;border-radius:10px;padding:12px 16px;min-width:120px;flex:1}
+.bstat-l{font-size:10px;color:#64748B;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.bstat-v{font-size:22px;font-weight:800;color:#0F172A}
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 </head>
@@ -316,6 +324,153 @@ tr:hover td{background:#FAFAFA}
 
       </div>
 
+
+      <!-- BUYER TOOLS -->
+      <div class="tab-pane" id="tab-buyer">
+
+        <!-- Forms -->
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;margin-bottom:22px">
+          <!-- Order Form card -->
+          <div style="background:#fff;border-radius:12px;border:1.5px solid #FDE68A;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.06)">
+            <div style="padding:18px 20px 14px;background:linear-gradient(135deg,#FFFBEB,#fff)">
+              <div style="font-size:26px;margin-bottom:8px">📦</div>
+              <div style="font-size:15px;font-weight:800;color:#0F172A;margin-bottom:2px">Order Form</div>
+              <div style="font-size:12px;color:#94A3B8">Fill after placing your order</div>
+            </div>
+            <div style="border-top:1px solid #F1F5F9">
+              <div style="padding:6px 20px;font-size:10px;font-weight:700;color:#94A3B8;text-transform:uppercase;background:#F8FAFC;letter-spacing:.5px">Keep ready</div>
+              <div style="font-size:12px;color:#64748B">
+                <div style="padding:7px 20px;border-top:1px solid #F8FAFC">🪪 Buyer name — exact as on Amazon/Flipkart</div>
+                <div style="padding:7px 20px;border-top:1px solid #F8FAFC">🔢 Order ID + 💵 Total amount incl. delivery</div>
+                <div style="padding:7px 20px;border-top:1px solid #F8FAFC">🏷️ Product code + MCS code</div>
+                <div style="padding:7px 20px;border-top:1px solid #F8FAFC">📸 Order screenshot + 📱 WhatsApp</div>
+              </div>
+            </div>
+            <div style="padding:14px 20px">
+              <button onclick="window.open('https://forms.gle/xXYAyETEL6pz6FGy7','_blank')" style="width:100%;padding:10px;background:#F59E0B;color:#fff;border:none;border-radius:8px;font-weight:800;font-size:13px;cursor:pointer;font-family:inherit">Open Order Form ↗</button>
+            </div>
+          </div>
+          <!-- Refund Form card -->
+          <div style="background:#fff;border-radius:12px;border:1.5px solid #A7F3D0;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.06)">
+            <div style="padding:18px 20px 14px;background:linear-gradient(135deg,#ECFDF5,#fff)">
+              <div style="font-size:26px;margin-bottom:8px">💸</div>
+              <div style="font-size:15px;font-weight:800;color:#0F172A;margin-bottom:2px">Refund Form</div>
+              <div style="font-size:12px;color:#94A3B8">Fill after leaving your review</div>
+            </div>
+            <div style="border-top:1px solid #F1F5F9">
+              <div style="padding:6px 20px;font-size:10px;font-weight:700;color:#94A3B8;text-transform:uppercase;background:#F8FAFC;letter-spacing:.5px">Keep ready</div>
+              <div style="font-size:12px;color:#64748B">
+                <div style="padding:7px 20px;border-top:1px solid #F8FAFC">🏷️ Product code + MCS code + Order ID</div>
+                <div style="padding:7px 20px;border-top:1px solid #F8FAFC">💳 UPI ID / Payment details</div>
+                <div style="padding:7px 20px;border-top:1px solid #F8FAFC">📸 Delivered screenshot + Rating screenshot</div>
+                <div style="padding:7px 20px;border-top:1px solid #F8FAFC">🔗 Verified review link</div>
+              </div>
+            </div>
+            <div style="padding:14px 20px">
+              <button onclick="window.open('https://forms.gle/2BoMUnuXV9yhjy8P7','_blank')" style="width:100%;padding:10px;background:#059669;color:#fff;border:none;border-radius:8px;font-weight:800;font-size:13px;cursor:pointer;font-family:inherit">Open Refund Form ↗</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Warning banner -->
+        <div style="background:#FFFBEB;border:1px solid #FDE68A;border-radius:10px;padding:10px 16px;font-size:13px;color:#92400E;margin-bottom:22px;display:flex;gap:8px;align-items:center">
+          <span style="font-size:16px;flex-shrink:0">⚠️</span>
+          Fill Refund Form within <strong style="color:#D97706">12–15 days</strong> of receiving product. Delay = no refund guarantee.
+        </div>
+
+        <!-- Order / Refund Lookup -->
+        <div style="background:#fff;border-radius:12px;border:1.5px solid #E2E8F0;padding:20px 22px;margin-bottom:18px;box-shadow:0 1px 3px rgba(0,0,0,.06)">
+          <div style="font-size:14px;font-weight:800;color:#0F172A;margin-bottom:16px">🔍 Order Lookup &amp; Refund Status</div>
+
+          <!-- Mode tabs -->
+          <div style="display:flex;gap:5px;margin-bottom:14px;background:#F1F5F9;border-radius:9px;padding:4px;width:fit-content">
+            <button id="mode-email"   onclick="setBuyerMode('email')"   class="buyer-mode active">By Email</button>
+            <button id="mode-mcsCode" onclick="setBuyerMode('mcsCode')" class="buyer-mode">By MCS Code</button>
+            <button id="mode-orderId" onclick="setBuyerMode('orderId')" class="buyer-mode">By Order ID</button>
+          </div>
+
+          <!-- Search row -->
+          <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px;align-items:flex-end">
+            <div style="flex:1;min-width:200px">
+              <div style="font-size:10px;font-weight:700;color:#64748B;text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px" id="buyer-search-label">Email Address</div>
+              <div style="display:flex;gap:6px">
+                <input id="buyer-q" placeholder="Enter value…" onkeydown="if(event.key==='Enter')doBuyerSearch()" style="flex:1;padding:8px 12px;border:1.5px solid #E2E8F0;border-radius:8px;font-size:13px;outline:none;font-family:inherit;color:#0F172A"/>
+                <button onclick="doBuyerSearch()" id="buyer-search-btn" style="padding:8px 18px;background:#0F172A;color:#fff;border:none;border-radius:8px;font-weight:700;cursor:pointer;font-size:13px;white-space:nowrap;font-family:inherit">Search</button>
+                <button onclick="cancelBuyerSearch()" id="buyer-cancel-btn" style="display:none;padding:8px 14px;background:#FEE2E2;color:#DC2626;border:none;border-radius:8px;font-weight:700;cursor:pointer;font-size:13px;font-family:inherit">✕</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Status / error -->
+          <div id="buyer-msg"  style="display:none;font-size:12px;color:#F59E0B;font-weight:700;margin-bottom:10px"></div>
+          <div id="buyer-err"  style="display:none;background:#FEE2E2;border-radius:8px;padding:8px 14px;font-size:12px;color:#DC2626;margin-bottom:10px"></div>
+
+          <!-- Results -->
+          <div id="buyer-results" style="display:none">
+            <!-- Stats row -->
+            <div id="buyer-stats" style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px"></div>
+            <!-- Legend -->
+            <div style="display:flex;gap:14px;font-size:11px;color:#94A3B8;margin-bottom:8px">
+              <span style="display:flex;align-items:center;gap:4px"><span style="width:3px;height:14px;border-radius:2px;background:#F59E0B;display:inline-block"></span>Refund form pending</span>
+              <span style="display:flex;align-items:center;gap:4px"><span style="width:3px;height:14px;border-radius:2px;background:#E2E8F0;display:inline-block"></span>Refund submitted</span>
+            </div>
+            <!-- Table -->
+            <div style="border:1px solid #F1F5F9;border-radius:10px;overflow:hidden;overflow-x:auto">
+              <table style="width:100%;border-collapse:collapse;font-size:12px;min-width:600px">
+                <thead>
+                  <tr style="background:#F8FAFC">
+                    <th style="padding:8px 12px;text-align:left;font-size:10px;font-weight:700;color:#64748B;text-transform:uppercase;white-space:nowrap;border-bottom:2px solid #F1F5F9"></th>
+                    <th style="padding:8px 12px;text-align:left;font-size:10px;font-weight:700;color:#64748B;text-transform:uppercase;white-space:nowrap;border-bottom:2px solid #F1F5F9">Buyer</th>
+                    <th style="padding:8px 12px;text-align:left;font-size:10px;font-weight:700;color:#64748B;text-transform:uppercase;white-space:nowrap;border-bottom:2px solid #F1F5F9">Order ID</th>
+                    <th style="padding:8px 12px;text-align:left;font-size:10px;font-weight:700;color:#64748B;text-transform:uppercase;white-space:nowrap;border-bottom:2px solid #F1F5F9">Product</th>
+                    <th style="padding:8px 12px;text-align:left;font-size:10px;font-weight:700;color:#64748B;text-transform:uppercase;white-space:nowrap;border-bottom:2px solid #F1F5F9">MCS</th>
+                    <th style="padding:8px 12px;text-align:left;font-size:10px;font-weight:700;color:#64748B;text-transform:uppercase;white-space:nowrap;border-bottom:2px solid #F1F5F9">Platform</th>
+                    <th style="padding:8px 12px;text-align:left;font-size:10px;font-weight:700;color:#64748B;text-transform:uppercase;white-space:nowrap;border-bottom:2px solid #F1F5F9">Amount</th>
+                    <th style="padding:8px 12px;text-align:left;font-size:10px;font-weight:700;color:#64748B;text-transform:uppercase;white-space:nowrap;border-bottom:2px solid #F1F5F9">Ordered</th>
+                    <th style="padding:8px 12px;text-align:left;font-size:10px;font-weight:700;color:#64748B;text-transform:uppercase;white-space:nowrap;border-bottom:2px solid #F1F5F9">Refund Date</th>
+                    <th style="padding:8px 12px;text-align:left;font-size:10px;font-weight:700;color:#64748B;text-transform:uppercase;white-space:nowrap;border-bottom:2px solid #F1F5F9">Status</th>
+                  </tr>
+                </thead>
+                <tbody id="buyer-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Empty state -->
+          <div id="buyer-empty" style="padding:48px 0;text-align:center;color:#94A3B8">
+            <div style="font-size:36px;margin-bottom:10px">🔍</div>
+            <div style="font-size:14px;font-weight:700;color:#64748B">Search by email, MCS code or Order ID</div>
+            <div style="font-size:12px;margin-top:4px">Enter a value above and press Search</div>
+          </div>
+        </div>
+
+        <!-- Payment Check -->
+        <div style="background:#fff;border-radius:12px;border:1.5px solid #E2E8F0;padding:20px 22px;box-shadow:0 1px 3px rgba(0,0,0,.06)">
+          <div style="font-size:14px;font-weight:800;color:#0F172A;margin-bottom:16px">💰 Payment Status Check</div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;margin-bottom:12px">
+            <div style="flex:1;min-width:200px">
+              <div style="font-size:10px;font-weight:700;color:#64748B;text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px">Order ID *</div>
+              <input id="pay-oid" placeholder="Amazon / Flipkart Order ID" onkeydown="if(event.key==='Enter')doPayCheck()" style="width:100%;padding:8px 12px;border:1.5px solid #E2E8F0;border-radius:8px;font-size:13px;outline:none;font-family:inherit;color:#0F172A"/>
+            </div>
+            <div style="flex:0 0 180px">
+              <div style="font-size:10px;font-weight:700;color:#64748B;text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px">MCS Code <span style="font-weight:400;text-transform:none">(faster)</span></div>
+              <input id="pay-mcs" placeholder="e.g. MCSSURAT" onkeydown="if(event.key==='Enter')doPayCheck()" style="width:100%;padding:8px 12px;border:1.5px solid #E2E8F0;border-radius:8px;font-size:13px;outline:none;font-family:inherit;color:#0F172A"/>
+            </div>
+            <button onclick="doPayCheck()" id="pay-btn" style="padding:8px 20px;background:#0F172A;color:#fff;border:none;border-radius:8px;font-weight:700;cursor:pointer;font-size:13px;white-space:nowrap;font-family:inherit">Check</button>
+          </div>
+          <div id="pay-err" style="display:none;background:#FEE2E2;border-radius:8px;padding:8px 14px;font-size:12px;color:#DC2626;margin-bottom:10px"></div>
+          <div id="pay-result" style="display:none"></div>
+          <div id="pay-empty" style="padding:40px 0;text-align:center;color:#94A3B8">
+            <div style="font-size:32px;margin-bottom:8px">💳</div>
+            <div style="font-size:13px;font-weight:700;color:#64748B">Enter an Order ID above</div>
+          </div>
+          <div style="margin-top:14px;padding:10px 14px;background:#FFFBEB;border:1px solid #FDE68A;border-radius:9px;font-size:12px;color:#92400E">
+            💡 Adding MCS code makes the search faster — it narrows down which payment tab to check first.
+          </div>
+        </div>
+
+      </div>
+
     </div><!-- #dash -->
   </div><!-- #content -->
 </div><!-- #main -->
@@ -331,7 +486,7 @@ let selMonth = 'all', mSortKey = 'totalClaimed', mSortDir = -1, mSearchQ = '';
 
 const MLABEL = {'2026-03':'Mar','2026-04':'Apr','2026-05':'May','2026-06':'Jun','2026-07':'Jul','2026-08':'Aug'};
 const MEDALS  = ['🥇','🥈','🥉','4th','5th'];
-const TAB_TITLES = { overview:'Overview', brands:'Brands & Billing', mediators:'Mediators' };
+const TAB_TITLES = { overview:'Overview', brands:'Brands & Billing', mediators:'Mediators', buyer:'Buyer Tools' };
 
 const BILL_META = {
   'bill-pending': { label:'Last Bill Pending', cls:'bs-bill-pending', color:'#DC2626', icon:'🔴' },
@@ -675,6 +830,163 @@ function filteredMeds(){
 function mClaimed(m){return selMonth==='all'?(m.totalClaimed||0):mVal(m,selMonth,'claimed');}
 function mRefunded(m){return selMonth==='all'?(m.totalRefunded||0):mVal(m,selMonth,'refunded');}
 function mVal(m,mo,f){return m.months?.[mo]?.[f]||0;}
+
+
+// ═══════════════════════════════════════════════════════════════
+//  BUYER TOOLS
+// ═══════════════════════════════════════════════════════════════
+const ORDERS_URL  = 'https://script.google.com/macros/s/AKfycbz2yInP38S2j-9q1dZfRZIb4XGVwt6U3eeZUh8J0JDy7aaOdecPb_ghSqE6qpMWkWipHg/exec';
+const REFUNDS_URL = 'https://script.google.com/macros/s/AKfycby9M5np-RHKUPEtGVWi3pEDAjrCu37PXh5fMaOIVGkGJd0Wx3Q7Cujm4k00JxKsC38zDA/exec';
+const PAYMENT_URL = 'https://script.google.com/macros/s/AKfycbzCjPAROwOxwXEteAc-BatPbdnlE0ZMzC2eo85YZYmFFNU5FGGXMYZ9mo4DHrwAVL24ig/exec';
+const BUYER_NT = 2;
+let buyerMode='email', buyerCtrl=null, buyerOrders=[], buyerRefunds=[];
+
+function setBuyerMode(m){
+  buyerMode=m;
+  document.querySelectorAll('.buyer-mode').forEach(b=>b.classList.remove('active'));
+  document.getElementById('mode-'+m).classList.add('active');
+  const labels={email:'Email Address',mcsCode:'MCS Code',orderId:'Order ID'};
+  document.getElementById('buyer-search-label').textContent=labels[m];
+  const ph={email:'buyer@email.com',mcsCode:'e.g. MCSSURAT',orderId:'Amazon / Flipkart Order ID'};
+  document.getElementById('buyer-q').placeholder=ph[m];
+}
+
+async function doBuyerSearch(){
+  const v=document.getElementById('buyer-q').value.trim();
+  if(!v)return;
+  if(buyerCtrl)buyerCtrl.abort();
+  const ctrl=new AbortController(); buyerCtrl=ctrl; const sig=ctrl.signal;
+  buyerOrders=[]; buyerRefunds=[];
+  showBMsg('Searching...'); hideBErr();
+  document.getElementById('buyer-results').style.display='none';
+  document.getElementById('buyer-empty').style.display='none';
+  document.getElementById('buyer-cancel-btn').style.display='inline-block';
+  document.getElementById('buyer-search-btn').disabled=true;
+
+  const seenO=new Set(),seenR=new Set();
+  const addO=arr=>(arr||[]).forEach(o=>{const k=String(o.orderId||'').trim().toLowerCase();if(k&&seenO.has(k))return;if(k)seenO.add(k);buyerOrders.push(o);});
+  const addR=arr=>(arr||[]).forEach(r=>{const k=String(r.orderId||'').trim().toLowerCase();if(k&&seenR.has(k))return;if(k)seenR.add(k);buyerRefunds.push(r);});
+  const bUrl=(action,tab)=>`${action==='getOrders'?ORDERS_URL:REFUNDS_URL}?${new URLSearchParams({action,[buyerMode]:v,tab})}`;
+
+  try{
+    if(buyerMode==='orderId'){
+      await Promise.all([
+        (async()=>{for(let t=0;t<BUYER_NT;t++){if(sig.aborted)return;const r=await fetch(bUrl('getOrders',t),{signal:sig});const d=await r.json();if(d.orders?.length){addO(d.orders);return;}}})(),
+        fetch(`${REFUNDS_URL}?action=getRefunds&tab=0&orderId=${encodeURIComponent(v)}`,{signal:sig}).then(r=>r.json()).then(d=>{if(d.refunds?.length)addR(d.refunds);}).catch(()=>{})
+      ]);
+      if(!sig.aborted){const r=await fetch(`${REFUNDS_URL}?action=getRefunds&tab=1&orderId=${encodeURIComponent(v)}`,{signal:sig}).then(r=>r.json()).catch(()=>null);if(r?.refunds?.length)addR(r.refunds);}
+    }else if(buyerMode==='mcsCode'){
+      await Promise.all(Array.from({length:BUYER_NT},(_,t)=>fetch(bUrl('getOrders',t),{signal:sig}).then(r=>r.json()).then(d=>addO(d.orders||[])).catch(()=>{})));
+      if(!sig.aborted&&buyerOrders.length>0){
+        showBMsg(`Checking refunds for ${buyerOrders.length} orders...`);
+        const ids=[...seenO];
+        for(let i=0;i<ids.length;i+=8){
+          if(sig.aborted)break;
+          await Promise.all(ids.slice(i,i+8).map(id=>fetch(`${REFUNDS_URL}?action=getRefunds&orderId=${encodeURIComponent(id)}`,{signal:sig}).then(r=>r.json()).then(d=>addR(d.refunds||[])).catch(()=>{})));
+        }
+      }
+    }else{
+      await Promise.all([
+        ...Array.from({length:BUYER_NT},(_,t)=>fetch(bUrl('getOrders',t),{signal:sig}).then(r=>r.json()).then(d=>addO(d.orders||[])).catch(()=>{})),
+        ...Array.from({length:BUYER_NT},(_,t)=>fetch(bUrl('getRefunds',t),{signal:sig}).then(r=>r.json()).then(d=>addR(d.refunds||[])).catch(()=>{}))
+      ]);
+    }
+  }catch(e){if(!sig.aborted)showBErr('Could not load data. Check your connection.');}
+
+  if(!sig.aborted){hideBMsg();renderBuyerResults();document.getElementById('buyer-cancel-btn').style.display='none';document.getElementById('buyer-search-btn').disabled=false;}
+}
+
+function cancelBuyerSearch(){if(buyerCtrl)buyerCtrl.abort();hideBMsg();document.getElementById('buyer-cancel-btn').style.display='none';document.getElementById('buyer-search-btn').disabled=false;}
+
+function renderBuyerResults(){
+  const rIds=new Set(buyerRefunds.map(r=>String(r.orderId||'').trim().toLowerCase()).filter(Boolean));
+  const rDates=new Map(buyerRefunds.filter(r=>r.orderId&&r.timestamp).map(r=>[String(r.orderId).trim().toLowerCase(),r.timestamp]));
+  const pending=buyerOrders.filter(o=>{const k=String(o.orderId||'').trim().toLowerCase();return k&&!rIds.has(k);}).length;
+  const total=buyerOrders.reduce((s,o)=>s+(parseFloat(o.orderAmount)||0),0);
+
+  if(!buyerOrders.length){
+    document.getElementById('buyer-empty').innerHTML='<div style="padding:40px 0;text-align:center;color:#94A3B8"><div style="font-size:32px;margin-bottom:8px">😶</div><div style="font-size:13px;font-weight:700;color:#64748B">No orders found</div><div style="font-size:12px;margin-top:4px">Try a different value</div></div>';
+    document.getElementById('buyer-empty').style.display='block';
+    return;
+  }
+
+  document.getElementById('buyer-stats').innerHTML=[
+    ['Total Orders',buyerOrders.length,'#0F172A'],
+    ['Refund Pending',pending,pending>0?'#D97706':'#059669'],
+    ['Refund Submitted',buyerOrders.length-pending,'#059669'],
+    ['Total Amount','₹'+total.toLocaleString('en-IN'),'#0F172A'],
+  ].map(([l,v,c])=>`<div class="bstat"><div class="bstat-l">${l}</div><div class="bstat-v" style="color:${c}">${v}</div></div>`).join('');
+
+  const fmtD=ts=>ts?new Date(ts).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'2-digit'}):'—';
+
+  document.getElementById('buyer-tbody').innerHTML=buyerOrders.map((o,i)=>{
+    const k=String(o.orderId||'').trim().toLowerCase();
+    const pend=k&&!rIds.has(k); const rd=k&&rDates.get(k);
+    const badge=pend
+      ?'<span style="display:inline-block;padding:2px 8px;border-radius:99px;font-size:10px;font-weight:700;background:#FEF3C7;color:#92400E">⚠ Pending</span>'
+      :'<span style="display:inline-block;padding:2px 8px;border-radius:99px;font-size:10px;font-weight:700;background:#D1FAE5;color:#065F46">✓ Submitted</span>';
+    return `<tr style="border-top:1px solid #F8FAFC;background:${pend?'rgba(251,191,36,0.04)':'transparent'}">
+      <td style="padding:9px 12px;border-left:3px solid ${pend?'#F59E0B':'transparent'}">${pend?'⚠️':'📦'}</td>
+      <td style="padding:9px 12px;font-weight:600;color:#0F172A">${o.buyerName||'—'}</td>
+      <td style="padding:9px 12px;font-family:monospace;font-size:11px;color:#0E7490">${o.orderId||'—'}</td>
+      <td style="padding:9px 12px;color:#64748B">${o.productCode||'—'}</td>
+      <td style="padding:9px 12px;font-family:monospace;font-size:11px;color:#64748B">${o.mcsCode||'—'}</td>
+      <td style="padding:9px 12px;color:#64748B">${o.marketplace||'—'}</td>
+      <td style="padding:9px 12px;font-weight:700;color:${pend?'#D97706':'#059669'}">₹${parseFloat(o.orderAmount||0).toLocaleString('en-IN')}</td>
+      <td style="padding:9px 12px;color:#94A3B8;white-space:nowrap">${fmtD(o.timestamp)}</td>
+      <td style="padding:9px 12px;color:${rd?'#059669':'#94A3B8'};white-space:nowrap">${fmtD(rd)}</td>
+      <td style="padding:9px 12px">${badge}</td>
+    </tr>`;
+  }).join('');
+
+  document.getElementById('buyer-results').style.display='block';
+  document.getElementById('buyer-empty').style.display='none';
+}
+
+async function doPayCheck(){
+  const oid=document.getElementById('pay-oid').value.trim();
+  if(!oid)return;
+  const mcs=document.getElementById('pay-mcs').value.trim();
+  document.getElementById('pay-btn').disabled=true;
+  document.getElementById('pay-btn').textContent='...';
+  document.getElementById('pay-err').style.display='none';
+  document.getElementById('pay-result').style.display='none';
+  document.getElementById('pay-empty').style.display='none';
+  try{
+    const p=new URLSearchParams({action:'checkPayment',orderId:oid});
+    if(mcs)p.append('mcsCode',mcs);
+    const r=await fetch(`${PAYMENT_URL}?${p}`);
+    const d=await r.json();
+    if(d.error){document.getElementById('pay-err').textContent=d.error;document.getElementById('pay-err').style.display='block';}
+    else renderPayResult(d);
+  }catch{document.getElementById('pay-err').textContent='Could not connect.';document.getElementById('pay-err').style.display='block';}
+  document.getElementById('pay-btn').disabled=false;
+  document.getElementById('pay-btn').textContent='Check';
+}
+
+function renderPayResult(d){
+  const paid=d.paid,col=paid?'#059669':'#D97706',bg=paid?'#ECFDF5':'#FFFBEB',bdr=paid?'#A7F3D0':'#FDE68A';
+  let h=`<div style="padding:18px;border-radius:12px;background:${bg};border:1.5px solid ${bdr}">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:${paid?'14px':'0'}">
+      <span style="font-size:28px">${paid?'✅':'⏳'}</span>
+      <div><div style="font-size:17px;font-weight:800;color:${col}">${paid?'Payment Done':'Not Paid Yet'}</div>
+      ${d.sheet?`<div style="font-size:11px;color:#94A3B8;margin-top:2px">Found in: ${d.sheet}</div>`:''}</div>
+    </div>`;
+  if(paid){
+    const rows=[['Order ID',d.orderId],['Date Paid',d.date||'—'],['Amount',d.amount?'₹'+d.amount:'—'],['Less',d.less?'₹'+d.less:'—'],['MCS Code',d.mcsCode||'—'],d.paidBy?['Paid By',d.paidBy]:null].filter(Boolean);
+    h+=`<div style="display:grid;grid-template-columns:110px 1fr;gap:6px 14px;font-size:13px">${rows.map(([l,v])=>`<div style="color:#64748B">${l}</div><div style="color:#0F172A;font-weight:600">${v}</div>`).join('')}</div>`;
+  }else{
+    h+=`<p style="font-size:12px;color:#64748B;margin-top:10px;line-height:1.7">If refund form was filled 15+ days ago, contact your point of contact.</p>`;
+  }
+  h+='</div>';
+  document.getElementById('pay-result').innerHTML=h;
+  document.getElementById('pay-result').style.display='block';
+}
+
+function showBMsg(m){const el=document.getElementById('buyer-msg');el.textContent=m;el.style.display='block';}
+function hideBMsg(){document.getElementById('buyer-msg').style.display='none';}
+function showBErr(m){const el=document.getElementById('buyer-err');el.textContent=m;el.style.display='block';}
+function hideBErr(){document.getElementById('buyer-err').style.display='none';}
 
 // Auto-refresh at midnight
 (function sched(){
